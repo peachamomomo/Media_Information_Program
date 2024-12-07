@@ -4,31 +4,49 @@ import javax.swing.*;
 import java.util.*;
 
 class Medimon {
-    private int h, s, b;  //体力、速さ、防御
-    private ArrayList<Integer> a;  //技
+    private int H, h, s, b;  //体力、速さ、防御
+    private ArrayList<Skill> a;  //技
+    private int i=0;  //技の数
 
     public Medimon(int h, int s, int b){
-        this.h = h; this.s = s; this.b = b;
-        this.a = new ArrayList<Integer>();
+        this.H = h; this.h = h; this.s = s; this.b = b;
+        this.a = new ArrayList<Skill>();
     }
 
-    
-
-    //体力の減少
-    public void downHp(int n){
-        if(h >= n) h = h - n;
-        else h = 0;
+    public void addSkill(Character x, int n) {
+        Skill d = new Skill();
+        d.x = x; d.n = n;
+        a.add(d);
+        i++;
     }
 
-    //速さの減少
-    public void downSpeed(int n){
-        if(s >= n) s = s - n;
-        else s = 0;
+    //体力の減少・増加
+    public void changeHp(int n){
+        h = h + n;
+        if(h >= H) h = H;
+        if(h < 0) h = 0;
     }
 
-    //防御の減少
-    public void downBougyo(int n){
-        if(b >= n) b = b - n;
-        else b = 0;
+    //速さの減少・増加
+    public void changeSpeed(Float n){
+        s = (int)(s * n);
+    }
+
+    //防御の減少・増加
+    public void changeBougyo(Float n){
+        b = (int)(b * n);
+    }
+
+    class Skill {
+        Character x;
+        int n;
+    }
+}
+
+class MedimonController implements ActionListener {
+    protected Medimon1 view;
+    public MedimonController(Medimon m, Medimon1 v) {
+        view = v;
+        v.getPanel().addActionListener(this);
     }
 }
