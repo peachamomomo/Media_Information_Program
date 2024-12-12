@@ -42,11 +42,3 @@ class Medimon {
         int n;
     }
 }
-
-class MedimonController implements ActionListener {
-    protected Medimon1 view;
-    public MedimonController(Medimon m, Medimon1 v) {
-        view = v;
-        v.getPanel().addActionListener(this);
-    }
-}
