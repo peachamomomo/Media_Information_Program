@@ -57,10 +57,10 @@ class MedimonController implements ActionListener {
     //sendAction()
     public void sendAction(int monsterIndex, int skillIndex){
         if(isServer){
-            serverMsg = String.format("&d %d %d %d", monsterIndex, skillIndex, 1, serverConducting);
+            serverMsg = String.format("%d %d %d %d", monsterIndex, skillIndex, 1, serverConducting); //1 -> server
             sv.send(serverMsg);
         } else {
-            serverMsg = String.format("&d %d %d %d", monsterIndex, skillIndex, 2, clientConducting);
+            serverMsg = String.format("%d %d %d %d", monsterIndex, skillIndex, 2, clientConducting); //2 ->client
             cl.send(serverMsg);
         }
     }
@@ -69,8 +69,6 @@ class MedimonController implements ActionListener {
         if(isServer){
             String[] clientMsgArray = sv.recv().split(" ");
             clientConducting = Integer.parseInt(clientMsgArray[3]);
-            //model.setMonster(Integer.parseInt(serverMsgArray[0]));
-            //model.setSkill(Integer.parseInt(serverMsgArray[1]));
         } else {
             String[] serverMsgArray = cl.recv().split(" ");
             serverConducting = Integer.parseInt(serverMsgArray[3]);
@@ -84,7 +82,17 @@ class MedimonController implements ActionListener {
     //ボタン入力から受け取った自分のmonster/skillIDと、メッセージから受け取った相手のmonster/skillIDをmodelにsetする関数
     public void setToModel(){
         if(isServer){
-
+            //model.setMonster();
+            //model.setSkill();
+            
+            //model.setOpponentMonster(Integer.parseInt(clientMsgArray[0]));
+            //model.setOpponentSkill(Integer.parseInt(clientMsgArray[1]));
+        } else {
+            //model.setMonster();
+            //model.setSkill();
+            
+            //model.setOpponentMonster(Integer.parseInt(clientMsgArray[0]));
+            //model.setOpponentSkill(Integer.parseInt(clientMsgArray[1]));
         }
     }
 
