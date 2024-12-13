@@ -2,35 +2,93 @@ import java.awt.event.*;
 
 class MedimonController implements ActionListener {
     protected Medimon1 view;
-    protected Medimon medimon;
-    CommServer sv = new CommServer(10010);
-    CommClient cl = new CommClient();
+    protected MedimonModel model;
+    CommServer sv;
+    CommClient cl;
     String serverMsg;
-    //isServerAction = 1/0のときserver/client側の行動を示す
-    int monsterHp, monsterID, skillID, isServerAction;
-    public MedimonController(Medimon m, Medimon1 v) {
+    //自分がサーバかクライアントかを記録
+    boolean isServer;
+    
+    //boolean serverConducting == 0のとき、サーバが処理中(入力は受け付けない)
+    //boolean clientConducting == 0のとき、クライアントが処理中(入力は受け付けない)
+    //get server/clientConducting();とメッセージで現在の処理状態を取得
+    int serverConducting = 0, clientConducting = 0;
+    
+    //existCommandWindow == trueのとき、Viewのコマンドウィンドウを表示する
+    boolean existCommandWindow = true;
+    
+    int monsterID, skillID;
+    public MedimonController(MedimonModel m, Medimon1 v, boolean isServer) {
         view = v;
-        medimon = m;
+        model = m;
+        this.isServer = isServer;
+        if(isServer){
+            sv = new CommServer(10010);
+        } else {
+            cl = new CommClient("localhost", 10010);
+        }
         //view.(Buttonオブジェクト名).addActionListener(this);
     }
 
     public void actionPerformed(ActionEvent e){
-        //skillIDを設定しやすいように、setActionCommand()でskillIDを設定してください
+        //skillIDを設定しやすいように、JButton名.setActionCommand(skillID);を設定してください
+        existCommandWindow = false;
         skillID = Integer.parseInt(e.getActionCommand());
-
+        
+        if(isServer){
+            if(!model.getServerConducting == 0){
+                recvFromServer();
+                if(clientConducting == 0){
+                    setToModel();
+                }
+            }
+        } else {
+            if(!model.getClientConducting == 0){
+                recvFromServer();
+                if(serverConducting == 0){
+                    setToModel();
+                }
+            }
+        }
+        
+        skillID = Integer.parseInt(e.getActionCommand());
     }
 
-    public void sendAction(){
-        serverMsg = String.format("%d %d &d %d", monsterHp, monsterID, skillID, isServerAction);
-        sv.send(serverMsg);
-        cl.send(serverMsg);
+    //sendAction()
+    public void sendAction(int monsterIndex, int skillIndex){
+        if(isServer){
+            serverMsg = String.format("&d %d %d %d", monsterIndex, skillIndex, 1, serverConducting);
+            sv.send(serverMsg);
+        } else {
+            serverMsg = String.format("&d %d %d %d", monsterIndex, skillIndex, 2, clientConducting);
+            cl.send(serverMsg);
+        }
     }
 
-    //サーバーからのメッセージを取得するときは、以下のrecvFromServer()をViewに追加する
     public void recvFromServer(){
-        String[] serverMsgArray = sv.recv().split(" ");
-        String[] clientMsgArray = cl.recv().split(" ");
-        //View, model側にmonsterHp, monsterID, skillID, isServerActionの値をしまうint型変数と、
+        if(isServer){
+            String[] clientMsgArray = sv.recv().split(" ");
+            clientConducting = Integer.parseInt(clientMsgArray[3]);
+            //model.setMonster(Integer.parseInt(serverMsgArray[0]));
+            //model.setSkill(Integer.parseInt(serverMsgArray[1]));
+        } else {
+            String[] serverMsgArray = cl.recv().split(" ");
+            serverConducting = Integer.parseInt(serverMsgArray[3]);
+            //model.setMonster(Integer.parseInt(serverMsgArray[0]));
+            //model.setSkill(Integer.parseInt(serverMsgArray[1]));
+        }
+        //View, model側にmonsterID, skillIDの値をしまうint型変数と、
         //それをsetするメソッドを作ってください
+    }
+
+    //ボタン入力から受け取った自分のmonster/skillIDと、メッセージから受け取った相手のmonster/skillIDをmodelにsetする関数
+    public void setToModel(){
+        if(isServer){
+
+        }
+    }
+
+    public boolean getExistCommandWindow(){
+        return existCommandWindow;
     }
 }
