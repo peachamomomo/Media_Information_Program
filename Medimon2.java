@@ -43,6 +43,11 @@ class Medimon {
     }
 }
 
+class MedimonModel {
+    private ArrayList<Medimon> allmyself, allopponent;
+    private Medimon nowmyself, nowopponent;
+}
+
 class MedimonController implements ActionListener {
     protected Medimon1 view;
     public MedimonController(Medimon m, Medimon1 v) {
