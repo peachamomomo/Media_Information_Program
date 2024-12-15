@@ -38,13 +38,13 @@ class Medimon {
     //速さの減少・増加
     public void changeSpeed(int n){
         Float x = n / (float)100;
-        s = (int)(s * n);
+        s = (int)(s * x);
     }
 
     //防御の減少・増加
     public void changeBougyo(int n){
         Float x = n / (float)100;
-        b = (int)(b * n);
+        b = (int)(b * x);
     } 
 
     public int getMaxHp() { return H; }
@@ -52,6 +52,7 @@ class Medimon {
     public int getSpeed() { return s; }
     public int getBougyo() { return b; }
     public Skill getSkill(int index) { return a.get(index); }
+    public String getName() { return n; }
 }
 
 class MedimonModel {
@@ -88,11 +89,59 @@ class MedimonModel {
         }
     }
 
-    public setSkill(int Player1MonsterID, int Player1SkillID, int Player2MonsterID, int Player2SkillID) { //二人の行動を受け取る
+    public void setSkill(int Player1MonsterID, int Player1SkillID, int Player2MonsterID, int Player2SkillID) { //二人の行動を受け取る
         serverconducting = 1;
         Medimon p1 = all1medimon.get(now1medimon);
         Medimon p2 = all2medimon.get(now2medimon);
-        if(p1.getSpeed() >= p2.getSpeed()) {}       //ここを来週までに書く
+        Skill s1 = p1.getSkill(Player1SkillID);
+        Skill s2 = p2.getSkill(Player1SkillID);
+        if(p1.getSpeed() >= p2.getSpeed()) {
+            if(s1.getStatusTarget() == 'h') {
+                if(s1.getValue() < 0) p2.changeHp(s1.getValue());
+                else p1.changeHp(s1.getValue());
+            } else if(s1.getStatusTarget() == 's')  {
+                if(s1.getValue() < 100) p2.changeSpeed(s1.getValue());
+                else p1.changeSpeed(s1.getValue());
+            } else {
+                if(s1.getValue() < 100) p2.changeBougyo(s1.getValue());
+                else p1.changeBougyo(s1.getValue());
+            }
+        } else {
+            if(s2.getStatusTarget() == 'h') {
+                if(s2.getValue() < 0) p1.changeHp(s2.getValue());
+                else p2.changeHp(s2.getValue());
+            } else if(s2.getStatusTarget() == 's')  {
+                if(s2.getValue() < 100) p1.changeSpeed(s2.getValue());
+                else p2.changeSpeed(s2.getValue());
+            } else {
+                if(s2.getValue() < 100) p1.changeBougyo(s2.getValue());
+                else p2.changeBougyo(s2.getValue());
+            }
+        }  
+        if(p1.getSpeed() >= p2.getSpeed()) {  
+            if(s2.getStatusTarget() == 'h') {
+                if(s2.getValue() < 0) p1.changeHp(s2.getValue());
+                else p2.changeHp(s2.getValue());
+            } else if(s2.getStatusTarget() == 's')  {
+                if(s2.getValue() < 100) p1.changeSpeed(s2.getValue());
+                else p2.changeSpeed(s2.getValue());
+            } else {
+                if(s2.getValue() < 100) p1.changeBougyo(s2.getValue());
+                else p2.changeBougyo(s2.getValue());
+            }
+        }  else {
+            if(s1.getStatusTarget() == 'h') {
+                if(s1.getValue() < 0) p2.changeHp(s1.getValue());
+                else p1.changeHp(s1.getValue());
+            } else if(s1.getStatusTarget() == 's')  {
+                if(s1.getValue() < 100) p2.changeSpeed(s1.getValue());
+                else p1.changeSpeed(s1.getValue());
+            } else {
+                if(s1.getValue() < 100) p2.changeBougyo(s1.getValue());
+                else p1.changeBougyo(s1.getValue());
+            }
+        }  
+        serverconducting = 0;
     }
 
     public Skill getSkill(int Player, int Index) {
