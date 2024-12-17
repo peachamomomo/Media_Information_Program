@@ -3,28 +3,28 @@ import java.awt.event.*;
 class MedimonController implements ActionListener {
     protected Medimon1 view;
     protected MedimonModel model;
-    CommServer sv;
-    CommClient cl;
-    String serverMsg;
+    protected CommServer sv;
+    protected CommClient cl;
+    private String serverMsg;
     //自分がサーバかクライアントかを記録
-    boolean isServer;
+    private boolean isServer;
     
     //boolean serverConducting == 0のとき、サーバが処理中(入力は受け付けない)
     //boolean clientConducting == 0のとき、クライアントが処理中(入力は受け付けない)
     //get server/clientConducting();とメッセージで現在の処理状態を取得
-    int serverConducting = 0, clientConducting = 0;
+    private int serverConducting = 0, clientConducting = 0;
 
     //コマンド入力待ち
     //server/clientInput == 1のとき、入力された
-    int serverInput = 0, clientInput = 0;
+    private int serverInput = 0, clientInput = 0;
 
     //モンスター交代時の入力待ち
-    boolean changeMonsterWaiting = false;
+    private boolean changeMonsterWaiting = false;
     
     //existCommandWindow == trueのとき、Viewのコマンドウィンドウを表示する
-    boolean existCommandWindow = true;
+    private boolean existCommandWindow = true;
     
-    int monsterID, skillID, opponentMonsterID, opponentSkillID;
+    private int monsterID, skillID, opponentMonsterID, opponentSkillID;
     public MedimonController(MedimonModel m, Medimon1 v, boolean isServer) {
         view = v;
         model = m;
