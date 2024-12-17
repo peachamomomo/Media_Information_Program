@@ -4,22 +4,30 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
  
 class BattleFrame extends JFrame {
-  public BattleFrame(boolean server){
+  public BattleFrame(boolean server, MedimonModel mm){
+  int me, you;
+  if(server == true){
+    me = 1; you = 2;
+  }else{
+    me = 2; you = 1;
+  }
+  Medimon nowmymedimon = mm.getMedimon(me, 1), nowyourmedimon = mm.getMedimon(you, 1);
+
   JPanel p1=new JPanel(),p2=new JPanel(),p6=new JPanel(),p7=new JPanel();
 
 	JLabel l1=new JLabel("<html><img src='file:Background.png' width=100 height=200></html>",JLabel.CENTER);
-	JLabel l2=new JLabel("<html><span style='font-size:20pt; color:black;'>" + "</span></html>",JLabel.LEFT); //自分側のモンスターの名前
+	JLabel l2=new JLabel("<html><span style='font-size:20pt; color:black;'>" + nowmymedimon.getName() +  "</span></html>",JLabel.LEFT); //自分側のモンスターの名前
   JLabel l3=new JLabel("<html><img src='file:Thogg_b.png' width=500 height=500></html>",JLabel.CENTER); //自分側のモンスターの画像
-	JLabel l4=new JLabel("<html><span style='font-size:20pt; color:black;'>トーグ</span></html>",JLabel.RIGHT); //相手側のモンスターの名前
+	JLabel l4=new JLabel("<html><span style='font-size:20pt; color:black;'>" + nowyourmedimon.getName() + "</span></html>",JLabel.RIGHT); //相手側のモンスターの名前
   JLabel l5=new JLabel("<html><img src='file:Thogg_f.png' width=500 height=500></html>",JLabel.CENTER); //相手側のモンスターの画像
-	JLabel l6=new JLabel("<html><span style='font-size:20pt; color:black;'>HP 100/100</span></html>",JLabel.LEFT); //自分側のモンスターのHP
-	JLabel l7=new JLabel("<html><span style='font-size:20pt; color:black;'>HP 100/100</span></html>",JLabel.RIGHT); //相手側のモンスターのHP
+	JLabel l6=new JLabel("<html><span style='font-size:20pt; color:black;'>HP " + nowmymedimon.getHp() + "/" + nowmymedimon.getMaxHp() + "</span></html>",JLabel.LEFT); //自分側のモンスターのHP
+	JLabel l7=new JLabel("<html><span style='font-size:20pt; color:black;'>HP " + nowyourmedimon.getHp() + "/" + nowyourmedimon.getMaxHp() + "</span></html>",JLabel.RIGHT); //相手側のモンスターのHP
 
-	JProgressBar bar1 = new JProgressBar();
-	bar1.setValue(100);
+	JProgressBar bar1 = new JProgressBar(0, nowmymedimon.getMaxHp());
+	bar1.setValue(nowmymedimon.getHp());
   bar1.setForeground(Color.GREEN);
-	JProgressBar bar2 = new JProgressBar();
-	bar2.setValue(100);
+	JProgressBar bar2 = new JProgressBar(0, nowyourmedimon.getMaxHp());
+	bar2.setValue(nowyourmedimon.getHp());
   bar2.setForeground(Color.GREEN);
  
   this.setTitle("メディアモンスター");
@@ -52,12 +60,14 @@ class BattleFrame extends JFrame {
 }
 
 class CommandFrame extends JFrame{
-  public CommandFrame(boolean server){
+  MedimonController mc;
+  JButton b1, b2, b3, b4, b5;
+  public CommandFrame(boolean server, MedimonModel mm){
     JPanel p1=new JPanel(),p2=new JPanel();
     // JPanelに貼り付けるためのJButtonを5つ生成
-    JButton b1=new JButton("button 1"),b2=new JButton("button 2");
-    JButton b3=new JButton("button 3"),b4=new JButton("button 4");
-    JButton b5=new JButton("button 5");
+    b1=new JButton("Skill 1"); b2=new JButton("Skill 2");
+    b3=new JButton("Skill 3"); b4=new JButton("Skill 4");
+    b5=new JButton("こうたい");
     b1.setActionCommand("0");
     b2.setActionCommand("1");
     b3.setActionCommand("2");
@@ -79,9 +89,25 @@ class CommandFrame extends JFrame{
    
     this.setSize(1200,200);
     this.setLocation(360, 740);
-    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.setVisible(true);
+
+    if(mc.getExistCommandWindow() == false){
+      this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
+    
+    this.setVisible(true);
+  }
+
+  public void setMedimonController(MedimonController mc){
+    this.mc = mc;
+  }
+
+  public JButton getButton(int i){
+    if(i==1){return b1;}
+    else if(i==2){return b2;}
+    else if(i==3){return b3;}
+    else if(i==4){return b4;}
+    else{return b5;}
+  }
 }
 
 public class Medimon1 {
@@ -93,18 +119,27 @@ public class Medimon1 {
       System.exit(1);
     }
     MedimonModel mm;
+    BattleFrame mv1;
+    MedimonController mc;
+    CommandFrame mv2;
     if (args[0].equals("server")){
        server=true;
        System.out.println("Server mode");
        str="server";
        mm = new MedimonModel();
+       mv1 = new BattleFrame(server, mm);
+       mv2 = new CommandFrame(server, mm);
+       mc = new MedimonController(mm, mv2, server);
+       mv2.setMedimonController(mc);
     }else{
        server=false;
        System.out.println("Client mode");
        str="cilent";
        mm = new MedimonModel();
+       mv1 = new BattleFrame(server, mm);
+       mv2 = new CommandFrame(server, mm);
+       mc = new MedimonController(mm, mv2, server);
     }
-    new BattleFrame(server);
-    new CommandFrame(server);
+    
   }
 }
