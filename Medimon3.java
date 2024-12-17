@@ -55,6 +55,7 @@ class MedimonController implements ActionListener {
             sendAction(monsterID, skillID);
         }
         
+        //サーバ/クライアント両方のmodelにデータ送信
         while(isServer){
             recvFromServer();
             if(clientInput == 1){
@@ -70,6 +71,7 @@ class MedimonController implements ActionListener {
             }
         }
 
+        //サーバ/クライアント両方の処理が終わり次第コマンドウィンドウ表示を命令
         while(isServer){
             if(model.getServerConducting() == 0 && clientConducting == 0){
                 existCommandWindow = true;
@@ -144,6 +146,7 @@ class MedimonController implements ActionListener {
         }
     }
 
+    //コマンドウィンドウの非/表示を命令するboolean値
     public boolean getExistCommandWindow(){
         return existCommandWindow;
     }
