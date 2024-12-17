@@ -1,7 +1,7 @@
 import java.awt.event.*;
 
 class MedimonController implements ActionListener {
-    protected Medimon1 view;
+    protected MedimonController view;
     protected MedimonModel model;
     protected CommServer sv;
     protected CommClient cl;
@@ -25,7 +25,7 @@ class MedimonController implements ActionListener {
     private boolean existCommandWindow = true;
     
     private int monsterID, skillID, opponentMonsterID, opponentSkillID;
-    public MedimonController(MedimonModel m, Medimon1 v, boolean isServer) {
+    public MedimonController(MedimonModel m, MedimonController v, boolean isServer) {
         view = v;
         model = m;
         this.isServer = isServer;
@@ -37,6 +37,7 @@ class MedimonController implements ActionListener {
         //view.(Buttonオブジェクト名).addActionListener(this);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e){
         //if(Integer.parseInt(e.getActionCommand()) == (モンスター交代のskill番号)) changeMonsterWaiting = true;
         
@@ -103,9 +104,11 @@ class MedimonController implements ActionListener {
     public void sendAction(int monsterIndex, int skillIndex){
         if(isServer){
             serverMsg = String.format("%d %d %d %d %d", monsterIndex, skillIndex, 1, serverConducting, serverInput); //1 -> server
+            System.out.println(serverMsg);
             sv.send(serverMsg);
         } else {
             serverMsg = String.format("%d %d %d %d %d", monsterIndex, skillIndex, 2, clientConducting, clientInput); //2 ->client
+            System.out.println(serverMsg);
             cl.send(serverMsg);
         }
     }
@@ -114,12 +117,14 @@ class MedimonController implements ActionListener {
     public void recvFromServer(){
         if(isServer){
             String[] msgArray = sv.recv().split(" ");
+            System.out.println(sv.recv());
             opponentMonsterID = Integer.parseInt(msgArray[0]);
             opponentSkillID = Integer.parseInt(msgArray[1]);
             clientConducting = Integer.parseInt(msgArray[3]);
             clientInput = Integer.parseInt(msgArray[4]);
         } else {
             String[] msgArray = cl.recv().split(" ");
+            System.out.println(cl.recv());
             opponentMonsterID = Integer.parseInt(msgArray[0]);
             opponentSkillID = Integer.parseInt(msgArray[1]);
             serverConducting = Integer.parseInt(msgArray[3]);
