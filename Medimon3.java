@@ -1,7 +1,7 @@
 import java.awt.event.*;
 
 class MedimonController implements ActionListener {
-    protected MedimonController view;
+    protected CommandFrame view;
     protected MedimonModel model;
     protected CommServer sv;
     protected CommClient cl;
@@ -25,7 +25,7 @@ class MedimonController implements ActionListener {
     private boolean existCommandWindow = true;
     
     private int monsterID, skillID, opponentMonsterID, opponentSkillID;
-    public MedimonController(MedimonModel m, MedimonController v, boolean isServer) {
+    public MedimonController(MedimonModel m, CommandFrame v, boolean isServer) {
         view = v;
         model = m;
         this.isServer = isServer;
