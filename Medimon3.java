@@ -1,0 +1,145 @@
+import java.awt.event.*;
+
+class MedimonController implements ActionListener {
+    protected Medimon1 view;
+    protected MedimonModel model;
+    CommServer sv;
+    CommClient cl;
+    String serverMsg;
+    //自分がサーバかクライアントかを記録
+    boolean isServer;
+    
+    //boolean serverConducting == 0のとき、サーバが処理中(入力は受け付けない)
+    //boolean clientConducting == 0のとき、クライアントが処理中(入力は受け付けない)
+    //get server/clientConducting();とメッセージで現在の処理状態を取得
+    int serverConducting = 0, clientConducting = 0;
+
+    //コマンド入力待ち
+    //server/clientInput == 1のとき、入力された
+    int serverInput = 0, clientInput = 0;
+
+    //モンスター交代時の入力待ち
+    boolean changeMonsterWaiting = false;
+    
+    //existCommandWindow == trueのとき、Viewのコマンドウィンドウを表示する
+    boolean existCommandWindow = true;
+    
+    int monsterID, skillID, opponentMonsterID, opponentSkillID;
+    public MedimonController(MedimonModel m, Medimon1 v, boolean isServer) {
+        view = v;
+        model = m;
+        this.isServer = isServer;
+        if(isServer){
+            sv = new CommServer(10010);
+        } else {
+            cl = new CommClient("localhost", 10010);
+        }
+        //view.(Buttonオブジェクト名).addActionListener(this);
+    }
+
+    public void actionPerformed(ActionEvent e){
+        //if(Integer.parseInt(e.getActionCommand()) == (モンスター交代のskill番号)) changeMonsterWaiting = true;
+        
+        //skillIDを設定しやすいように、JButton名.setActionCommand(skillID);を設定してください
+        existCommandWindow = false;
+        skillID = Integer.parseInt(e.getActionCommand());
+        //monsterID = view.getMonsterID(); //仮称: getMonsterID();でviewからMonsterのindex番号を受け取る
+
+        //サーバに送る
+        if(isServer){
+            serverInput = 1;
+            sendAction(monsterID, skillID);
+        } else {
+            clientInput = 1;
+            sendAction(monsterID, skillID);
+        }
+        
+        while(isServer){
+            recvFromServer();
+            if(clientInput == 1){
+                setToModel();
+                break;
+            }
+        }
+        while(!isServer){
+            recvFromServer();
+            if(serverInput == 1){
+                setToModel();
+                break;
+            }
+        }
+
+        while(isServer){
+            if(model.getServerConducting() == 0 && clientConducting == 0){
+                existCommandWindow = true;
+                break;
+            }
+        }
+        while(!isServer){
+            if(model.getServerConducting() == 0 && serverConducting == 0){
+                existCommandWindow = true;
+                break;
+            }
+        }
+
+        /*if(isServer){
+            if(model.getServerConducting() == 0){
+                recvFromServer();
+                if(clientConducting == 0){
+                    setToModel();
+                }
+            }
+        } else {
+            if(model.getServerConducting() == 0){
+                recvFromServer();
+                if(serverConducting == 0){
+                    setToModel();
+                }
+            }
+        }*/
+    }
+
+    //サーバにデータを送るメソッド
+    public void sendAction(int monsterIndex, int skillIndex){
+        if(isServer){
+            serverMsg = String.format("%d %d %d %d %d", monsterIndex, skillIndex, 1, serverConducting, serverInput); //1 -> server
+            sv.send(serverMsg);
+        } else {
+            serverMsg = String.format("%d %d %d %d %d", monsterIndex, skillIndex, 2, clientConducting, clientInput); //2 ->client
+            cl.send(serverMsg);
+        }
+    }
+
+    //サーバからデータを受け取るメソッド
+    public void recvFromServer(){
+        if(isServer){
+            String[] msgArray = sv.recv().split(" ");
+            opponentMonsterID = Integer.parseInt(msgArray[0]);
+            opponentSkillID = Integer.parseInt(msgArray[1]);
+            clientConducting = Integer.parseInt(msgArray[3]);
+            clientInput = Integer.parseInt(msgArray[4]);
+        } else {
+            String[] msgArray = cl.recv().split(" ");
+            opponentMonsterID = Integer.parseInt(msgArray[0]);
+            opponentSkillID = Integer.parseInt(msgArray[1]);
+            serverConducting = Integer.parseInt(msgArray[3]);
+            serverInput = Integer.parseInt(msgArray[4]);
+        }
+        //View, model側にmonsterID, skillIDの値をしまうint型変数と、
+        //それをsetするメソッドを作ってください
+    }
+
+    //ボタン入力から受け取った自分のmonster/skillIDと、メッセージから受け取った相手のmonster/skillIDをmodelにsetするメソッド
+    public void setToModel(){
+        //setSkillのPlayer1にはserverの情報を、Player2にはclientの情報を入力するように実装しました
+        if(isServer){
+            model.setSkill(monsterID, skillID, opponentMonsterID, opponentSkillID);
+        } else {
+            model.setSkill(opponentMonsterID, opponentSkillID, monsterID, skillID);
+        }
+    }
+
+    public boolean getExistCommandWindow(){
+        return existCommandWindow;
+    }
+}
