@@ -5,7 +5,10 @@ class MedimonController implements ActionListener {
     protected MedimonModel model;
     protected CommServer sv;
     protected CommClient cl;
+
+    //サーバからのメッセージを記録
     private String serverMsg;
+
     //自分がサーバかクライアントかを記録
     private boolean isServer;
     
@@ -34,7 +37,11 @@ class MedimonController implements ActionListener {
         } else {
             cl = new CommClient("localhost", 10010);
         }
-        //view.(Buttonオブジェクト名).addActionListener(this);
+        view.getButton(0).addActionListener(this);
+        view.getButton(1).addActionListener(this);
+        view.getButton(2).addActionListener(this);
+        view.getButton(3).addActionListener(this);
+        view.getButton(4).addActionListener(this);
     }
 
     @Override
