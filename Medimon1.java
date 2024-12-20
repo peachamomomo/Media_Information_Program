@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.awt.event.ActionListener;
 
 import javax.swing.*;
  
@@ -11,7 +10,7 @@ class BattleFrame extends JFrame {
   }else{
     me = 2; you = 1;
   }
-  Medimon nowmymedimon = mm.getMedimon(me, 1), nowyourmedimon = mm.getMedimon(you, 1);
+  Medimon nowmymedimon = mm.getMedimon(me, 0), nowyourmedimon = mm.getMedimon(you, 0);
 
   JPanel p1=new JPanel(),p2=new JPanel(),p6=new JPanel(),p7=new JPanel();
 
@@ -60,7 +59,6 @@ class BattleFrame extends JFrame {
 }
 
 class CommandFrame extends JFrame{
-  MedimonController mc;
   JButton b1, b2, b3, b4, b5;
   public CommandFrame(boolean server, MedimonModel mm){
     JPanel p1=new JPanel(),p2=new JPanel();
@@ -90,16 +88,15 @@ class CommandFrame extends JFrame{
     this.setSize(1200,200);
     this.setLocation(360, 740);
 
-    if(mc.getExistCommandWindow() == false){
-      this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
     
     this.setVisible(true);
   }
 
-  public void setMedimonController(MedimonController mc){
-    this.mc = mc;
+  public void windowClose(){
+    System.out.println("OK");
+    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   }
+
 
   public JButton getButton(int i){
     if(i==1){return b1;}
@@ -130,7 +127,6 @@ public class Medimon1 {
        mv1 = new BattleFrame(server, mm);
        mv2 = new CommandFrame(server, mm);
        mc = new MedimonController(mm, mv2, server);
-       mv2.setMedimonController(mc);
     }else{
        server=false;
        System.out.println("Client mode");

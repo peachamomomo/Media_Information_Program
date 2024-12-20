@@ -49,7 +49,7 @@ class MedimonController implements ActionListener {
         //if(Integer.parseInt(e.getActionCommand()) == (モンスター交代のskill番号)) changeMonsterWaiting = true;
         
         //skillIDを設定しやすいように、JButton名.setActionCommand(skillID);を設定してください
-        existCommandWindow = false;
+        view.windowClose();
         skillID = Integer.parseInt(e.getActionCommand());
         //monsterID = view.getMonsterID(); //仮称: getMonsterID();でviewからMonsterのindex番号を受け取る
 
