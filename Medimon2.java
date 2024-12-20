@@ -19,7 +19,7 @@ class Medimon {
     private String n;  //名前
 
     public Medimon(int h, int s, int b, Skill s1, Skill s2, Skill s3, Skill s4, String n){
-        this.H = h; this.h = h; this.s = s; this.b = b;
+        this.H = h; this.h = h; this.s = s; this.b = b; this.n = n;
         this.a = new ArrayList<Skill>();
         a.add(s1);
         a.add(s2);

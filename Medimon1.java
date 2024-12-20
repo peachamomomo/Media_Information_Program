@@ -1,6 +1,4 @@
 import java.awt.*;
-import java.awt.event.ActionListener;
-
 import javax.swing.*;
  
 class BattleFrame extends JFrame {
@@ -11,7 +9,7 @@ class BattleFrame extends JFrame {
   }else{
     me = 2; you = 1;
   }
-  Medimon nowmymedimon = mm.getMedimon(me, 1), nowyourmedimon = mm.getMedimon(you, 1);
+  Medimon nowmymedimon = mm.getMedimon(me, 0), nowyourmedimon = mm.getMedimon(you, 0);
 
   JPanel p1=new JPanel(),p2=new JPanel(),p6=new JPanel(),p7=new JPanel();
 
