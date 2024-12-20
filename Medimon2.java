@@ -6,10 +6,13 @@ import java.util.*;
 class Skill {
     private Character x;
     private int n;
+    private String name;
     public Character getStatusTarget() { return x; }
     public void setStatusTarget(Character x) { this.x = x; }
     public int getValue() { return n; }
     public void setValue(int n) { this.n = n; }
+    public String getSkillname() { return name; }
+    public void setSkillname(String name) { this.name = name; }
 }
 
 class Medimon {
@@ -19,7 +22,7 @@ class Medimon {
     private String n;  //名前
 
     public Medimon(int h, int s, int b, Skill s1, Skill s2, Skill s3, Skill s4, String n){
-        this.H = h; this.h = h; this.s = s; this.b = b; this.n = n;
+        this.H = h; this.h = h; this.s = s; this.b = b;
         this.a = new ArrayList<Skill>();
         a.add(s1);
         a.add(s2);
@@ -30,9 +33,13 @@ class Medimon {
 
     //体力の減少・増加
     public void changeHp(int n){
-        h = h + n;
-        if(h >= H) h = H;
-        if(h < 0) h = 0;
+        if(n > 0) {
+            h = h + n;
+            if(h >= H) h = H;
+        } else {
+            h = h + n;
+            if(h < 0) h = 0;
+        }
     }
 
     //速さの減少・増加
@@ -65,18 +72,18 @@ class MedimonModel {
     public MedimonModel() {
         this.all1medimon = new ArrayList<Medimon>();
         h = 100; s = 50; b = 50;  n = "Monster";
-        s1.setStatusTarget('h'); s1.setValue(-20);
-        s2.setStatusTarget('h'); s2.setValue(-20);
-        s3.setStatusTarget('h'); s3.setValue(-20);
-        s4.setStatusTarget('h'); s4.setValue(-20);
+        s1.setStatusTarget('h'); s1.setValue(-20); s1.setSkillname("パンチ");
+        s2.setStatusTarget('h'); s2.setValue(-40); s2.setSkillname("キック");
+        s3.setStatusTarget('h'); s3.setValue(-60); s3.setSkillname("タックル");
+        s4.setStatusTarget('h'); s4.setValue(40); s4.setSkillname("かいふく");
         Medimon m1 = new Medimon(h, s, b, s1, s2, s3, s4, n);
         all1medimon.add(m1);
         this.all2medimon = new ArrayList<Medimon>();    
         h = 100; s = 50; b = 50;  n = "Monster";
-        s1.setStatusTarget('h'); s1.setValue(-20);
-        s2.setStatusTarget('h'); s2.setValue(-20);
-        s3.setStatusTarget('h'); s3.setValue(-20);
-        s4.setStatusTarget('h'); s4.setValue(-20);
+        s1.setStatusTarget('h'); s1.setValue(-20); s1.setSkillname("パンチ");
+        s2.setStatusTarget('h'); s2.setValue(-40); s2.setSkillname("キック");
+        s3.setStatusTarget('h'); s3.setValue(-60); s3.setSkillname("タックル");
+        s4.setStatusTarget('h'); s4.setValue(40); s4.setSkillname("かいふく");
         Medimon m2 = new Medimon(h, s, b, s1, s2, s3, s4, n);
         all2medimon.add(m2);
     }
