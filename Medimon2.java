@@ -35,7 +35,7 @@ class Medimon {
     public void changeHp(int n){
         if(n > 0) {
             h = h + n;
-            if(h >= H) h = (int)(n*(150-b)/100.0);
+            if(h >= H) h = (int)(n*(150-b)/(float)100);
         } else {
             h = h + n;
             if(h < 0) h = 0;
