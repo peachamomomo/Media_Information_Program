@@ -21,7 +21,7 @@ class MedimonController implements ActionListener {
 
     //コマンド入力待ち
     //server/clientInput == 1のとき、入力された
-    private int serverInput = 0, clientInput = 0;
+    //private int serverInput = 0, clientInput = 0;
 
     //モンスター交代時の入力待ち
     private boolean changeMonsterWaiting = false;
@@ -50,7 +50,6 @@ class MedimonController implements ActionListener {
     public void actionPerformed(ActionEvent e){
         //if(Integer.parseInt(e.getActionCommand()) == (モンスター交代のskill番号)) changeMonsterWaiting = true;
         
-        //skillIDを設定しやすいように、JButton名.setActionCommand(skillID);を設定してください
         view.windowClose();
         System.out.println("commandWindow :close");
         skillID = Integer.parseInt(e.getActionCommand());
@@ -58,36 +57,30 @@ class MedimonController implements ActionListener {
 
         //サーバに送る
         if(isServer){
-            serverInput = 1;
             sendAction(monsterID, skillID);
         } else {
-            clientInput = 1;
             sendAction(monsterID, skillID);
         }
         System.out.println("sendAction: finish");
         
         //サーバ/クライアント両方のmodelにデータ送信
-        while(isServer){
+        if(isServer){
             recvFromServer();
             System.out.println("recvFromServer: finish");
-            if(clientInput == 1){
-                setToModel();
-                System.out.println("setToModel: finish");
-                break;
-            }
-        }
-        while(!isServer){
+            setToModel();
+            System.out.println("setToModel: finish");
+        } else {
             recvFromServer();
             System.out.println("recvFromServer: finish");
-            if(serverInput == 1){
-                setToModel();
-                System.out.println("setToModel: finish");
-                break;
-            }
+            setToModel();
+            System.out.println("setToModel: finish");
         }
 
         //サーバ/クライアント両方の処理が終わり次第コマンドウィンドウ表示を命令
         while(isServer){
+          System.out.println("commandWindow :conduct");
+          sendAction(monsterID, skillID);
+          recvFromServer();
             if(model.getServerConducting() == 0 && clientConducting == 0){
                 //view.windowOpen();
                 System.out.println("commandWindow :open");
@@ -95,6 +88,9 @@ class MedimonController implements ActionListener {
             }
         }
         while(!isServer){
+          System.out.println("commandWindow :conduct");
+          sendAction(monsterID, skillID);
+          recvFromServer();
             if(model.getServerConducting() == 0 && serverConducting == 0){
                 //view.windowOpen();
                 System.out.println("commandWindow :open");
@@ -106,11 +102,11 @@ class MedimonController implements ActionListener {
     //サーバにデータを送るメソッド
     public void sendAction(int monsterIndex, int skillIndex){
         if(isServer){
-            serverMsg = String.format("%d %d %d %d %d", monsterIndex, skillIndex, 1, serverConducting, serverInput); //1 -> server
+            serverMsg = String.format("%d %d %d %d", monsterIndex, skillIndex, 1, model.getServerConducting()); //1 -> server
             System.out.println("send: " + serverMsg);
             sv.send(serverMsg);
         } else {
-            serverMsg = String.format("%d %d %d %d %d", monsterIndex, skillIndex, 2, clientConducting, clientInput); //2 ->client
+            serverMsg = String.format("%d %d %d %d", monsterIndex, skillIndex, 2, model.getServerConducting()); //2 ->client
             System.out.println("send: " + serverMsg);
             cl.send(serverMsg);
         }
@@ -123,17 +119,17 @@ class MedimonController implements ActionListener {
             opponentMonsterID = Integer.parseInt(msgArray[0]);
             opponentSkillID = Integer.parseInt(msgArray[1]);
             clientConducting = Integer.parseInt(msgArray[3]);
-            clientInput = Integer.parseInt(msgArray[4]);
+            //clientInput = Integer.parseInt(msgArray[4]);
             System.out.println("recv: "+opponentMonsterID+" "+opponentSkillID
-                                +" "+msgArray[2]+" "+clientConducting+" "+clientInput);
+                                +" "+msgArray[2]+" "+clientConducting);
           } else {
             String[] msgArray = (cl.recv()).split(" ");
             opponentMonsterID = Integer.parseInt(msgArray[0]);
             opponentSkillID = Integer.parseInt(msgArray[1]);
             serverConducting = Integer.parseInt(msgArray[3]);
-            serverInput = Integer.parseInt(msgArray[4]);
+            //serverInput = Integer.parseInt(msgArray[4]);
             System.out.println("recv: "+opponentMonsterID+" "+opponentSkillID
-                                +" "+msgArray[2]+" "+clientConducting+" "+clientInput);
+                                +" "+msgArray[2]+" "+clientConducting);
           }
         //View, model側にmonsterID, skillIDの値をしまうint型変数と、
         //それをsetするメソッドを作ってください
