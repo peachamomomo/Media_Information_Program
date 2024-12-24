@@ -39,7 +39,7 @@ class Medimon {
         } else {
             h = h + n;
             if(h < 0) h = 0;
-        }
+        } 
     }
 
     //速さの減少・増加

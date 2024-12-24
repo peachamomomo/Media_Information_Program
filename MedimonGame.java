@@ -155,34 +155,48 @@ class MedimonController implements ActionListener {
     }
 }
 
-class BattleFrame extends JFrame {
-  public BattleFrame(boolean server, MedimonModel mm){
+class BattleFrame extends JFrame implements ActionListener{
+  private Timer timer;
+  boolean server;
   int me, you;
+  Medimon nowmymedimon, nowyourmedimon;
+  JLabel l1, l2, l3, l4, l5, l6, l7;
+  public BattleFrame(boolean server, MedimonModel mm){
+  this.server = server;
   if(server == true){
-    me = 1; you = 2;
+    this.me = 1; this.you = 2;
   }else{
-    me = 2; you = 1;
+    this.me = 2; this.you = 1;
   }
-  Medimon nowmymedimon = mm.getMedimon(me, 0), nowyourmedimon = mm.getMedimon(you, 0);
+  this.nowmymedimon = mm.getMedimon(me, 0); this.nowyourmedimon = mm.getMedimon(you, 0);
 
   JPanel p1=new JPanel(),p2=new JPanel(),p6=new JPanel(),p7=new JPanel();
 
-	JLabel l1=new JLabel("<html><img src='file:Background.png' width=100 height=200></html>",JLabel.CENTER);
-	JLabel l2=new JLabel("<html><span style='font-size:20pt; color:black;'>" + nowmymedimon.getName() +  "</span></html>",JLabel.LEFT); //自分側のモンスターの名前
-  JLabel l3=new JLabel("<html><img src='file:Thogg_b.png' width=500 height=500></html>",JLabel.CENTER); //自分側のモンスターの画像
-	JLabel l4=new JLabel("<html><span style='font-size:20pt; color:black;'>" + nowyourmedimon.getName() + "</span></html>",JLabel.RIGHT); //相手側のモンスターの名前
-  JLabel l5=new JLabel("<html><img src='file:Thogg_f.png' width=500 height=500></html>",JLabel.CENTER); //相手側のモンスターの画像
-	JLabel l6=new JLabel("<html><span style='font-size:20pt; color:black;'>HP " + nowmymedimon.getHp() + "/" + nowmymedimon.getMaxHp() + "</span></html>",JLabel.LEFT); //自分側のモンスターのHP
-	JLabel l7=new JLabel("<html><span style='font-size:20pt; color:black;'>HP " + nowyourmedimon.getHp() + "/" + nowyourmedimon.getMaxHp() + "</span></html>",JLabel.RIGHT); //相手側のモンスターのHP
+  timer = new Timer(1, this); // 1ミリ秒毎にactionPerformedを呼び出し
+  timer.start(); // stopメソッドを呼ぶまでactionPerformedが呼ばれ続ける
 
+	l1=new JLabel("<html><img src='file:Background.png' width=100 height=200></html>",JLabel.CENTER);
+	l2=new JLabel("<html><span style='font-size:20pt; color:black;'>" + nowmymedimon.getName() +  "</span></html>",JLabel.LEFT); //自分側のモンスターの名前
+  l3=new JLabel("<html><img src='file:Thogg_b.png' width=500 height=500></html>",JLabel.CENTER); //自分側のモンスターの画像
+	l4=new JLabel("<html><span style='font-size:20pt; color:black;'>" + nowyourmedimon.getName() + "</span></html>",JLabel.RIGHT); //相手側のモンスターの名前
+  l5=new JLabel("<html><img src='file:Thogg_f.png' width=500 height=500></html>",JLabel.CENTER); //相手側のモンスターの画像
+	l6=new JLabel("<html><span style='font-size:20pt; color:black;'>HP " + nowmymedimon.getHp() + "/" + nowmymedimon.getMaxHp() + "</span></html>",JLabel.LEFT); //自分側のモンスターのHP
+	l7=new JLabel("<html><span style='font-size:20pt; color:black;'>HP " + nowyourmedimon.getHp() + "/" + nowyourmedimon.getMaxHp() + "</span></html>",JLabel.RIGHT); //相手側のモンスターのHP
+
+  
 	JProgressBar bar1 = new JProgressBar(0, nowmymedimon.getMaxHp());
 	bar1.setValue(nowmymedimon.getHp());
   bar1.setForeground(Color.GREEN);
 	JProgressBar bar2 = new JProgressBar(0, nowyourmedimon.getMaxHp());
 	bar2.setValue(nowyourmedimon.getHp());
   bar2.setForeground(Color.GREEN);
- 
-  this.setTitle("メディアモンスター");
+  
+  if(me==1){
+    this.setTitle("Server Mode");
+  }else{
+    this.setTitle("Client Mode");
+  }
+  
 
   p1.setLayout(new BorderLayout());
   p2.setLayout(new BorderLayout());
@@ -209,15 +223,29 @@ class BattleFrame extends JFrame {
   this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   this.setVisible(true);
   }
+  public void actionPerformed(ActionEvent e){
+    l2.setText("a");
+	  //l2.setText("<html><span style='font-size:20pt; color:black;'>" + this.nowmymedimon.getName() +  "</span></html>"); //自分側のモンスターの名前
+    //l3.setText("<html><img src='file:Thogg_b.png' width=500 height=500></html>"); //自分側のモンスターの画像
+	  //l4.setText("<html><span style='font-size:20pt; color:black;'>" + this.nowyourmedimon.getName() + "</span></html>"); //相手側のモンスターの名前
+    //l5.setText("<html><img src='file:Thogg_f.png' width=500 height=500></html>"); //相手側のモンスターの画像
+	  //l6.setText("<html><span style='font-size:20pt; color:black;'>HP " + this.nowmymedimon.getHp() + "/" + nowmymedimon.getMaxHp() + "</span></html>"); //自分側のモンスターのHP
+	  //l7.setText("<html><span style='font-size:20pt; color:black;'>HP " + this.nowyourmedimon.getHp() + "/" + nowyourmedimon.getMaxHp() + "</span></html>"); //相手側のモンスターのHP
+  }
 }
+
+
 
 class CommandFrame extends JFrame{
   JButton b1, b2, b3, b4, b5;
   public CommandFrame(boolean server, MedimonModel mm){
     JPanel p1=new JPanel(),p2=new JPanel();
+    int me;
+    if(server == true){me = 1;}
+    else{me = 2;}
     // JPanelに貼り付けるためのJButtonを5つ生成
-    b1=new JButton("Skill 1"); b2=new JButton("Skill 2");
-    b3=new JButton("Skill 3"); b4=new JButton("Skill 4");
+    b1=new JButton(mm.getSkill(me,0).getSkillname()); b2=new JButton(mm.getSkill(me,1).getSkillname());
+    b3=new JButton(mm.getSkill(me,2).getSkillname()); b4=new JButton(mm.getSkill(me,3).getSkillname());
     b5=new JButton("こうたい");
     b1.setActionCommand("0");
     b2.setActionCommand("1");
@@ -225,7 +253,11 @@ class CommandFrame extends JFrame{
     b4.setActionCommand("3");
     b5.setActionCommand("4");
 
-    this.setTitle("コマンド");
+    if(me==1){
+      this.setTitle("Server Mode");
+    }else{
+      this.setTitle("Client Mode");
+    }
 
     this.setLayout(new GridLayout(1,3));
 
