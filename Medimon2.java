@@ -101,7 +101,7 @@ class MedimonModel {
         Medimon p1 = all1medimon.get(now1medimon);
         Medimon p2 = all2medimon.get(now2medimon);
         Skill s1 = p1.getSkill(Player1SkillID);
-        Skill s2 = p2.getSkill(Player1SkillID);
+        Skill s2 = p2.getSkill(Player2SkillID);
         if(p1.getSpeed() >= p2.getSpeed()) {
             if(s1.getStatusTarget() == 'h') {
                 if(s1.getValue() < 0) p2.changeHp(s1.getValue());
