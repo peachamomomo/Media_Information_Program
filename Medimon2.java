@@ -35,7 +35,7 @@ class Medimon {
     public void changeHp(int n){
         if(n > 0) {
             h = h + n;
-            if(h >= H) h = H;
+            if(h >= H) h = (int)(n*(150-b)/(float)100);
         } else {
             h = h + n;
             if(h < 0) h = 0;
@@ -101,7 +101,7 @@ class MedimonModel {
         Medimon p1 = all1medimon.get(now1medimon);
         Medimon p2 = all2medimon.get(now2medimon);
         Skill s1 = p1.getSkill(Player1SkillID);
-        Skill s2 = p2.getSkill(Player1SkillID);
+        Skill s2 = p2.getSkill(Player2SkillID);
         if(p1.getSpeed() >= p2.getSpeed()) {
             if(s1.getStatusTarget() == 'h') {
                 if(s1.getValue() < 0) p2.changeHp(s1.getValue());
