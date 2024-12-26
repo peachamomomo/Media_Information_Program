@@ -35,9 +35,9 @@ class Medimon {
     public void changeHp(int n){
         if(n > 0) {
             h = h + n;
-            if(h >= H) h = (int)(n*(150-b)/(float)100);
+            if(h >= H) h = H;
         } else {
-            h = h + n;
+            h = h + (int)(n*(150-b)/(float)100);
             if(h < 0) h = 0;
         } 
     }
@@ -147,7 +147,7 @@ class MedimonModel {
                 if(sp1.getValue() < 100) p2.changeBougyo(sp1.getValue());
                 else p1.changeBougyo(sp1.getValue());
             }
-        }  
+        } 
         serverconducting = 0;
     }
 
