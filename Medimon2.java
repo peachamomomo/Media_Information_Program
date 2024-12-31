@@ -37,7 +37,7 @@ class Medimon {
             h = h + n;
             if(h >= H) h = H;
         } else {
-            h = h + n;
+            h = h + (int)(n*(150-b)/(float)100);
             if(h < 0) h = 0;
         } 
     }
@@ -100,54 +100,63 @@ class MedimonModel {
         serverconducting = 1;
         Medimon p1 = all1medimon.get(now1medimon);
         Medimon p2 = all2medimon.get(now2medimon);
-        Skill s1 = p1.getSkill(Player1SkillID);
-        Skill s2 = p2.getSkill(Player1SkillID);
-        if(p1.getSpeed() >= p2.getSpeed()) {
-            if(s1.getStatusTarget() == 'h') {
-                if(s1.getValue() < 0) p2.changeHp(s1.getValue());
-                else p1.changeHp(s1.getValue());
-            } else if(s1.getStatusTarget() == 's')  {
-                if(s1.getValue() < 100) p2.changeSpeed(s1.getValue());
-                else p1.changeSpeed(s1.getValue());
-            } else {
-                if(s1.getValue() < 100) p2.changeBougyo(s1.getValue());
-                else p1.changeBougyo(s1.getValue());
-            }
+        Skill sp1 = p1.getSkill(Player1SkillID);
+        Skill sp2 = p2.getSkill(Player2SkillID);
+        if(Player1MonsterID < 0 || Player2MonsterID < 0) {
+
         } else {
-            if(s2.getStatusTarget() == 'h') {
-                if(s2.getValue() < 0) p1.changeHp(s2.getValue());
-                else p2.changeHp(s2.getValue());
-            } else if(s2.getStatusTarget() == 's')  {
-                if(s2.getValue() < 100) p1.changeSpeed(s2.getValue());
-                else p2.changeSpeed(s2.getValue());
+        try{
+        if(p1.getSpeed() >= p2.getSpeed()) {
+            if(sp1.getStatusTarget() == 'h') {
+                if(sp1.getValue() < 0) p2.changeHp(sp1.getValue());
+                else p1.changeHp(sp1.getValue());
+            } else if(sp1.getStatusTarget() == 's')  {
+                if(sp1.getValue() < 100) p2.changeSpeed(sp1.getValue());
+                else p1.changeSpeed(sp1.getValue());
             } else {
-                if(s2.getValue() < 100) p1.changeBougyo(s2.getValue());
-                else p2.changeBougyo(s2.getValue());
+                if(sp1.getValue() < 100) p2.changeBougyo(sp1.getValue());
+                else p1.changeBougyo(sp1.getValue());
+            }                
+        } else {
+            if(sp2.getStatusTarget() == 'h') {
+                if(sp2.getValue() < 0) p1.changeHp(sp2.getValue());
+                else p2.changeHp(sp2.getValue());
+            } else if(sp2.getStatusTarget() == 's')  {
+                if(sp2.getValue() < 100) p1.changeSpeed(sp2.getValue());
+                else p2.changeSpeed(sp2.getValue());
+            } else {
+                if(sp2.getValue() < 100) p1.changeBougyo(sp2.getValue());
+                else p2.changeBougyo(sp2.getValue());
             }
-        }  
+        } 
+            Thread.sleep(3000);
         if(p1.getSpeed() >= p2.getSpeed()) {  
-            if(s2.getStatusTarget() == 'h') {
-                if(s2.getValue() < 0) p1.changeHp(s2.getValue());
-                else p2.changeHp(s2.getValue());
-            } else if(s2.getStatusTarget() == 's')  {
-                if(s2.getValue() < 100) p1.changeSpeed(s2.getValue());
-                else p2.changeSpeed(s2.getValue());
+            if(sp2.getStatusTarget() == 'h') {
+                if(sp2.getValue() < 0) p1.changeHp(sp2.getValue());
+                else p2.changeHp(sp2.getValue());
+            } else if(sp2.getStatusTarget() == 's')  {
+                if(sp2.getValue() < 100) p1.changeSpeed(sp2.getValue());
+                else p2.changeSpeed(sp2.getValue());
             } else {
-                if(s2.getValue() < 100) p1.changeBougyo(s2.getValue());
-                else p2.changeBougyo(s2.getValue());
+                if(sp2.getValue() < 100) p1.changeBougyo(sp2.getValue());
+                else p2.changeBougyo(sp2.getValue());
             }
         }  else {
-            if(s1.getStatusTarget() == 'h') {
-                if(s1.getValue() < 0) p2.changeHp(s1.getValue());
-                else p1.changeHp(s1.getValue());
-            } else if(s1.getStatusTarget() == 's')  {
-                if(s1.getValue() < 100) p2.changeSpeed(s1.getValue());
-                else p1.changeSpeed(s1.getValue());
+            if(sp1.getStatusTarget() == 'h') {
+                if(sp1.getValue() < 0) p2.changeHp(sp1.getValue());
+                else p1.changeHp(sp1.getValue());
+            } else if(sp1.getStatusTarget() == 's')  {
+                if(sp1.getValue() < 100) p2.changeSpeed(sp1.getValue());
+                else p1.changeSpeed(sp1.getValue());
             } else {
-                if(s1.getValue() < 100) p2.changeBougyo(s1.getValue());
-                else p1.changeBougyo(s1.getValue());
+                if(sp1.getValue() < 100) p2.changeBougyo(sp1.getValue());
+                else p1.changeBougyo(sp1.getValue());
             }
-        }  
+        }
+        } catch(InterruptedException e){
+            e.printStackTrace();
+        } 
+        }
         serverconducting = 0;
     }
 
@@ -160,4 +169,8 @@ class MedimonModel {
     }
 
     public int getServerConducting() { return serverconducting; }
+
+    public int getNow1medimon() { return now1medimon; }
+
+    public int getNow2medimon() { return now2medimon; }
 }
