@@ -140,6 +140,7 @@ class MedimonModel {
                 Skill sp2 = p2.getSkill(Player2SkillID);
                 p2Skill(p1, p2, sp2);
             }
+            serverconducting = 0;
         } else if(Player2SkillID < 0) {
             Medimon p1 = all1medimon.get(now1medimon);
             Medimon p2 = all2medimon.get(now2medimon);
@@ -147,6 +148,7 @@ class MedimonModel {
             p2 = all2medimon.get(now2medimon);
             Skill sp1 = p1.getSkill(Player1SkillID);
             p1Skill(p1, p2, sp1);
+            serverconducting = 0;
         } else {   
         Medimon p1 = all1medimon.get(now1medimon);
         Medimon p2 = all2medimon.get(now2medimon);
@@ -167,14 +169,13 @@ class MedimonModel {
                     }  else {
                         p1Skill(p1, p2, sp1);
                     } 
+                    serverconducting = 0;
                 }
             }, 3, TimeUnit.SECONDS);
         } catch (Exception e) {
             System.out.println(e);
         }
-        
         }
-        serverconducting = 0;
     }
 
     public void p1Skill (Medimon p1, Medimon p2, Skill sp1) {
