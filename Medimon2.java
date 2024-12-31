@@ -102,6 +102,9 @@ class MedimonModel {
         Medimon p2 = all2medimon.get(now2medimon);
         Skill sp1 = p1.getSkill(Player1SkillID);
         Skill sp2 = p2.getSkill(Player2SkillID);
+        if(Player1MonsterID < 0 || Player2MonsterID < 0) {
+
+        } else {
         if(p1.getSpeed() >= p2.getSpeed()) {
             if(sp1.getStatusTarget() == 'h') {
                 if(sp1.getValue() < 0) p2.changeHp(sp1.getValue());
@@ -112,6 +115,11 @@ class MedimonModel {
             } else {
                 if(sp1.getValue() < 100) p2.changeBougyo(sp1.getValue());
                 else p1.changeBougyo(sp1.getValue());
+            }            
+            try {
+                Thread.sleep(3000);
+            } catch(InterruptedException e){
+                e.printStackTrace();
             }
         } else {
             if(sp2.getStatusTarget() == 'h') {
@@ -124,11 +132,11 @@ class MedimonModel {
                 if(sp2.getValue() < 100) p1.changeBougyo(sp2.getValue());
                 else p2.changeBougyo(sp2.getValue());
             }
-        }
-        try {
-            Thread.sleep(3000);
-        } catch(InterruptedException e){
-            e.printStackTrace();
+            try {
+                Thread.sleep(3000);
+            } catch(InterruptedException e){
+                e.printStackTrace();
+            }
         } 
         if(p1.getSpeed() >= p2.getSpeed()) {  
             if(sp2.getStatusTarget() == 'h') {
@@ -153,6 +161,7 @@ class MedimonModel {
                 else p1.changeBougyo(sp1.getValue());
             }
         } 
+        }
         serverconducting = 0;
     }
 
