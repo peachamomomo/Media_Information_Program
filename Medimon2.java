@@ -131,12 +131,11 @@ class MedimonModel {
     public void setSkill(int Player1MonsterID, int Player1SkillID, int Player2MonsterID, int Player2SkillID) { //二人の行動を受け取る
         serverconducting = 1;
         if(Player1SkillID < 0) {
-            Medimon p1 = all1medimon.get(now1medimon);
             Medimon p2 = all2medimon.get(now2medimon);
             now1medimon = Player1MonsterID;
             if(Player2SkillID < 0) now2medimon = Player2MonsterID;
             else {
-                p1 = all1medimon.get(now1medimon);
+                Medimon p1 = all1medimon.get(now1medimon);
                 Skill sp2 = p2.getSkill(Player2SkillID);
                 p2Skill(p1, p2, sp2);
             }
@@ -169,12 +168,12 @@ class MedimonModel {
                     }  else {
                         p1Skill(p1, p2, sp1);
                     } 
-                    serverconducting = 0;
                 }
             }, 3, TimeUnit.SECONDS);
         } catch (Exception e) {
             System.out.println(e);
         }
+            serverconducting = 0;
         }
     }
 
