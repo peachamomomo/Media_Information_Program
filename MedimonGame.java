@@ -398,6 +398,12 @@ class ChangeFrame extends JFrame{
     System.out.println("OK");
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   }
+
+  public JButton getButton(int i){
+    if(i==0){return change1;}
+    else if(i==1){return change2;}
+    else if(i==2){return change3;}
+  }
 }
 
 public class MedimonGame {
