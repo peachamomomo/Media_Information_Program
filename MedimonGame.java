@@ -111,6 +111,7 @@ class MedimonController implements ActionListener {
         view.getButton(3).addActionListener(this);
         view.getButton(4).addActionListener(this);
         changeButton.addActionListener(this);
+        sendAction(monsterID, skillID);
 
         System.out.println("commandWindow :open");
         break;
@@ -128,6 +129,7 @@ class MedimonController implements ActionListener {
         view.getButton(3).addActionListener(this);
         view.getButton(4).addActionListener(this);
         changeButton.addActionListener(this);
+        sendAction(monsterID, skillID);
         
         System.out.println("commandWindow :open");
         break;
@@ -152,6 +154,7 @@ class MedimonController implements ActionListener {
   public void recvFromServer(){
     if(isServer){
       String[] msgArray = (sv.recv()).split(" ");
+      System.out.println(msgArray[3]);
       opponentMonsterID = Integer.parseInt(msgArray[0]);
       opponentSkillID = Integer.parseInt(msgArray[1]);
       clientConducting = Integer.parseInt(msgArray[3]);
@@ -160,6 +163,7 @@ class MedimonController implements ActionListener {
                           +" "+msgArray[2]+" "+clientConducting);
     } else {
       String[] msgArray = (cl.recv()).split(" ");
+      System.out.println(msgArray[3]);
       opponentMonsterID = Integer.parseInt(msgArray[0]);
       opponentSkillID = Integer.parseInt(msgArray[1]);
       serverConducting = Integer.parseInt(msgArray[3]);
