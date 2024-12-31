@@ -104,7 +104,14 @@ class MedimonController implements ActionListener {
       sendAction(monsterID, skillID);
       recvFromServer();
       if(model.getServerConducting() == 0 && clientConducting == 0){
-        //view.windowOpen();
+        view = new CommandFrame(isServer, model);
+        changeButton = view.getButton(-1);
+        view.getButton(1).addActionListener(this);
+        view.getButton(2).addActionListener(this);
+        view.getButton(3).addActionListener(this);
+        view.getButton(4).addActionListener(this);
+        changeButton.addActionListener(this);
+
         System.out.println("commandWindow :open");
         break;
       }
@@ -114,7 +121,14 @@ class MedimonController implements ActionListener {
       sendAction(monsterID, skillID);
       recvFromServer();
       if(model.getServerConducting() == 0 && serverConducting == 0){
-        //view.windowOpen();
+        view = new CommandFrame(isServer, model);
+        changeButton = view.getButton(-1);
+        view.getButton(1).addActionListener(this);
+        view.getButton(2).addActionListener(this);
+        view.getButton(3).addActionListener(this);
+        view.getButton(4).addActionListener(this);
+        changeButton.addActionListener(this);
+        
         System.out.println("commandWindow :open");
         break;
       }
