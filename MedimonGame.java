@@ -42,10 +42,10 @@ class MedimonController implements ActionListener {
       cl = new CommClient("localhost", 10010);
     }
     changeButton = view.getButton(-1);
-    view.getButton(0).addActionListener(this);
     view.getButton(1).addActionListener(this);
     view.getButton(2).addActionListener(this);
     view.getButton(3).addActionListener(this);
+    view.getButton(4).addActionListener(this);
     changeButton.addActionListener(this);
   }
 
@@ -130,7 +130,7 @@ class MedimonController implements ActionListener {
         view.getButton(4).addActionListener(this);
         changeButton.addActionListener(this);
         sendAction(monsterID, skillID);
-        
+
         System.out.println("commandWindow :open");
         break;
       }
