@@ -111,7 +111,7 @@ class MedimonController implements ActionListener {
         view.getButton(3).addActionListener(this);
         view.getButton(4).addActionListener(this);
         changeButton.addActionListener(this);
-        sendAction(monsterID, skillID);
+        //sendAction(monsterID, skillID);
 
         System.out.println("commandWindow :open");
         break;
@@ -129,7 +129,7 @@ class MedimonController implements ActionListener {
         view.getButton(3).addActionListener(this);
         view.getButton(4).addActionListener(this);
         changeButton.addActionListener(this);
-        sendAction(monsterID, skillID);
+        //sendAction(monsterID, skillID);
 
         System.out.println("commandWindow :open");
         break;
