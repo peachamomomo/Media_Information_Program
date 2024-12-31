@@ -1,13 +1,13 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.Border;
 
 class MedimonController implements ActionListener {
   protected CommandFrame view;
   protected MedimonModel model;
   protected CommServer sv;
   protected CommClient cl;
+  protected ChangeFrame changeFrame;
 
   //サーバからのメッセージを記録
   private String serverMsg;
@@ -26,6 +26,7 @@ class MedimonController implements ActionListener {
 
   //モンスター交代時の入力待ち
   private boolean changeMonsterWaiting = false;
+  private JButton changeButton;
     
   //existCommandWindow == trueのとき、Viewのコマンドウィンドウを表示する
   private boolean existCommandWindow = true;
@@ -40,20 +41,25 @@ class MedimonController implements ActionListener {
     } else {
       cl = new CommClient("localhost", 10010);
     }
+    changeButton = view.getButton(-1);
     view.getButton(0).addActionListener(this);
     view.getButton(1).addActionListener(this);
     view.getButton(2).addActionListener(this);
     view.getButton(3).addActionListener(this);
-    view.getButton(4).addActionListener(this);
+    changeButton.addActionListener(this);
   }
 
   @Override
   public void actionPerformed(ActionEvent e){
     //if(Integer.parseInt(e.getActionCommand()) == (モンスター交代のskill番号)) changeMonsterWaiting = true;
 
-    if(e.getSource() == change){
+    if(e.getSource() == changeButton){
       view.windowClose();
       System.out.println("commandWindow :close");
+      changeFrame = new ChangeFrame(isServer, model);
+      changeFrame.getButton(0).addActionListener(this);
+      changeFrame.getButton(1).addActionListener(this);
+      changeFrame.getButton(2).addActionListener(this);
       
       changeMonsterWaiting = true;
       return;
