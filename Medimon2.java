@@ -124,7 +124,12 @@ class MedimonModel {
                 if(sp2.getValue() < 100) p1.changeBougyo(sp2.getValue());
                 else p2.changeBougyo(sp2.getValue());
             }
-        }  
+        }
+        try {
+            Thread.sleep(3000);
+        } catch(InterruptedException e){
+            e.printStackTrace();
+        } 
         if(p1.getSpeed() >= p2.getSpeed()) {  
             if(sp2.getStatusTarget() == 'h') {
                 if(sp2.getValue() < 0) p1.changeHp(sp2.getValue());
@@ -160,4 +165,8 @@ class MedimonModel {
     }
 
     public int getServerConducting() { return serverconducting; }
+
+    public int getNow1medimon() { return now1medimon; }
+
+    public int getNow2medimon() { return now2medimon; }
 }
