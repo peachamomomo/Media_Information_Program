@@ -2,6 +2,10 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 
 class Skill {
     private Character x;
@@ -106,60 +110,54 @@ class MedimonModel {
 
         } else {
         if(p1.getSpeed() >= p2.getSpeed()) {
-            if(sp1.getStatusTarget() == 'h') {
-                if(sp1.getValue() < 0) p2.changeHp(sp1.getValue());
-                else p1.changeHp(sp1.getValue());
-            } else if(sp1.getStatusTarget() == 's')  {
-                if(sp1.getValue() < 100) p2.changeSpeed(sp1.getValue());
-                else p1.changeSpeed(sp1.getValue());
-            } else {
-                if(sp1.getValue() < 100) p2.changeBougyo(sp1.getValue());
-                else p1.changeBougyo(sp1.getValue());
-            }
+            p1Skill(p1, p2, sp1);
         } else {
-            if(sp2.getStatusTarget() == 'h') {
-                if(sp2.getValue() < 0) p1.changeHp(sp2.getValue());
-                else p2.changeHp(sp2.getValue());
-            } else if(sp2.getStatusTarget() == 's')  {
-                if(sp2.getValue() < 100) p1.changeSpeed(sp2.getValue());
-                else p2.changeSpeed(sp2.getValue());
-            } else {
-                if(sp2.getValue() < 100) p1.changeBougyo(sp2.getValue());
-                else p2.changeBougyo(sp2.getValue());
-            }
+            p2Skill(p1, p2, sp2);
         }
-        for (int i = 0; i < 5; i++) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        try {
+            final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+            executorService.schedule(new Runnable() {
+                @Override
+                public void run() {
+                    if(p1.getSpeed() >= p2.getSpeed()) {  
+                        p2Skill(p1, p2, sp2);
+                    }  else {
+                        p1Skill(p1, p2, sp1);
+                    } 
+                }
+            }, 3, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            System.out.println(e);
         }
-        if(p1.getSpeed() >= p2.getSpeed()) {  
-            if(sp2.getStatusTarget() == 'h') {
-                if(sp2.getValue() < 0) p1.changeHp(sp2.getValue());
-                else p2.changeHp(sp2.getValue());
-            } else if(sp2.getStatusTarget() == 's')  {
-                if(sp2.getValue() < 100) p1.changeSpeed(sp2.getValue());
-                else p2.changeSpeed(sp2.getValue());
-            } else {
-                if(sp2.getValue() < 100) p1.changeBougyo(sp2.getValue());
-                else p2.changeBougyo(sp2.getValue());
-            }
-        }  else {
-            if(sp1.getStatusTarget() == 'h') {
-                if(sp1.getValue() < 0) p2.changeHp(sp1.getValue());
-                else p1.changeHp(sp1.getValue());
-            } else if(sp1.getStatusTarget() == 's')  {
-                if(sp1.getValue() < 100) p2.changeSpeed(sp1.getValue());
-                else p1.changeSpeed(sp1.getValue());
-            } else {
-                if(sp1.getValue() < 100) p2.changeBougyo(sp1.getValue());
-                else p1.changeBougyo(sp1.getValue());
-            }
-        } 
+        
         }
         serverconducting = 0;
+    }
+
+    public void p1Skill (Medimon p1, Medimon p2, Skill sp1) {
+        if(sp1.getStatusTarget() == 'h') {
+            if(sp1.getValue() < 0) p2.changeHp(sp1.getValue());
+            else p1.changeHp(sp1.getValue());
+        } else if(sp1.getStatusTarget() == 's')  {
+            if(sp1.getValue() < 100) p2.changeSpeed(sp1.getValue());
+            else p1.changeSpeed(sp1.getValue());
+        } else {
+            if(sp1.getValue() < 100) p2.changeBougyo(sp1.getValue());
+            else p1.changeBougyo(sp1.getValue());
+        }
+    }
+
+    public void p2Skill (Medimon p1, Medimon p2, Skill sp2) {
+        if(sp2.getStatusTarget() == 'h') {
+            if(sp2.getValue() < 0) p1.changeHp(sp2.getValue());
+            else p2.changeHp(sp2.getValue());
+        } else if(sp2.getStatusTarget() == 's')  {
+            if(sp2.getValue() < 100) p1.changeSpeed(sp2.getValue());
+            else p2.changeSpeed(sp2.getValue());
+        } else {
+            if(sp2.getValue() < 100) p1.changeBougyo(sp2.getValue());
+            else p2.changeBougyo(sp2.getValue());
+        }
     }
 
     public Skill getSkill(int Player, int Index) {
