@@ -1,9 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 class MedimonController implements ActionListener {
   protected CommandFrame view;
@@ -102,59 +99,41 @@ class MedimonController implements ActionListener {
     }
   
     //サーバ/クライアント両方の処理が終わり次第コマンドウィンドウ表示を命令
-    if(isServer){
-      /*System.out.println("commandWindow :conduct");
-      sendAction(monsterID, skillID);
-      recvFromServer();
-      if(model.getServerConducting() == 0 && clientConducting == 0){*/
-      final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-      executorService.schedule(new Runnable() {          
-        @Override
-        public void run() {
-          view = new CommandFrame(isServer, model);
-        }
-      }, 6, TimeUnit.SECONDS);
-      /*try {
-        Thread.sleep(6000);
-        view = new CommandFrame(isServer, model);
-      } catch (Exception en) {
-        System.out.println(en);
-      }*/
-      changeButton = view.getButton(-1);
-      view.getButton(1).addActionListener(this);
-      view.getButton(2).addActionListener(this);
-      view.getButton(3).addActionListener(this);
-      view.getButton(4).addActionListener(this);
-      changeButton.addActionListener(this);
-      //sendAction(monsterID, skillID);
-
-      System.out.println("commandWindow :open");
-      /*break;
-    }*/
-    } else {
-      /*while(!isServer){
+    while(isServer){
       System.out.println("commandWindow :conduct");
       sendAction(monsterID, skillID);
       recvFromServer();
-      if(model.getServerConducting() == 0 && serverConducting == 0){*/
-      try {
-        Thread.sleep(6000);
+      if(model.getServerConducting() == 0 && clientConducting == 0){
         view = new CommandFrame(isServer, model);
-      } catch (Exception en) {
-        System.out.println(en);
-      }
-      changeButton = view.getButton(-1);
-      view.getButton(1).addActionListener(this);
-      view.getButton(2).addActionListener(this);
-      view.getButton(3).addActionListener(this);
-      view.getButton(4).addActionListener(this);
-      changeButton.addActionListener(this);
-      //sendAction(monsterID, skillID);
+        changeButton = view.getButton(-1);
+        view.getButton(1).addActionListener(this);
+        view.getButton(2).addActionListener(this);
+        view.getButton(3).addActionListener(this);
+        view.getButton(4).addActionListener(this);
+        changeButton.addActionListener(this);
+        sendAction(monsterID, skillID);
 
-      System.out.println("commandWindow :open");
-      /*break;
+        System.out.println("commandWindow :open");
+        break;
+      }
     }
-  }*/
+    while(!isServer){
+      System.out.println("commandWindow :conduct");
+      sendAction(monsterID, skillID);
+      recvFromServer();
+      if(model.getServerConducting() == 0 && serverConducting == 0){
+        view = new CommandFrame(isServer, model);
+        changeButton = view.getButton(-1);
+        view.getButton(1).addActionListener(this);
+        view.getButton(2).addActionListener(this);
+        view.getButton(3).addActionListener(this);
+        view.getButton(4).addActionListener(this);
+        changeButton.addActionListener(this);
+        sendAction(monsterID, skillID);
+
+        System.out.println("commandWindow :open");
+        break;
+      }
     }
   }
 
