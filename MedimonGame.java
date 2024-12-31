@@ -13,7 +13,7 @@ class MedimonController implements ActionListener {
   private String serverMsg;
 
   //自分がサーバかクライアントかを記録
-  private boolean isServer;
+  private final boolean isServer;
     
   //boolean serverConducting == 0のとき、サーバが処理中(入力は受け付けない)
   //boolean clientConducting == 0のとき、クライアントが処理中(入力は受け付けない)
