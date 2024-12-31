@@ -165,6 +165,11 @@ class MedimonController implements ActionListener {
   public boolean getExistCommandWindow(){
     return existCommandWindow;
   }
+
+  //場に出てるmedimonが死んだときに交代の入力を待つ状態にする
+  public void deathChangeMonster(){
+    changeMonsterWaiting = true;
+  }
 }
 
 class BattleFrame extends JFrame implements ActionListener{
