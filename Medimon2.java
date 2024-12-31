@@ -130,13 +130,28 @@ class MedimonModel {
 
     public void setSkill(int Player1MonsterID, int Player1SkillID, int Player2MonsterID, int Player2SkillID) { //二人の行動を受け取る
         serverconducting = 1;
+        if(Player1SkillID < 0) {
+            Medimon p1 = all1medimon.get(now1medimon);
+            Medimon p2 = all2medimon.get(now2medimon);
+            now1medimon = Player1MonsterID;
+            if(Player2SkillID < 0) now2medimon = Player2MonsterID;
+            else {
+                p1 = all1medimon.get(now1medimon);
+                Skill sp2 = p2.getSkill(Player2SkillID);
+                p2Skill(p1, p2, sp2);
+            }
+        } else if(Player2SkillID < 0) {
+            Medimon p1 = all1medimon.get(now1medimon);
+            Medimon p2 = all2medimon.get(now2medimon);
+            now2medimon = Player2MonsterID;
+            p2 = all2medimon.get(now2medimon);
+            Skill sp1 = p1.getSkill(Player1SkillID);
+            p1Skill(p1, p2, sp1);
+        } else {   
         Medimon p1 = all1medimon.get(now1medimon);
         Medimon p2 = all2medimon.get(now2medimon);
         Skill sp1 = p1.getSkill(Player1SkillID);
         Skill sp2 = p2.getSkill(Player2SkillID);
-        if(Player1MonsterID < 0 || Player2MonsterID < 0) {
-
-        } else {
         if(p1.getSpeed() >= p2.getSpeed()) {
             p1Skill(p1, p2, sp1);
         } else {
