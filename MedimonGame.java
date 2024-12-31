@@ -1,6 +1,9 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 class MedimonController implements ActionListener {
   protected CommandFrame view;
@@ -104,12 +107,19 @@ class MedimonController implements ActionListener {
       sendAction(monsterID, skillID);
       recvFromServer();
       if(model.getServerConducting() == 0 && clientConducting == 0){*/
-      try {
+      final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+      executorService.schedule(new Runnable() {          
+        @Override
+        public void run() {
+          view = new CommandFrame(isServer, model);
+        }
+      }, 6, TimeUnit.SECONDS);
+      /*try {
         Thread.sleep(6000);
         view = new CommandFrame(isServer, model);
       } catch (Exception en) {
         System.out.println(en);
-      }
+      }*/
       changeButton = view.getButton(-1);
       view.getButton(1).addActionListener(this);
       view.getButton(2).addActionListener(this);
