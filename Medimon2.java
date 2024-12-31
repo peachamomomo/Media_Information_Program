@@ -105,6 +105,7 @@ class MedimonModel {
         if(Player1MonsterID < 0 || Player2MonsterID < 0) {
 
         } else {
+        try{
         if(p1.getSpeed() >= p2.getSpeed()) {
             if(sp1.getStatusTarget() == 'h') {
                 if(sp1.getValue() < 0) p2.changeHp(sp1.getValue());
@@ -115,12 +116,7 @@ class MedimonModel {
             } else {
                 if(sp1.getValue() < 100) p2.changeBougyo(sp1.getValue());
                 else p1.changeBougyo(sp1.getValue());
-            }            
-            try {
-                Thread.sleep(3000);
-            } catch(InterruptedException e){
-                e.printStackTrace();
-            }
+            }                
         } else {
             if(sp2.getStatusTarget() == 'h') {
                 if(sp2.getValue() < 0) p1.changeHp(sp2.getValue());
@@ -132,12 +128,8 @@ class MedimonModel {
                 if(sp2.getValue() < 100) p1.changeBougyo(sp2.getValue());
                 else p2.changeBougyo(sp2.getValue());
             }
-            try {
-                Thread.sleep(3000);
-            } catch(InterruptedException e){
-                e.printStackTrace();
-            }
         } 
+            Thread.sleep(3000);
         if(p1.getSpeed() >= p2.getSpeed()) {  
             if(sp2.getStatusTarget() == 'h') {
                 if(sp2.getValue() < 0) p1.changeHp(sp2.getValue());
@@ -160,6 +152,9 @@ class MedimonModel {
                 if(sp1.getValue() < 100) p2.changeBougyo(sp1.getValue());
                 else p1.changeBougyo(sp1.getValue());
             }
+        }
+        } catch(InterruptedException e){
+            e.printStackTrace();
         } 
         }
         serverconducting = 0;
