@@ -389,9 +389,9 @@ class ChangeFrame extends JFrame{
     p2.add(l2, BorderLayout.WEST); p2.add(p5, BorderLayout.CENTER); p2.add(change2, BorderLayout.EAST);
     p3.add(l3, BorderLayout.WEST); p3.add(p6, BorderLayout.CENTER); p3.add(change3, BorderLayout.EAST);
 
-    if(mm.getNow1medimon() != 0 || mm.getMedimon(me, 0).getHp() != 0){this.add(p1);}
-    if(mm.getNow1medimon() != 1 || mm.getMedimon(me, 1).getHp() != 0){this.add(p2);}
-    if(mm.getNow1medimon() != 2 || mm.getMedimon(me, 2).getHp() != 0){this.add(p3);}
+    if(mm.getNow1medimon() != 0 && mm.getMedimon(me, 0).getHp() != 0){this.add(p1);}
+    if(mm.getNow1medimon() != 1 && mm.getMedimon(me, 1).getHp() != 0){this.add(p2);}
+    if(mm.getNow1medimon() != 2 && mm.getMedimon(me, 2).getHp() != 0){this.add(p3);}
 
     this.setSize(1200,200);
     this.setLocation(360, 740);
