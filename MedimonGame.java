@@ -324,7 +324,7 @@ class CommandFrame extends JFrame{
 
   public void windowClose(){
     System.out.println("OK");
-    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    this.dispose();
   }
 
 
@@ -352,9 +352,9 @@ class ChangeFrame extends JFrame{
     change2.setActionCommand("2");
 
     l1=new JLabel(); l2=new JLabel(); l3=new JLabel(); l4=new JLabel(); l5=new JLabel(); l6=new JLabel(); l7=new JLabel(); l8=new JLabel(); l9=new JLabel();
-    l1.setText("<html><img src='file:Thogg_b.png' width=500 height=500></html>");
-    l2.setText("<html><img src='file:Thogg_b.png' width=500 height=500></html>");
-    l3.setText("<html><img src='file:Thogg_b.png' width=500 height=500></html>");
+    l1.setText("<html><img src='file:Thogg_change.png' width=200 height=200></html>");
+    l2.setText("<html><img src='file:Thogg_change.png' width=200 height=200></html>");
+    l3.setText("<html><img src='file:Thogg_change.png' width=200 height=200></html>");
     l4.setText("<html><span style='font-size:20pt; color:black;'>" + mm.getMedimon(me, 0).getName() +  "</span></html>");
     l5.setText("<html><span style='font-size:20pt; color:black;'>HP " + mm.getMedimon(me, 0).getHp() + "/" + mm.getMedimon(me, 0).getMaxHp() + "</span></html>");
     l6.setText("<html><span style='font-size:20pt; color:black;'>" + mm.getMedimon(me, 1).getName() +  "</span></html>");
@@ -375,35 +375,34 @@ class ChangeFrame extends JFrame{
       this.setTitle("Client Mode");
     }
 
-    this.setLayout(new GridLayout(2,1));
+    this.setLayout(new GridLayout(3,1));
 
-    p1.setLayout(new BorderLayout());
-    p2.setLayout(new BorderLayout());
-    p3.setLayout(new BorderLayout());
+    p1.setLayout(new GridLayout(1,3));
+    p2.setLayout(new GridLayout(1,3));
+    p3.setLayout(new GridLayout(1,3));
 
-    p4.setLayout(new GridLayout(1,2));
-    p5.setLayout(new GridLayout(1,2));
-    p6.setLayout(new GridLayout(1,2));
+    p4.setLayout(new GridLayout(2,1));
+    p5.setLayout(new GridLayout(2,1));
+    p6.setLayout(new GridLayout(2,1));
     p4.add(l4); p4.add(l5); p5.add(l6); p5.add(l7); p6.add(l8); p6.add(l9); 
 
-    p1.add(l1, BorderLayout.WEST); p1.add(p4, BorderLayout.CENTER); p1.add(change1, BorderLayout.EAST);
-    p2.add(l2, BorderLayout.WEST); p2.add(p5, BorderLayout.CENTER); p2.add(change2, BorderLayout.EAST);
-    p3.add(l3, BorderLayout.WEST); p3.add(p6, BorderLayout.CENTER); p3.add(change3, BorderLayout.EAST);
+    p1.add(l1); p1.add(p4); p1.add(change1);
+    p2.add(l2); p2.add(p5); p2.add(change2);
+    p3.add(l3); p3.add(p6); p3.add(change3);
 
     if(mm.getNow1medimon() != 0 && mm.getMedimon(me, 0).getHp() != 0){this.add(p1);}
     if(mm.getNow1medimon() != 1 && mm.getMedimon(me, 1).getHp() != 0){this.add(p2);}
     if(mm.getNow1medimon() != 2 && mm.getMedimon(me, 2).getHp() != 0){this.add(p3);}
 
-    this.setSize(1200,200);
-    this.setLocation(360, 740);
+    this.setSize(1200, 600); 
+    this.setLocation(360, 140);
 
-    
     this.setVisible(true);
   }
 
   public void windowClose(){
     System.out.println("OK");
-    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    this.dispose();
   }
 
   public JButton getButton(int i){
