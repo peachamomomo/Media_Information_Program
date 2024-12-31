@@ -403,6 +403,7 @@ class ChangeFrame extends JFrame{
     if(i==0){return change1;}
     else if(i==1){return change2;}
     else if(i==2){return change3;}
+    return null;
   }
 }
 
