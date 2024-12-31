@@ -157,6 +157,7 @@ class MedimonController implements ActionListener {
 class BattleFrame extends JFrame implements ActionListener{
   private Timer timer;
   boolean server;
+  MedimonModel mm;
   int me, you;
   Medimon nowmymedimon, nowyourmedimon;
   JLabel l1, l2, l3, l4, l5, l6, l7;
@@ -168,7 +169,9 @@ class BattleFrame extends JFrame implements ActionListener{
   }else{
     this.me = 2; this.you = 1;
   }
-  this.nowmymedimon = mm.getMedimon(me, 0); this.nowyourmedimon = mm.getMedimon(you, 0);
+  this.mm = mm;
+
+  setNowMedimon(this.mm);
 
   JPanel p1=new JPanel(),p2=new JPanel(),p6=new JPanel(),p7=new JPanel();
 
@@ -232,7 +235,14 @@ class BattleFrame extends JFrame implements ActionListener{
   timer = new Timer(1, this); // 1ミリ秒毎にactionPerformedを呼び出し
   timer.start(); // stopメソッドを呼ぶまでactionPerformedが呼ばれ続ける
   }
+
+  public void setNowMedimon(MedimonModel mm){
+    this.nowmymedimon = mm.getMedimon(me, mm.getNow1medimon());
+    this.nowyourmedimon = mm.getMedimon(you, mm.getNow2medimon());
+  }
+
   public void actionPerformed(ActionEvent e){
+    setNowMedimon(this.mm);
 	  l2.setText("<html><span style='font-size:20pt; color:black;'>" + this.nowmymedimon.getName() +  "</span></html>"); //自分側のモンスターの名前
     l3.setText("<html><img src='file:Thogg_b.png' width=500 height=500></html>"); //自分側のモンスターの画像
 	  l4.setText("<html><span style='font-size:20pt; color:black;'>" + this.nowyourmedimon.getName() + "</span></html>"); //相手側のモンスターの名前
@@ -302,25 +312,37 @@ class CommandFrame extends JFrame{
 }
 
 class ChangeFrame extends JFrame{
-  JButton change1, change2;
-  JLabel l1, l2, l3, l4, l5, l6;
+  JButton change1, change2, change3;
+  JLabel l1, l2, l3, l4, l5, l6, l7, l8, l9;
   public ChangeFrame(boolean server, MedimonModel mm){
-    JPanel p1=new JPanel(),p2=new JPanel(), p3=new JPanel(), p4=new JPanel();
+    JPanel p1=new JPanel(),p2=new JPanel(), p3=new JPanel(), p4=new JPanel(), p5=new JPanel(), p6=new JPanel();
     int me;
     if(server == true){me = 1;}
     else{me = 2;}
     // JPanelに貼り付けるためのJButtonを5つ生成
-    change1=new JButton("こうたい"); change2=new JButton("こうたい");
+    change1=new JButton("こうたい"); change2=new JButton("こうたい"); change3=new JButton("こうたい");
     change1.setActionCommand("0");
     change2.setActionCommand("1");
+    change2.setActionCommand("2");
 
-    l1=new JLabel(); l2=new JLabel(); l3=new JLabel(); l4=new JLabel(); l5=new JLabel(); l6=new JLabel();
+    l1=new JLabel(); l2=new JLabel(); l3=new JLabel(); l4=new JLabel(); l5=new JLabel(); l6=new JLabel(); l7=new JLabel(); l8=new JLabel(); l9=new JLabel();
     l1.setText("<html><img src='file:Thogg_b.png' width=500 height=500></html>");
     l2.setText("<html><img src='file:Thogg_b.png' width=500 height=500></html>");
-    l3.setText("<html><span style='font-size:20pt; color:black;'>" + this.nowmymedimon.getName() +  "</span></html>");
-    l4.setText("<html><span style='font-size:20pt; color:black;'>HP " + this.nowmymedimon.getHp() + "/" + nowmymedimon.getMaxHp() + "</span></html>");
-
+    l3.setText("<html><img src='file:Thogg_b.png' width=500 height=500></html>");
+    l4.setText("<html><span style='font-size:20pt; color:black;'>" + mm.getMedimon(me, 0).getName() +  "</span></html>");
+    l5.setText("<html><span style='font-size:20pt; color:black;'>HP " + mm.getMedimon(me, 0).getHp() + "/" + mm.getMedimon(me, 0).getMaxHp() + "</span></html>");
+    l6.setText("<html><span style='font-size:20pt; color:black;'>" + mm.getMedimon(me, 1).getName() +  "</span></html>");
+    l7.setText("<html><span style='font-size:20pt; color:black;'>HP " + mm.getMedimon(me, 1).getHp() + "/" + mm.getMedimon(me, 1).getMaxHp() + "</span></html>");
+    l8.setText("<html><span style='font-size:20pt; color:black;'>" + mm.getMedimon(me, 2).getName() +  "</span></html>");
+    l9.setText("<html><span style='font-size:20pt; color:black;'>HP " + mm.getMedimon(me, 2).getHp() + "/" + mm.getMedimon(me, 2).getMaxHp() + "</span></html>");
     
+    l4.setHorizontalAlignment(JLabel.LEFT);
+    l5.setHorizontalAlignment(JLabel.LEFT);
+    l6.setHorizontalAlignment(JLabel.LEFT);
+    l7.setHorizontalAlignment(JLabel.LEFT);
+    l8.setHorizontalAlignment(JLabel.LEFT);
+    l9.setHorizontalAlignment(JLabel.LEFT);
+
     if(me==1){
       this.setTitle("Server Mode");
     }else{
@@ -331,13 +353,20 @@ class ChangeFrame extends JFrame{
 
     p1.setLayout(new BorderLayout());
     p2.setLayout(new BorderLayout());
+    p3.setLayout(new BorderLayout());
 
-    p1.add(l1, BorderLayout.WEST); p1.add(p3, BorderLayout.CENTER); p1.add(change1, BorderLayout.EAST);
-    p2.add(l2, BorderLayout.WEST); p2.add(p4, BorderLayout.CENTER); p3.add(change2, BorderLayout.EAST);
+    p4.setLayout(new GridLayout(1,2));
+    p5.setLayout(new GridLayout(1,2));
+    p6.setLayout(new GridLayout(1,2));
+    p4.add(l4); p4.add(l5); p5.add(l6); p5.add(l7); p6.add(l8); p6.add(l9); 
 
+    p1.add(l1, BorderLayout.WEST); p1.add(p4, BorderLayout.CENTER); p1.add(change1, BorderLayout.EAST);
+    p2.add(l2, BorderLayout.WEST); p2.add(p5, BorderLayout.CENTER); p2.add(change2, BorderLayout.EAST);
+    p3.add(l3, BorderLayout.WEST); p3.add(p6, BorderLayout.CENTER); p3.add(change3, BorderLayout.EAST);
 
-    this.add(p1);
-    this.add(p2);
+    if(mm.getNow1medimon() != 0 || mm.getMedimon(me, 0).getHp() != 0){this.add(p1);}
+    if(mm.getNow1medimon() != 1 || mm.getMedimon(me, 1).getHp() != 0){this.add(p2);}
+    if(mm.getNow1medimon() != 2 || mm.getMedimon(me, 2).getHp() != 0){this.add(p3);}
 
     this.setSize(1200,200);
     this.setLocation(360, 740);
@@ -349,15 +378,6 @@ class ChangeFrame extends JFrame{
   public void windowClose(){
     System.out.println("OK");
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-  }
-
-
-  public JButton getButton(int i){
-    if(i==1){return b1;}
-    else if(i==2){return b2;}
-    else if(i==3){return b3;}
-    else if(i==4){return b4;}
-    else{return change;}
   }
 }
 
