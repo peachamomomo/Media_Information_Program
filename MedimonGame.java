@@ -99,46 +99,52 @@ class MedimonController implements ActionListener {
     }
   
     //サーバ/クライアント両方の処理が終わり次第コマンドウィンドウ表示を命令
-    while(isServer){
-      System.out.println("commandWindow :conduct");
+    if(isServer){
+      /*System.out.println("commandWindow :conduct");
       sendAction(monsterID, skillID);
       recvFromServer();
-      if(model.getServerConducting() == 0 && clientConducting == 0){
-        try {
-          Thread.sleep(5000);
-          view = new CommandFrame(isServer, model);
-        } catch (Exception en) {
-          System.out.println(en);
-        }
-        changeButton = view.getButton(-1);
-        view.getButton(1).addActionListener(this);
-        view.getButton(2).addActionListener(this);
-        view.getButton(3).addActionListener(this);
-        view.getButton(4).addActionListener(this);
-        changeButton.addActionListener(this);
-        sendAction(monsterID, skillID);
-
-        System.out.println("commandWindow :open");
-        break;
-      }
-    }
-    while(!isServer){
-      System.out.println("commandWindow :conduct");
-      sendAction(monsterID, skillID);
-      recvFromServer();
-      if(model.getServerConducting() == 0 && serverConducting == 0){
+      if(model.getServerConducting() == 0 && clientConducting == 0){*/
+      try {
+        Thread.sleep(6000);
         view = new CommandFrame(isServer, model);
-        changeButton = view.getButton(-1);
-        view.getButton(1).addActionListener(this);
-        view.getButton(2).addActionListener(this);
-        view.getButton(3).addActionListener(this);
-        view.getButton(4).addActionListener(this);
-        changeButton.addActionListener(this);
-        sendAction(monsterID, skillID);
-
-        System.out.println("commandWindow :open");
-        break;
+      } catch (Exception en) {
+        System.out.println(en);
       }
+      changeButton = view.getButton(-1);
+      view.getButton(1).addActionListener(this);
+      view.getButton(2).addActionListener(this);
+      view.getButton(3).addActionListener(this);
+      view.getButton(4).addActionListener(this);
+      changeButton.addActionListener(this);
+      //sendAction(monsterID, skillID);
+
+      System.out.println("commandWindow :open");
+      /*break;
+    }*/
+    } else {
+      /*while(!isServer){
+      System.out.println("commandWindow :conduct");
+      sendAction(monsterID, skillID);
+      recvFromServer();
+      if(model.getServerConducting() == 0 && serverConducting == 0){*/
+      try {
+        Thread.sleep(6000);
+        view = new CommandFrame(isServer, model);
+      } catch (Exception en) {
+        System.out.println(en);
+      }
+      changeButton = view.getButton(-1);
+      view.getButton(1).addActionListener(this);
+      view.getButton(2).addActionListener(this);
+      view.getButton(3).addActionListener(this);
+      view.getButton(4).addActionListener(this);
+      changeButton.addActionListener(this);
+      //sendAction(monsterID, skillID);
+
+      System.out.println("commandWindow :open");
+      /*break;
+    }
+  }*/
     }
   }
 
