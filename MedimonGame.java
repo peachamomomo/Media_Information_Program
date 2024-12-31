@@ -104,7 +104,12 @@ class MedimonController implements ActionListener {
       sendAction(monsterID, skillID);
       recvFromServer();
       if(model.getServerConducting() == 0 && clientConducting == 0){
-        view = new CommandFrame(isServer, model);
+        try {
+          Thread.sleep(5000);
+          view = new CommandFrame(isServer, model);
+        } catch (Exception en) {
+          System.out.println(en);
+        }
         changeButton = view.getButton(-1);
         view.getButton(1).addActionListener(this);
         view.getButton(2).addActionListener(this);
