@@ -54,6 +54,7 @@ class MedimonController implements ActionListener {
     //if(Integer.parseInt(e.getActionCommand()) == (モンスター交代のskill番号)) changeMonsterWaiting = true;
 
     if(e.getSource() == changeButton){
+      if(changeMonsterWaiting) return;
       view.windowClose();
       System.out.println("commandWindow :close");
       changeFrame = new ChangeFrame(isServer, model);
