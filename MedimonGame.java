@@ -112,6 +112,7 @@ class MedimonController implements ActionListener {
         view.getButton(3).addActionListener(this);
         view.getButton(4).addActionListener(this);
         changeButton.addActionListener(this);
+        changeMonsterWaiting = false;
         //sendAction(monsterID, skillID);
 
         System.out.println("commandWindow :open");
@@ -282,8 +283,8 @@ class BattleFrame extends JFrame implements ActionListener{
   }
 
   public void setNowMedimon(MedimonModel mm){
-    this.nowmymedimon = mm.getMedimon(me, mm.getNow1medimon());
-    this.nowyourmedimon = mm.getMedimon(you, mm.getNow2medimon());
+    this.nowmymedimon = mm.getMedimon(me, mm.getNowmedimon(me));
+    this.nowyourmedimon = mm.getMedimon(you, mm.getNowmedimon(you));
   }
 
   public void actionPerformed(ActionEvent e){
@@ -409,9 +410,9 @@ class ChangeFrame extends JFrame{
     p2.add(l2); p2.add(p5); p2.add(change2);
     p3.add(l3); p3.add(p6); p3.add(change3);
 
-    if(mm.getNow1medimon() != 0 && mm.getMedimon(me, 0).getHp() != 0){this.add(p1);}
-    if(mm.getNow1medimon() != 1 && mm.getMedimon(me, 1).getHp() != 0){this.add(p2);}
-    if(mm.getNow1medimon() != 2 && mm.getMedimon(me, 2).getHp() != 0){this.add(p3);}
+    if(mm.getNowmedimon(me) != 0 && mm.getMedimon(me, 0).getHp() != 0){this.add(p1);}
+    if(mm.getNowmedimon(me) != 1 && mm.getMedimon(me, 1).getHp() != 0){this.add(p2);}
+    if(mm.getNowmedimon(me) != 2 && mm.getMedimon(me, 2).getHp() != 0){this.add(p3);}
 
     this.setSize(1200, 600); 
     this.setLocation(360, 140);

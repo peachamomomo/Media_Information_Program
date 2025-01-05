@@ -212,7 +212,8 @@ class MedimonModel {
 
     public int getServerConducting() { return serverconducting; }
 
-    public int getNow1medimon() { return now1medimon; }
-
-    public int getNow2medimon() { return now2medimon; }
+    public int getNowmedimon(int Player) { 
+        if(Player ==1) return now1medimon;
+        else return now2medimon; 
+    }
 }
