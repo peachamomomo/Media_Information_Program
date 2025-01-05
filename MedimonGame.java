@@ -203,6 +203,13 @@ class MedimonController implements ActionListener {
 
   //場に出てるmedimonが死んだときに交代の入力を待つ状態にする
   public void deathChangeMonster(){
+    view.windowClose();
+    System.out.println("commandWindow :close");
+    changeFrame = new ChangeFrame(isServer, model);
+    changeFrame.getButton(0).addActionListener(this);
+    changeFrame.getButton(1).addActionListener(this);
+    changeFrame.getButton(2).addActionListener(this);
+      
     changeMonsterWaiting = true;
   }
 }
