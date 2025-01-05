@@ -35,14 +35,14 @@ class MedimonController implements ActionListener {
   private boolean existCommandWindow = true;
     
   private int monsterID, skillID, opponentMonsterID, opponentSkillID;
-  public MedimonController(MedimonModel m, CommandFrame v, boolean isServer) {
+  public MedimonController(MedimonModel m, CommandFrame v, boolean isServer, int port) {
     view = v;
     model = m;
     this.isServer = isServer;
     if(isServer){
-      sv = new CommServer(10010);
+      sv = new CommServer(port);
     } else {
-      cl = new CommClient("localhost", 10010);
+      cl = new CommClient("localhost", port);
     }
     changeButton = view.getButton(-1);
     view.getButton(1).addActionListener(this);
@@ -444,6 +444,7 @@ public class MedimonGame {
   public static void main(String[] args) {
     String str;
     boolean server=false;
+    int port;
     if (args.length<2){
       System.out.println("Usage : java Medimon1 {server/{host name}} {port no.} \n");     
       System.exit(1);
@@ -454,20 +455,22 @@ public class MedimonGame {
     CommandFrame mv2;
     if (args[0].equals("server")){
        server=true;
+       port = Integer.parseInt(args[1]);
        System.out.println("Server mode");
        str="server";
        mm = new MedimonModel();
        mv1 = new BattleFrame(server, mm);
        mv2 = new CommandFrame(server, mm);
-       mc = new MedimonController(mm, mv2, server);
+       mc = new MedimonController(mm, mv2, server, port);
     }else{
        server=false;
+       port = Integer.parseInt(args[1]);
        System.out.println("Client mode");
        str="cilent";
        mm = new MedimonModel();
        mv1 = new BattleFrame(server, mm);
        mv2 = new CommandFrame(server, mm);
-       mc = new MedimonController(mm, mv2, server);
+       mc = new MedimonController(mm, mv2, server, port);
     }
     
   }
