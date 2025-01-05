@@ -1,9 +1,9 @@
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import javax.swing.*;
 
 class MedimonController implements ActionListener {
   protected CommandFrame view;
@@ -21,7 +21,7 @@ class MedimonController implements ActionListener {
   //boolean serverConducting == 0のとき、サーバが処理中(入力は受け付けない)
   //boolean clientConducting == 0のとき、クライアントが処理中(入力は受け付けない)
   //get server/clientConducting();とメッセージで現在の処理状態を取得
-  private int serverConducting = 0, clientConducting = 0;
+  //private int serverConducting = 0, clientConducting = 0;
 
   //コマンド入力待ち
   //server/clientInput == 1のとき、入力された
@@ -29,6 +29,9 @@ class MedimonController implements ActionListener {
 
   //モンスター交代時の入力待ち
   private boolean changeMonsterWaiting = false;
+  //deathChange: 自身のモンスター死亡時の交代選択待機
+  //deathChangeWaiting: 相手のモンスター死亡時の交代選択待機
+  private boolean deathChange = false, deathChangeWaiting = false;
   private JButton changeButton;
     
   //existCommandWindow == trueのとき、Viewのコマンドウィンドウを表示する
@@ -57,78 +60,114 @@ class MedimonController implements ActionListener {
     //if(Integer.parseInt(e.getActionCommand()) == (モンスター交代のskill番号)) changeMonsterWaiting = true;
 
     if(e.getSource() == changeButton){
+      view.windowClose();
       openChangeWindow();
 
       return;
     }
 
-    if(changeMonsterWaiting){
+    if(deathChange){
       changeFrame.windowClose();
       monsterID = Integer.parseInt(e.getActionCommand());
-      skillID = -1;
+      skillID = -2;
+      if(isServer){
+        model.deathChange(1, monsterID);
+        sendAction(monsterID, skillID);
+        System.out.println("server: deathChange");
+      } else {
+        model.deathChange(2, monsterID);
+        sendAction(monsterID, skillID);
+        System.out.println("client: deathChange");
+      }
+      deathChange = false;
+      return;
+    } else if(deathChangeWaiting){
+      recvFromServer();
+      if(isServer){
+        model.deathChange(2, monsterID);
+        System.out.println("client: deathChange");
+      } else {
+        model.deathChange(1, monsterID);
+        System.out.println("server: deathChange");
+      }
+      deathChangeWaiting = false;
     } else {
-      view.windowClose();
-      System.out.println("commandWindow :close");
-      
-      skillID = Integer.parseInt(e.getActionCommand());
-      //monsterID = view.getMonsterID(); //仮称: getMonsterID();でviewからMonsterのindex番号を受け取る
-    }
+      if(changeMonsterWaiting){
+        changeFrame.windowClose();
+        monsterID = Integer.parseInt(e.getActionCommand());
+        skillID = -1;
+      } else {
+        view.windowClose();
+        System.out.println("commandWindow :close");
+        
+        skillID = Integer.parseInt(e.getActionCommand());
+        //monsterID = view.getMonsterID(); //仮称: getMonsterID();でviewからMonsterのindex番号を受け取る
+      }
+    
+      //サーバに送る
+      if(isServer){
+        sendAction(monsterID, skillID);
+      } else {
+        sendAction(monsterID, skillID);
+      }
+      System.out.println("sendAction: finish");
+            
+      //サーバ/クライアント両方のmodelにデータ送信
+      if(isServer){
+        recvFromServer();
+        System.out.println("recvFromServer: finish");
+        setToModel();
+        System.out.println("setToModel: finish");
+      } else {
+        recvFromServer();
+        System.out.println("recvFromServer: finish");
+        setToModel();
+        System.out.println("setToModel: finish");
+      }
   
-    //サーバに送る
-    if(isServer){
-      sendAction(monsterID, skillID);
-    } else {
-      sendAction(monsterID, skillID);
-    }
-    System.out.println("sendAction: finish");
-          
-    //サーバ/クライアント両方のmodelにデータ送信
-    if(isServer){
-      recvFromServer();
-      System.out.println("recvFromServer: finish");
-      setToModel();
-      System.out.println("setToModel: finish");
-    } else {
-      recvFromServer();
-      System.out.println("recvFromServer: finish");
-      setToModel();
-      System.out.println("setToModel: finish");
-    }
-
-    while(isServer){
-      if(model.gameSet() == 1){
-        System.out.println("YOU WIN!");
-        return;
-      } else if(model.gameSet() == 2){
-        System.out.println("YOU LOSE...");
-        return;
-      } else {
-        if(model.getMedimon(1, model.getNowmedimon(1)).getHp() > 0
-        && model.getMedimon(2, model.getNowmedimon(2)).getHp() > 0){
-          break;
-        } else if(model.getMedimon(1, model.getNowmedimon(1)).getHp() == 0){
-          openChangeWindow();
+      if(isServer){
+        System.out.println("clientHP: " + model.getMedimon(1, model.getNowmedimon(1)).getHp() + "serverHP: "
+                            + model.getMedimon(2, model.getNowmedimon(2)).getHp());
+        if(model.gameSet() == 1){
+          System.out.println("YOU WIN!");
           return;
-        }
-      }
-    }
-
-    while(!isServer){
-      if(model.gameSet() == 2){
-        System.out.println("YOU WIN!");
-        return;
-      } else if(model.gameSet() == 1){
-        System.out.println("YOU LOSE...");
-        return;
-      } else {
-        if(model.getMedimon(2, model.getNowmedimon(1)).getHp() > 0
-        && model.getMedimon(1, model.getNowmedimon(2)).getHp() > 0){
-          break;
-        } else if(model.getMedimon(2, model.getNowmedimon(2)).getHp() == 0){
-          openChangeWindow();
+        } else if(model.gameSet() == 2){
+          System.out.println("YOU LOSE...");
           return;
+        } else {
+          //if(model.isDeathChange(1) == 1){ に変更
+          if(model.getMedimon(1, model.getNowmedimon(1)).getHp() == 0){
+            deathChange = true;
+            openChangeWindow();
+            return;
+            //else if(model.isDeathChange(2) == 1){ に変更
+          } else if(model.getMedimon(2, model.getNowmedimon(2)).getHp() == 0){
+            deathChangeWaiting = true;
+            return;
+          }
         }
-      }
+      } else {
+        System.out.println("clientHP: " + model.getMedimon(2, model.getNowmedimon(2)).getHp() + "serverHP: "
+                            + model.getMedimon(1, model.getNowmedimon(1)).getHp());
+        if(model.gameSet() == 2){
+          System.out.println("YOU WIN!");
+          return;
+        } else if(model.gameSet() == 1){
+          System.out.println("YOU LOSE...");
+          return;
+        } else {
+          //if(model.isDeathChange(2) == 2){ に変更
+          if(model.getMedimon(2, model.getNowmedimon(2)).getHp() == 0){
+            deathChange = true;
+            openChangeWindow();
+            return;
+            //else if(model.isDeathChange(1) == 1){ に変更
+          } else if(model.getMedimon(1, model.getNowmedimon(1)).getHp() == 0){
+            deathChangeWaiting = true;
+            return;
+          }
+        }
+      }  
     }
 
     //サーバ/クライアント両方の処理が終わり次第コマンドウィンドウ表示を命令
@@ -165,11 +204,11 @@ class MedimonController implements ActionListener {
     //サーバにデータを送るメソッド
   public void sendAction(int monsterIndex, int skillIndex){
     if(isServer){
-      serverMsg = String.format("%d %d %d %d", monsterIndex, skillIndex, 1, model.getServerConducting()); //1 -> server
+      serverMsg = String.format("%d %d %d", monsterIndex, skillIndex, 1); //1 -> server
       System.out.println("send: " + serverMsg);
       sv.send(serverMsg);
     } else {
-      serverMsg = String.format("%d %d %d %d", monsterIndex, skillIndex, 2, model.getServerConducting()); //2 ->client
+      serverMsg = String.format("%d %d %d", monsterIndex, skillIndex, 2); //2 ->client
       System.out.println("send: " + serverMsg);
       cl.send(serverMsg);
     }
@@ -179,22 +218,18 @@ class MedimonController implements ActionListener {
   public void recvFromServer(){
     if(isServer){
       String[] msgArray = (sv.recv()).split(" ");
-      System.out.println(msgArray[3]);
       opponentMonsterID = Integer.parseInt(msgArray[0]);
       opponentSkillID = Integer.parseInt(msgArray[1]);
-      clientConducting = Integer.parseInt(msgArray[3]);
       //clientInput = Integer.parseInt(msgArray[4]);
       System.out.println("recv: "+opponentMonsterID+" "+opponentSkillID
-                          +" "+msgArray[2]+" "+clientConducting);
+                          +" "+msgArray[2]);
     } else {
       String[] msgArray = (cl.recv()).split(" ");
-      System.out.println(msgArray[3]);
       opponentMonsterID = Integer.parseInt(msgArray[0]);
       opponentSkillID = Integer.parseInt(msgArray[1]);
-      serverConducting = Integer.parseInt(msgArray[3]);
       //serverInput = Integer.parseInt(msgArray[4]);
       System.out.println("recv: "+opponentMonsterID+" "+opponentSkillID
-                          +" "+msgArray[2]+" "+clientConducting);
+                          +" "+msgArray[2]);
     }
     //View, model側にmonsterID, skillIDの値をしまうint型変数と、
     //それをsetするメソッドを作ってください
@@ -242,18 +277,6 @@ class MedimonController implements ActionListener {
   //コマンドウィンドウの非/表示を命令するboolean値
   public boolean getExistCommandWindow(){
     return existCommandWindow;
-  }
-
-  //場に出てるmedimonが死んだときに交代の入力を待つ状態にする
-  public void deathChangeMonster(){
-    view.windowClose();
-    System.out.println("commandWindow :close");
-    changeFrame = new ChangeFrame(isServer, model);
-    changeFrame.getButton(0).addActionListener(this);
-    changeFrame.getButton(1).addActionListener(this);
-    changeFrame.getButton(2).addActionListener(this);
-      
-    changeMonsterWaiting = true;
   }
 }
 
