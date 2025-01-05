@@ -67,6 +67,7 @@ class MedimonController implements ActionListener {
     }
 
     if(changeMonsterWaiting){
+      changeFrame.windowClose();
       monsterID = Integer.parseInt(e.getActionCommand());
       skillID = -1;
     } else {
