@@ -236,4 +236,12 @@ class MedimonModel {
         if(Player ==1) return now1medimon;
         else return now2medimon; 
     }
+
+    public int gameSet() {
+        boolean p1 = all1medimon.get(0).getHp() == 0 && all1medimon.get(1).getHp() == 0 && all1medimon.get(2).getHp() == 0;
+        boolean p2 = all2medimon.get(0).getHp() == 0 && all2medimon.get(1).getHp() == 0 && all2medimon.get(2).getHp() == 0;
+        if(p1) return 1;
+        else if(p2) return 2;
+        else return 0;
+    }
 }
