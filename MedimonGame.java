@@ -57,15 +57,8 @@ class MedimonController implements ActionListener {
     //if(Integer.parseInt(e.getActionCommand()) == (モンスター交代のskill番号)) changeMonsterWaiting = true;
 
     if(e.getSource() == changeButton){
-      if(changeMonsterWaiting) return;
-      view.windowClose();
-      System.out.println("commandWindow :close");
-      changeFrame = new ChangeFrame(isServer, model);
-      changeFrame.getButton(0).addActionListener(this);
-      changeFrame.getButton(1).addActionListener(this);
-      changeFrame.getButton(2).addActionListener(this);
-      
-      changeMonsterWaiting = true;
+      openChangeWindow();
+
       return;
     }
 
@@ -101,7 +94,43 @@ class MedimonController implements ActionListener {
       setToModel();
       System.out.println("setToModel: finish");
     }
-  
+
+    while(isServer){
+      if(model.gameSet() == 1){
+        System.out.println("YOU WIN!");
+        return;
+      } else if(model.gameSet() == 2){
+        System.out.println("YOU LOSE...");
+        return;
+      } else {
+        if(model.getMedimon(1, model.getNowmedimon(1)).getHp() > 0
+        && model.getMedimon(2, model.getNowmedimon(2)).getHp() > 0){
+          break;
+        } else if(model.getMedimon(1, model.getNowmedimon(1)).getHp() == 0){
+          openChangeWindow();
+          return;
+        }
+      }
+    }
+
+    while(!isServer){
+      if(model.gameSet() == 2){
+        System.out.println("YOU WIN!");
+        return;
+      } else if(model.gameSet() == 1){
+        System.out.println("YOU LOSE...");
+        return;
+      } else {
+        if(model.getMedimon(2, model.getNowmedimon(1)).getHp() > 0
+        && model.getMedimon(1, model.getNowmedimon(2)).getHp() > 0){
+          break;
+        } else if(model.getMedimon(2, model.getNowmedimon(2)).getHp() == 0){
+          openChangeWindow();
+          return;
+        }
+      }
+    }
+
     //サーバ/クライアント両方の処理が終わり次第コマンドウィンドウ表示を命令
     if(isServer){
       System.out.println("commandWindow :conduct");
@@ -195,6 +224,20 @@ class MedimonController implements ActionListener {
 
     System.out.println("commandWindow :open");
   }
+
+  public void openChangeWindow(){
+    if(changeMonsterWaiting) return;
+      view.windowClose();
+      System.out.println("commandWindow :close");
+      changeFrame = new ChangeFrame(isServer, model);
+      changeFrame.getButton(0).addActionListener(this);
+      changeFrame.getButton(1).addActionListener(this);
+      changeFrame.getButton(2).addActionListener(this);
+      
+      changeMonsterWaiting = true;
+  }
+
+  public void waitingChange(){}
 
   //コマンドウィンドウの非/表示を命令するboolean値
   public boolean getExistCommandWindow(){
