@@ -100,43 +100,13 @@ class MedimonController implements ActionListener {
     }
   
     //サーバ/クライアント両方の処理が終わり次第コマンドウィンドウ表示を命令
-    while(isServer){
+    if(isServer){
       System.out.println("commandWindow :conduct");
-      sendAction(monsterID, skillID);
-      recvFromServer();
-      if(model.getServerConducting() == 0 && clientConducting == 0){
-        view = new CommandFrame(isServer, model);
-        changeButton = view.getButton(-1);
-        view.getButton(1).addActionListener(this);
-        view.getButton(2).addActionListener(this);
-        view.getButton(3).addActionListener(this);
-        view.getButton(4).addActionListener(this);
-        changeButton.addActionListener(this);
-        changeMonsterWaiting = false;
-        //sendAction(monsterID, skillID);
-
-        System.out.println("commandWindow :open");
-        break;
-      }
+      openCommandWindow();
     }
-    while(!isServer){
+    if(!isServer){
       System.out.println("commandWindow :conduct");
-      sendAction(monsterID, skillID);
-      recvFromServer();
-      if(model.getServerConducting() == 0 && serverConducting == 0){
-        view = new CommandFrame(isServer, model);
-        changeButton = view.getButton(-1);
-        view.getButton(1).addActionListener(this);
-        view.getButton(2).addActionListener(this);
-        view.getButton(3).addActionListener(this);
-        view.getButton(4).addActionListener(this);
-        changeButton.addActionListener(this);
-        changeMonsterWaiting = false;
-        //sendAction(monsterID, skillID);
-
-        System.out.println("commandWindow :open");
-        break;
-      }
+      openCommandWindow();
     }
   }
 
@@ -188,6 +158,19 @@ class MedimonController implements ActionListener {
       System.out.println("setToModel: "+opponentMonsterID+" "+opponentSkillID+" "+monsterID+" "+skillID);
       model.setSkill(opponentMonsterID, opponentSkillID, monsterID, skillID);
     }
+  }
+
+  public void openCommandWindow(){
+    view = new CommandFrame(isServer, model);
+    changeButton = view.getButton(-1);
+    view.getButton(1).addActionListener(this);
+    view.getButton(2).addActionListener(this);
+    view.getButton(3).addActionListener(this);
+    view.getButton(4).addActionListener(this);
+    changeButton.addActionListener(this);
+    changeMonsterWaiting = false;
+
+    System.out.println("commandWindow :open");
   }
 
   //コマンドウィンドウの非/表示を命令するboolean値
