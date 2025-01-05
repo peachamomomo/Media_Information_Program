@@ -198,6 +198,11 @@ class MedimonModel {
         }
     }
 
+    public void deathChange(int Player, int monsterID) {
+        if(Player == 1) now1medimon = monsterID;
+        else now2medimon = monsterID;
+    }
+
     public void p1Skill (Medimon p1, Medimon p2, Skill sp1) {
         if(sp1.getStatusTarget() == 'h') {
             if(sp1.getValue() < 0) p2.changeHp(sp1.getValue());
