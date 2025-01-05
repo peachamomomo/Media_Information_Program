@@ -137,7 +137,17 @@ class MedimonModel {
                 Medimon p1 = all1medimon.get(now1medimon);
                 Medimon p2 = all2medimon.get(now2medimon);
                 Skill sp2 = p2.getSkill(Player2SkillID);
-                p2Skill(p1, p2, sp2);
+                try {
+                    final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+                    executorService.schedule(new Runnable() {
+                        @Override
+                        public void run() { 
+                            p2Skill(p1, p2, sp2);
+                        }
+                    }, 2, TimeUnit.SECONDS);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
             }
             serverconducting = 0;
         } else if(Player2SkillID < 0) {
@@ -145,7 +155,17 @@ class MedimonModel {
             Medimon p1 = all1medimon.get(now1medimon);
             Medimon p2 = all2medimon.get(now2medimon);
             Skill sp1 = p1.getSkill(Player1SkillID);
-            p1Skill(p1, p2, sp1);
+            try {
+                final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+                executorService.schedule(new Runnable() {
+                    @Override
+                    public void run() {
+                        p1Skill(p1, p2, sp1);                       
+                    }
+                }, 2, TimeUnit.SECONDS);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
             serverconducting = 0;
         } else {   
         Medimon p1 = all1medimon.get(now1medimon);
@@ -168,7 +188,7 @@ class MedimonModel {
                         p1Skill(p1, p2, sp1);
                     } 
                 }
-            }, 3, TimeUnit.SECONDS);
+            }, 2, TimeUnit.SECONDS);
         } catch (Exception e) {
             System.out.println(e);
         }
