@@ -367,7 +367,7 @@ class ChangeFrame extends JFrame{
     change1=new JButton("こうたい"); change2=new JButton("こうたい"); change3=new JButton("こうたい");
     change1.setActionCommand("0");
     change2.setActionCommand("1");
-    change2.setActionCommand("2");
+    change3.setActionCommand("2");
 
     l1=new JLabel(); l2=new JLabel(); l3=new JLabel(); l4=new JLabel(); l5=new JLabel(); l6=new JLabel(); l7=new JLabel(); l8=new JLabel(); l9=new JLabel();
     l1.setText("<html><img src='file:Thogg_change.png' width=200 height=200></html>");
