@@ -177,20 +177,22 @@ class MedimonModel {
         } else {
             p2Skill(p1, p2, sp2);
         }
-        try {
-            final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-            executorService.schedule(new Runnable() {
-                @Override
-                public void run() {
-                    if(p1.getSpeed() >= p2.getSpeed()) {  
-                        p2Skill(p1, p2, sp2);
-                    }  else {
-                        p1Skill(p1, p2, sp1);
-                    } 
-                }
-            }, 2, TimeUnit.SECONDS);
-        } catch (Exception e) {
-            System.out.println(e);
+        if(p1.getHp()!=0 && p2.getHp()!=0) {
+            try {
+                final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+                executorService.schedule(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(p1.getSpeed() >= p2.getSpeed()) {  
+                            p2Skill(p1, p2, sp2);
+                        }  else {
+                            p1Skill(p1, p2, sp1);
+                        } 
+                    }
+                }, 2, TimeUnit.SECONDS);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         }
             serverconducting = 0;
         }
