@@ -1,6 +1,9 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 class MedimonController implements ActionListener {
   protected CommandFrame view;
@@ -102,11 +105,31 @@ class MedimonController implements ActionListener {
     //サーバ/クライアント両方の処理が終わり次第コマンドウィンドウ表示を命令
     if(isServer){
       System.out.println("commandWindow :conduct");
-      openCommandWindow();
+      try {
+        final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.schedule(new Runnable() {
+          @Override
+          public void run() { 
+            openCommandWindow();
+          }
+        }, 3, TimeUnit.SECONDS);
+      } catch (Exception en) {
+        System.out.println(en);
+      }
     }
     if(!isServer){
       System.out.println("commandWindow :conduct");
-      openCommandWindow();
+      try {
+        final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.schedule(new Runnable() {
+          @Override
+          public void run() { 
+            openCommandWindow();
+          }
+        }, 3, TimeUnit.SECONDS);
+      } catch (Exception en) {
+        System.out.println(en);
+      }
     }
   }
 
