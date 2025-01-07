@@ -412,6 +412,37 @@ class ChangeFrame extends JFrame{
   }
 }
 
+class TextFrame extends JFrame{
+  JLabel l1, l2;
+  public TextFrame(Medimon p, Skill sp){
+    JPanel p1=new JPanel();
+    l1=new JLabel(); l2=new JLabel();
+    
+    this.setTitle("Text");
+
+    this.add(p1);
+
+    l1.setText("<html><span style='font-size:20pt; color:black;'>" + p.getName() + "　の　" + sp.getSkillname() + "　！</span></html>");
+    if(sp.getValue() < 0){
+      l2.setText("<html><span style='font-size:20pt; color:black;'>" + sp.getValue()*(-1) + "　ダメージ！</span></html>");
+    }
+
+    p1.setLayout(new GridLayout(2,1));
+
+    p1.add(l1); p1.add(l2);
+   
+    this.setSize(1200,200);
+    this.setLocation(360, 740);
+
+    this.setVisible(true);
+  }
+
+  public void windowClose(){
+    System.out.println("OK");
+    this.dispose();
+  }
+}
+
 public class MedimonGame {
   public static void main(String[] args) {
     String str;
