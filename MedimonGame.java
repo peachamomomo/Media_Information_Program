@@ -1,6 +1,9 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 class MedimonController implements ActionListener {
   protected CommandFrame view;
@@ -13,7 +16,7 @@ class MedimonController implements ActionListener {
   private String serverMsg;
 
   //自分がサーバかクライアントかを記録
-  private boolean isServer;
+  private final boolean isServer;
     
   //boolean serverConducting == 0のとき、サーバが処理中(入力は受け付けない)
   //boolean clientConducting == 0のとき、クライアントが処理中(入力は受け付けない)
@@ -32,20 +35,20 @@ class MedimonController implements ActionListener {
   private boolean existCommandWindow = true;
     
   private int monsterID, skillID, opponentMonsterID, opponentSkillID;
-  public MedimonController(MedimonModel m, CommandFrame v, boolean isServer) {
+  public MedimonController(MedimonModel m, CommandFrame v, boolean isServer, int port) {
     view = v;
     model = m;
     this.isServer = isServer;
     if(isServer){
-      sv = new CommServer(10010);
+      sv = new CommServer(port);
     } else {
-      cl = new CommClient("localhost", 10010);
+      cl = new CommClient("localhost", port);
     }
     changeButton = view.getButton(-1);
-    view.getButton(0).addActionListener(this);
     view.getButton(1).addActionListener(this);
     view.getButton(2).addActionListener(this);
     view.getButton(3).addActionListener(this);
+    view.getButton(4).addActionListener(this);
     changeButton.addActionListener(this);
   }
 
@@ -67,6 +70,7 @@ class MedimonController implements ActionListener {
     }
 
     if(changeMonsterWaiting){
+      changeFrame.windowClose();
       monsterID = Integer.parseInt(e.getActionCommand());
       skillID = -1;
     } else {
@@ -99,24 +103,32 @@ class MedimonController implements ActionListener {
     }
   
     //サーバ/クライアント両方の処理が終わり次第コマンドウィンドウ表示を命令
-    while(isServer){
+    if(isServer){
       System.out.println("commandWindow :conduct");
-      sendAction(monsterID, skillID);
-      recvFromServer();
-      if(model.getServerConducting() == 0 && clientConducting == 0){
-        //view.windowOpen();
-        System.out.println("commandWindow :open");
-        break;
+      try {
+        final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.schedule(new Runnable() {
+          @Override
+          public void run() { 
+            openCommandWindow();
+          }
+        }, 3, TimeUnit.SECONDS);
+      } catch (Exception en) {
+        System.out.println(en);
       }
     }
-    while(!isServer){
+    if(!isServer){
       System.out.println("commandWindow :conduct");
-      sendAction(monsterID, skillID);
-      recvFromServer();
-      if(model.getServerConducting() == 0 && serverConducting == 0){
-        //view.windowOpen();
-        System.out.println("commandWindow :open");
-        break;
+      try {
+        final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.schedule(new Runnable() {
+          @Override
+          public void run() { 
+            openCommandWindow();
+          }
+        }, 3, TimeUnit.SECONDS);
+      } catch (Exception en) {
+        System.out.println(en);
       }
     }
   }
@@ -138,6 +150,7 @@ class MedimonController implements ActionListener {
   public void recvFromServer(){
     if(isServer){
       String[] msgArray = (sv.recv()).split(" ");
+      System.out.println(msgArray[3]);
       opponentMonsterID = Integer.parseInt(msgArray[0]);
       opponentSkillID = Integer.parseInt(msgArray[1]);
       clientConducting = Integer.parseInt(msgArray[3]);
@@ -146,6 +159,7 @@ class MedimonController implements ActionListener {
                           +" "+msgArray[2]+" "+clientConducting);
     } else {
       String[] msgArray = (cl.recv()).split(" ");
+      System.out.println(msgArray[3]);
       opponentMonsterID = Integer.parseInt(msgArray[0]);
       opponentSkillID = Integer.parseInt(msgArray[1]);
       serverConducting = Integer.parseInt(msgArray[3]);
@@ -167,6 +181,19 @@ class MedimonController implements ActionListener {
       System.out.println("setToModel: "+opponentMonsterID+" "+opponentSkillID+" "+monsterID+" "+skillID);
       model.setSkill(opponentMonsterID, opponentSkillID, monsterID, skillID);
     }
+  }
+
+  public void openCommandWindow(){
+    view = new CommandFrame(isServer, model);
+    changeButton = view.getButton(-1);
+    view.getButton(1).addActionListener(this);
+    view.getButton(2).addActionListener(this);
+    view.getButton(3).addActionListener(this);
+    view.getButton(4).addActionListener(this);
+    changeButton.addActionListener(this);
+    changeMonsterWaiting = false;
+
+    System.out.println("commandWindow :open");
   }
 
   //コマンドウィンドウの非/表示を命令するboolean値
@@ -263,8 +290,8 @@ class BattleFrame extends JFrame implements ActionListener{
   }
 
   public void setNowMedimon(MedimonModel mm){
-    this.nowmymedimon = mm.getMedimon(me, mm.getNow1medimon());
-    this.nowyourmedimon = mm.getMedimon(you, mm.getNow2medimon());
+    this.nowmymedimon = mm.getMedimon(me, mm.getNowmedimon(me));
+    this.nowyourmedimon = mm.getMedimon(you, mm.getNowmedimon(you));
   }
 
   public void actionPerformed(ActionEvent e){
@@ -348,7 +375,7 @@ class ChangeFrame extends JFrame{
     change1=new JButton("こうたい"); change2=new JButton("こうたい"); change3=new JButton("こうたい");
     change1.setActionCommand("0");
     change2.setActionCommand("1");
-    change2.setActionCommand("2");
+    change3.setActionCommand("2");
 
     l1=new JLabel(); l2=new JLabel(); l3=new JLabel(); l4=new JLabel(); l5=new JLabel(); l6=new JLabel(); l7=new JLabel(); l8=new JLabel(); l9=new JLabel();
     l1.setText("<html><img src='file:Thogg_change.png' width=200 height=200></html>");
@@ -389,9 +416,9 @@ class ChangeFrame extends JFrame{
     p2.add(l2); p2.add(p5); p2.add(change2);
     p3.add(l3); p3.add(p6); p3.add(change3);
 
-    if(mm.getNow1medimon() != 0 && mm.getMedimon(me, 0).getHp() != 0){this.add(p1);}
-    if(mm.getNow1medimon() != 1 && mm.getMedimon(me, 1).getHp() != 0){this.add(p2);}
-    if(mm.getNow1medimon() != 2 && mm.getMedimon(me, 2).getHp() != 0){this.add(p3);}
+    if(mm.getNowmedimon(me) != 0 && mm.getMedimon(me, 0).getHp() != 0){this.add(p1);}
+    if(mm.getNowmedimon(me) != 1 && mm.getMedimon(me, 1).getHp() != 0){this.add(p2);}
+    if(mm.getNowmedimon(me) != 2 && mm.getMedimon(me, 2).getHp() != 0){this.add(p3);}
 
     this.setSize(1200, 600); 
     this.setLocation(360, 140);
@@ -447,6 +474,7 @@ public class MedimonGame {
   public static void main(String[] args) {
     String str;
     boolean server=false;
+    int port;
     if (args.length<2){
       System.out.println("Usage : java Medimon1 {server/{host name}} {port no.} \n");     
       System.exit(1);
@@ -457,20 +485,22 @@ public class MedimonGame {
     CommandFrame mv2;
     if (args[0].equals("server")){
        server=true;
+       port = Integer.parseInt(args[1]);
        System.out.println("Server mode");
        str="server";
        mm = new MedimonModel();
        mv1 = new BattleFrame(server, mm);
        mv2 = new CommandFrame(server, mm);
-       mc = new MedimonController(mm, mv2, server);
+       mc = new MedimonController(mm, mv2, server, port);
     }else{
        server=false;
+       port = Integer.parseInt(args[1]);
        System.out.println("Client mode");
        str="cilent";
        mm = new MedimonModel();
        mv1 = new BattleFrame(server, mm);
        mv2 = new CommandFrame(server, mm);
-       mc = new MedimonController(mm, mv2, server);
+       mc = new MedimonController(mm, mv2, server, port);
     }
     
   }

@@ -2,6 +2,10 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 
 class Skill {
     private Character x;
@@ -71,20 +75,48 @@ class MedimonModel {
     private int serverconducting = 0;          //行動処理中であるか判別する値
     public MedimonModel() {
         this.all1medimon = new ArrayList<Medimon>();
-        h = 100; s = 50; b = 50;  n = "Monster";
+        h = 100; s = 50; b = 50;  n = "Monster1";
         s1.setStatusTarget('h'); s1.setValue(-20); s1.setSkillname("パンチ");
         s2.setStatusTarget('h'); s2.setValue(-40); s2.setSkillname("キック");
         s3.setStatusTarget('h'); s3.setValue(-60); s3.setSkillname("タックル");
         s4.setStatusTarget('h'); s4.setValue(40); s4.setSkillname("かいふく");
         Medimon m1 = new Medimon(h, s, b, s1, s2, s3, s4, n);
         all1medimon.add(m1);
+        h = 100; s = 50; b = 50;  n = "Monster2";
+        s1.setStatusTarget('h'); s1.setValue(-20); s1.setSkillname("パンチ");
+        s2.setStatusTarget('h'); s2.setValue(-40); s2.setSkillname("キック");
+        s3.setStatusTarget('h'); s3.setValue(-60); s3.setSkillname("タックル");
+        s4.setStatusTarget('h'); s4.setValue(40); s4.setSkillname("かいふく");
+        m1 = new Medimon(h, s, b, s1, s2, s3, s4, n);
+        all1medimon.add(m1);
+        h = 100; s = 50; b = 50;  n = "Monster3";
+        s1.setStatusTarget('h'); s1.setValue(-20); s1.setSkillname("パンチ");
+        s2.setStatusTarget('h'); s2.setValue(-40); s2.setSkillname("キック");
+        s3.setStatusTarget('h'); s3.setValue(-60); s3.setSkillname("タックル");
+        s4.setStatusTarget('h'); s4.setValue(40); s4.setSkillname("かいふく");
+        m1 = new Medimon(h, s, b, s1, s2, s3, s4, n);
+        all1medimon.add(m1);
         this.all2medimon = new ArrayList<Medimon>();    
-        h = 100; s = 50; b = 50;  n = "Monster";
+        h = 100; s = 50; b = 50;  n = "Monster1";
         s1.setStatusTarget('h'); s1.setValue(-20); s1.setSkillname("パンチ");
         s2.setStatusTarget('h'); s2.setValue(-40); s2.setSkillname("キック");
         s3.setStatusTarget('h'); s3.setValue(-60); s3.setSkillname("タックル");
         s4.setStatusTarget('h'); s4.setValue(40); s4.setSkillname("かいふく");
         Medimon m2 = new Medimon(h, s, b, s1, s2, s3, s4, n);
+        all2medimon.add(m2);
+        h = 100; s = 50; b = 50;  n = "Monster2";
+        s1.setStatusTarget('h'); s1.setValue(-20); s1.setSkillname("パンチ");
+        s2.setStatusTarget('h'); s2.setValue(-40); s2.setSkillname("キック");
+        s3.setStatusTarget('h'); s3.setValue(-60); s3.setSkillname("タックル");
+        s4.setStatusTarget('h'); s4.setValue(40); s4.setSkillname("かいふく");
+        m2 = new Medimon(h, s, b, s1, s2, s3, s4, n);
+        all2medimon.add(m2);
+        h = 100; s = 50; b = 50;  n = "Monster3";
+        s1.setStatusTarget('h'); s1.setValue(-20); s1.setSkillname("パンチ");
+        s2.setStatusTarget('h'); s2.setValue(-40); s2.setSkillname("キック");
+        s3.setStatusTarget('h'); s3.setValue(-60); s3.setSkillname("タックル");
+        s4.setStatusTarget('h'); s4.setValue(40); s4.setSkillname("かいふく");
+        m2 = new Medimon(h, s, b, s1, s2, s3, s4, n);
         all2medimon.add(m2);
     }
 
@@ -98,66 +130,96 @@ class MedimonModel {
 
     public void setSkill(int Player1MonsterID, int Player1SkillID, int Player2MonsterID, int Player2SkillID) { //二人の行動を受け取る
         serverconducting = 1;
+        if(Player1SkillID < 0) {
+            now1medimon = Player1MonsterID;
+            if(Player2SkillID < 0) now2medimon = Player2MonsterID;
+            else {
+                Medimon p1 = all1medimon.get(now1medimon);
+                Medimon p2 = all2medimon.get(now2medimon);
+                Skill sp2 = p2.getSkill(Player2SkillID);
+                try {
+                    final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+                    executorService.schedule(new Runnable() {
+                        @Override
+                        public void run() { 
+                            p2Skill(p1, p2, sp2);
+                        }
+                    }, 2, TimeUnit.SECONDS);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+            serverconducting = 0;
+        } else if(Player2SkillID < 0) {
+            now2medimon = Player2MonsterID;
+            Medimon p1 = all1medimon.get(now1medimon);
+            Medimon p2 = all2medimon.get(now2medimon);
+            Skill sp1 = p1.getSkill(Player1SkillID);
+            try {
+                final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+                executorService.schedule(new Runnable() {
+                    @Override
+                    public void run() {
+                        p1Skill(p1, p2, sp1);                       
+                    }
+                }, 2, TimeUnit.SECONDS);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            serverconducting = 0;
+        } else {   
         Medimon p1 = all1medimon.get(now1medimon);
         Medimon p2 = all2medimon.get(now2medimon);
         Skill sp1 = p1.getSkill(Player1SkillID);
         Skill sp2 = p2.getSkill(Player2SkillID);
-        if(Player1MonsterID < 0 || Player2MonsterID < 0) {
-
-        } else {
-        try{
         if(p1.getSpeed() >= p2.getSpeed()) {
-            if(sp1.getStatusTarget() == 'h') {
-                if(sp1.getValue() < 0) p2.changeHp(sp1.getValue());
-                else p1.changeHp(sp1.getValue());
-            } else if(sp1.getStatusTarget() == 's')  {
-                if(sp1.getValue() < 100) p2.changeSpeed(sp1.getValue());
-                else p1.changeSpeed(sp1.getValue());
-            } else {
-                if(sp1.getValue() < 100) p2.changeBougyo(sp1.getValue());
-                else p1.changeBougyo(sp1.getValue());
-            }                
+            p1Skill(p1, p2, sp1);
         } else {
-            if(sp2.getStatusTarget() == 'h') {
-                if(sp2.getValue() < 0) p1.changeHp(sp2.getValue());
-                else p2.changeHp(sp2.getValue());
-            } else if(sp2.getStatusTarget() == 's')  {
-                if(sp2.getValue() < 100) p1.changeSpeed(sp2.getValue());
-                else p2.changeSpeed(sp2.getValue());
-            } else {
-                if(sp2.getValue() < 100) p1.changeBougyo(sp2.getValue());
-                else p2.changeBougyo(sp2.getValue());
-            }
-        } 
-            Thread.sleep(3000);
-        if(p1.getSpeed() >= p2.getSpeed()) {  
-            if(sp2.getStatusTarget() == 'h') {
-                if(sp2.getValue() < 0) p1.changeHp(sp2.getValue());
-                else p2.changeHp(sp2.getValue());
-            } else if(sp2.getStatusTarget() == 's')  {
-                if(sp2.getValue() < 100) p1.changeSpeed(sp2.getValue());
-                else p2.changeSpeed(sp2.getValue());
-            } else {
-                if(sp2.getValue() < 100) p1.changeBougyo(sp2.getValue());
-                else p2.changeBougyo(sp2.getValue());
-            }
-        }  else {
-            if(sp1.getStatusTarget() == 'h') {
-                if(sp1.getValue() < 0) p2.changeHp(sp1.getValue());
-                else p1.changeHp(sp1.getValue());
-            } else if(sp1.getStatusTarget() == 's')  {
-                if(sp1.getValue() < 100) p2.changeSpeed(sp1.getValue());
-                else p1.changeSpeed(sp1.getValue());
-            } else {
-                if(sp1.getValue() < 100) p2.changeBougyo(sp1.getValue());
-                else p1.changeBougyo(sp1.getValue());
-            }
+            p2Skill(p1, p2, sp2);
         }
-        } catch(InterruptedException e){
-            e.printStackTrace();
-        } 
+        try {
+            final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+            executorService.schedule(new Runnable() {
+                @Override
+                public void run() {
+                    if(p1.getSpeed() >= p2.getSpeed()) {  
+                        p2Skill(p1, p2, sp2);
+                    }  else {
+                        p1Skill(p1, p2, sp1);
+                    } 
+                }
+            }, 2, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            System.out.println(e);
         }
-        serverconducting = 0;
+            serverconducting = 0;
+        }
+    }
+
+    public void p1Skill (Medimon p1, Medimon p2, Skill sp1) {
+        if(sp1.getStatusTarget() == 'h') {
+            if(sp1.getValue() < 0) p2.changeHp(sp1.getValue());
+            else p1.changeHp(sp1.getValue());
+        } else if(sp1.getStatusTarget() == 's')  {
+            if(sp1.getValue() < 100) p2.changeSpeed(sp1.getValue());
+            else p1.changeSpeed(sp1.getValue());
+        } else {
+            if(sp1.getValue() < 100) p2.changeBougyo(sp1.getValue());
+            else p1.changeBougyo(sp1.getValue());
+        }
+    }
+
+    public void p2Skill (Medimon p1, Medimon p2, Skill sp2) {
+        if(sp2.getStatusTarget() == 'h') {
+            if(sp2.getValue() < 0) p1.changeHp(sp2.getValue());
+            else p2.changeHp(sp2.getValue());
+        } else if(sp2.getStatusTarget() == 's')  {
+            if(sp2.getValue() < 100) p1.changeSpeed(sp2.getValue());
+            else p2.changeSpeed(sp2.getValue());
+        } else {
+            if(sp2.getValue() < 100) p1.changeBougyo(sp2.getValue());
+            else p2.changeBougyo(sp2.getValue());
+        }
     }
 
     public Skill getSkill(int Player, int Index) {
@@ -170,7 +232,8 @@ class MedimonModel {
 
     public int getServerConducting() { return serverconducting; }
 
-    public int getNow1medimon() { return now1medimon; }
-
-    public int getNow2medimon() { return now2medimon; }
+    public int getNowmedimon(int Player) { 
+        if(Player ==1) return now1medimon;
+        else return now2medimon; 
+    }
 }
