@@ -26,14 +26,16 @@ class MedimonController implements ActionListener {
   private JButton changeButton;
     
   private int monsterID, skillID, opponentMonsterID, opponentSkillID;
-  public MedimonController(MedimonModel m, CommandFrame v, boolean isServer, int port) {
+
+//str: serverのIPアドレス
+  public MedimonController(MedimonModel m, CommandFrame v, boolean isServer, String str, int port) {
     view = v;
     model = m;
     this.isServer = isServer;
     if(isServer){
       sv = new CommServer(port);
     } else {
-      cl = new CommClient("localhost", port);
+      cl = new CommClient(str, port);
     }
     changeButton = view.getButton(-1);
     view.getButton(1).addActionListener(this);
@@ -48,8 +50,6 @@ class MedimonController implements ActionListener {
 
     if(e.getSource() == changeButton){
       view.windowClose();
-      openChangeWindow();
-
       return;
     }
 
@@ -90,7 +90,7 @@ class MedimonController implements ActionListener {
           public void run() { 
             duelJudge();
           }
-        }, 3, TimeUnit.SECONDS);
+        }, 5, TimeUnit.SECONDS);
       } catch (Exception en) {
         System.out.println(en);
       }
@@ -462,6 +462,7 @@ class ChangeFrame extends JFrame{
   }
 }
 
+//localhost: server側のIPアドレスをコマンドライン第一引数に入力して起動
 public class MedimonGame {
   public static void main(String[] args) {
     String str;
@@ -483,16 +484,16 @@ public class MedimonGame {
        mm = new MedimonModel();
        mv1 = new BattleFrame(server, mm);
        mv2 = new CommandFrame(server, mm);
-       mc = new MedimonController(mm, mv2, server, port);
+       mc = new MedimonController(mm, mv2, server, str, port);
     }else{
        server=false;
        port = Integer.parseInt(args[1]);
        System.out.println("Client mode");
-       str="cilent";
+       str=args[0];
        mm = new MedimonModel();
        mv1 = new BattleFrame(server, mm);
        mv2 = new CommandFrame(server, mm);
-       mc = new MedimonController(mm, mv2, server, port);
+       mc = new MedimonController(mm, mv2, server, str, port);
     }
     
   }
