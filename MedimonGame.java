@@ -50,6 +50,7 @@ class MedimonController implements ActionListener {
 
     if(e.getSource() == changeButton){
       view.windowClose();
+      openChangeWindow();
       return;
     }
 
