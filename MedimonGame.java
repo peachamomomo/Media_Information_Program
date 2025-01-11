@@ -18,6 +18,9 @@ class MedimonController implements ActionListener {
   //自分がサーバかクライアントかを記録
   private final boolean isServer;
 
+  //戦闘が始まったかどうか
+  private boolean battleStart = true;
+
   //モンスター交代時の入力待ち
   private boolean changeMonsterWaiting = false;
 
@@ -47,6 +50,12 @@ class MedimonController implements ActionListener {
 
   @Override
   public void actionPerformed(ActionEvent e){
+
+    if(!battleStart){
+      monsterID = Integer.parseInt(e.getActionCommand());
+      duelStart();
+      return;
+    }
 
     if(e.getSource() == changeButton){
       view.windowClose();
@@ -139,6 +148,14 @@ class MedimonController implements ActionListener {
       System.out.println("setToModel: "+opponentMonsterID+" "+opponentSkillID+" "+monsterID+" "+skillID);
       model.setSkill(opponentMonsterID, opponentSkillID, monsterID, skillID);
     }
+  }
+
+  public void duelStart(){
+    skillID = -1;
+    sendAction(monsterID, skillID);
+    recvFromServer();
+    setToModel();
+    battleStart = true;
   }
 
   //試合状況を監視する(勝敗or継続中)
