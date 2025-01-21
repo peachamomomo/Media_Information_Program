@@ -168,30 +168,32 @@ class MedimonModel {
             }
             serverconducting = 0;
         } else {   
-        Medimon p1 = all1medimon.get(now1medimon);
-        Medimon p2 = all2medimon.get(now2medimon);
-        Skill sp1 = p1.getSkill(Player1SkillID);
-        Skill sp2 = p2.getSkill(Player2SkillID);
-        if(p1.getSpeed() >= p2.getSpeed()) {
-            p1Skill(p1, p2, sp1);
-        } else {
-            p2Skill(p1, p2, sp2);
-        }
-        try {
-            final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-            executorService.schedule(new Runnable() {
-                @Override
-                public void run() {
-                    if(p1.getSpeed() >= p2.getSpeed()) {  
-                        p2Skill(p1, p2, sp2);
-                    }  else {
-                        p1Skill(p1, p2, sp1);
-                    } 
+            Medimon p1 = all1medimon.get(now1medimon);
+            Medimon p2 = all2medimon.get(now2medimon);
+            Skill sp1 = p1.getSkill(Player1SkillID);
+            Skill sp2 = p2.getSkill(Player2SkillID);
+            if(p1.getSpeed() >= p2.getSpeed()) {
+                p1Skill(p1, p2, sp1);
+            } else {
+                p2Skill(p1, p2, sp2);
+            }
+            if(p1.getHp()!=0 && p2.getHp()!=0) {
+                try {
+                    final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+                    executorService.schedule(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(p1.getSpeed() >= p2.getSpeed()) {  
+                                p2Skill(p1, p2, sp2);
+                            }  else {
+                                p1Skill(p1, p2, sp1);
+                            } 
+                        }
+                    }, 2, TimeUnit.SECONDS);
+                } catch (Exception e) {
+                    System.out.println(e);
                 }
-            }, 2, TimeUnit.SECONDS);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+            }
             serverconducting = 0;
         }
     }
@@ -222,6 +224,11 @@ class MedimonModel {
         }
     }
 
+    public void deathChange(int Player, int monsterID) {
+        if(Player == 1) now1medimon = monsterID;
+        else now2medimon = monsterID;
+    }
+
     public Skill getSkill(int Player, int Index) {
         if(Player == 1) {                            // Server
             return all1medimon.get(now1medimon).getSkill(Index);
@@ -230,10 +237,16 @@ class MedimonModel {
         }
     }
 
-    public int getServerConducting() { return serverconducting; }
-
     public int getNowmedimon(int Player) { 
         if(Player ==1) return now1medimon;
         else return now2medimon; 
+    }
+
+    public int gameSet() {
+        boolean p1 = all1medimon.get(0).getHp() == 0 && all1medimon.get(1).getHp() == 0 && all1medimon.get(2).getHp() == 0;
+        boolean p2 = all2medimon.get(0).getHp() == 0 && all2medimon.get(1).getHp() == 0 && all2medimon.get(2).getHp() == 0;
+        if(p1) return 2;
+        else if(p2) return 1;
+        else return 0;
     }
 }

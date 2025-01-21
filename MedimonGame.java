@@ -18,6 +18,9 @@ class MedimonController implements ActionListener {
   //自分がサーバかクライアントかを記録
   private final boolean isServer;
 
+  //戦闘が始まったかどうか
+  private boolean battleStart = true;
+
   //モンスター交代時の入力待ち
   private boolean changeMonsterWaiting = false;
 
@@ -26,14 +29,16 @@ class MedimonController implements ActionListener {
   private JButton changeButton;
     
   private int monsterID, skillID, opponentMonsterID, opponentSkillID;
-  public MedimonController(MedimonModel m, CommandFrame v, boolean isServer, int port) {
+
+//str: serverのIPアドレス
+  public MedimonController(MedimonModel m, CommandFrame v, boolean isServer, String str, int port) {
     view = v;
     model = m;
     this.isServer = isServer;
     if(isServer){
       sv = new CommServer(port);
     } else {
-      cl = new CommClient("localhost", port);
+      cl = new CommClient(str, port);
     }
     changeButton = view.getButton(-1);
     view.getButton(1).addActionListener(this);
@@ -46,10 +51,15 @@ class MedimonController implements ActionListener {
   @Override
   public void actionPerformed(ActionEvent e){
 
+    if(!battleStart){
+      monsterID = Integer.parseInt(e.getActionCommand());
+      duelStart();
+      return;
+    }
+
     if(e.getSource() == changeButton){
       view.windowClose();
       openChangeWindow();
-
       return;
     }
 
@@ -90,7 +100,7 @@ class MedimonController implements ActionListener {
           public void run() { 
             duelJudge();
           }
-        }, 3, TimeUnit.SECONDS);
+        }, 5, TimeUnit.SECONDS);
       } catch (Exception en) {
         System.out.println(en);
       }
@@ -138,6 +148,14 @@ class MedimonController implements ActionListener {
       System.out.println("setToModel: "+opponentMonsterID+" "+opponentSkillID+" "+monsterID+" "+skillID);
       model.setSkill(opponentMonsterID, opponentSkillID, monsterID, skillID);
     }
+  }
+
+  public void duelStart(){
+    skillID = -1;
+    sendAction(monsterID, skillID);
+    recvFromServer();
+    setToModel();
+    battleStart = true;
   }
 
   //試合状況を監視する(勝敗or継続中)
@@ -317,20 +335,15 @@ class BattleFrame extends JFrame implements ActionListener{
   }
 
   public void actionPerformed(ActionEvent e){
-    if(mm.gameSet()==0){
-      setNowMedimon(this.mm);
-	    l2.setText("<html><span style='font-size:20pt; color:black;'>" + this.nowmymedimon.getName() +  "</span></html>"); //自分側のモンスターの名前
-      l3.setText("<html><img src='file:Thogg_b.png' width=500 height=500></html>"); //自分側のモンスターの画像
-	    l4.setText("<html><span style='font-size:20pt; color:black;'>" + this.nowyourmedimon.getName() + "</span></html>"); //相手側のモンスターの名前
-      l5.setText("<html><img src='file:Thogg_f.png' width=500 height=500></html>"); //相手側のモンスターの画像
-	    l6.setText("<html><span style='font-size:20pt; color:black;'>HP " + this.nowmymedimon.getHp() + "/" + nowmymedimon.getMaxHp() + "</span></html>"); //自分側のモンスターのHP
-      bar1.setValue(this.nowmymedimon.getHp());
-	    l7.setText("<html><span style='font-size:20pt; color:black;'>HP " + this.nowyourmedimon.getHp() + "/" + nowyourmedimon.getMaxHp() + "</span></html>"); //相手側のモンスターのHP
-      bar2.setValue(this.nowyourmedimon.getHp());
-    }else{
-      timer.stop();
-      //勝敗画面の表示
-    }
+    setNowMedimon(this.mm);
+	  l2.setText("<html><span style='font-size:20pt; color:black;'>" + this.nowmymedimon.getName() +  "</span></html>"); //自分側のモンスターの名前
+    l3.setText("<html><img src='file:Thogg_b.png' width=500 height=500></html>"); //自分側のモンスターの画像
+	  l4.setText("<html><span style='font-size:20pt; color:black;'>" + this.nowyourmedimon.getName() + "</span></html>"); //相手側のモンスターの名前
+    l5.setText("<html><img src='file:Thogg_f.png' width=500 height=500></html>"); //相手側のモンスターの画像
+	  l6.setText("<html><span style='font-size:20pt; color:black;'>HP " + this.nowmymedimon.getHp() + "/" + nowmymedimon.getMaxHp() + "</span></html>"); //自分側のモンスターのHP
+    bar1.setValue(this.nowmymedimon.getHp());
+	  l7.setText("<html><span style='font-size:20pt; color:black;'>HP " + this.nowyourmedimon.getHp() + "/" + nowyourmedimon.getMaxHp() + "</span></html>"); //相手側のモンスターのHP
+    bar2.setValue(this.nowyourmedimon.getHp());
   }
 }
 
@@ -380,6 +393,7 @@ class CommandFrame extends JFrame{
     System.out.println("OK");
     this.dispose();
   }
+
 
   public JButton getButton(int i){
     if(i==1){return b1;}
@@ -466,37 +480,7 @@ class ChangeFrame extends JFrame{
   }
 }
 
-class TextFrame extends JFrame{
-  JLabel l1, l2;
-  public TextFrame(Medimon p, Skill sp){
-    JPanel p1=new JPanel();
-    l1=new JLabel(); l2=new JLabel();
-    
-    this.setTitle("Text");
-
-    this.add(p1);
-
-    l1.setText("<html><span style='font-size:20pt; color:black;'>" + p.getName() + "　の　" + sp.getSkillname() + "　！</span></html>");
-    if(sp.getValue() < 0){
-      l2.setText("<html><span style='font-size:20pt; color:black;'>" + sp.getValue()*(-1) + "　ダメージ！</span></html>");
-    }
-
-    p1.setLayout(new GridLayout(2,1));
-
-    p1.add(l1); p1.add(l2);
-   
-    this.setSize(1200,200);
-    this.setLocation(360, 740);
-
-    this.setVisible(true);
-  }
-
-  public void windowClose(){
-    System.out.println("OK");
-    this.dispose();
-  }
-}
-
+//localhost: server側のIPアドレスをコマンドライン第一引数に入力して起動
 public class MedimonGame {
   public static void main(String[] args) {
     String str;
@@ -518,16 +502,16 @@ public class MedimonGame {
        mm = new MedimonModel();
        mv1 = new BattleFrame(server, mm);
        mv2 = new CommandFrame(server, mm);
-       mc = new MedimonController(mm, mv2, server, port);
+       mc = new MedimonController(mm, mv2, server, str, port);
     }else{
        server=false;
        port = Integer.parseInt(args[1]);
        System.out.println("Client mode");
-       str="cilent";
+       str=args[0];
        mm = new MedimonModel();
        mv1 = new BattleFrame(server, mm);
        mv2 = new CommandFrame(server, mm);
-       mc = new MedimonController(mm, mv2, server, port);
+       mc = new MedimonController(mm, mv2, server, str, port);
     }
     
   }
