@@ -91,7 +91,7 @@ class MedimonModel {
         s4.setStatusTarget('h'); s4.setValue(40); s4.setSkillname("かいふく");
         m1 = new Medimon(h, s, b, s1, s2, s3, s4, n);
         all1medimon.add(m1);
-        h = 100; s = 50; b = 50;  n = "Monster3";
+        h = 100; s = 50; b = 50;  n = "ミーゴ";
         s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
         s1.setStatusTarget('h'); s1.setValue(-20); s1.setSkillname("パンチ");
         s2.setStatusTarget('h'); s2.setValue(-40); s2.setSkillname("キック");
@@ -116,7 +116,7 @@ class MedimonModel {
         s4.setStatusTarget('h'); s4.setValue(40); s4.setSkillname("かいふく");
         m2 = new Medimon(h, s, b, s1, s2, s3, s4, n);
         all2medimon.add(m2);
-        h = 100; s = 50; b = 50;  n = "Monster3";
+        h = 100; s = 50; b = 50;  n = "ミーゴ";
         s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
         s1.setStatusTarget('h'); s1.setValue(-20); s1.setSkillname("パンチ");
         s2.setStatusTarget('h'); s2.setValue(-40); s2.setSkillname("キック");
