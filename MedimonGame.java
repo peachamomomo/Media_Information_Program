@@ -341,8 +341,10 @@ class BattleFrame extends JFrame implements ActionListener{
 	  l4.setText("<html><span style='font-size:20pt; color:black;'>" + this.nowyourmedimon.getName() + "</span></html>"); //相手側のモンスターの名前
     l5.setText("<html><img src='file:Thogg_f.png' width=500 height=500></html>"); //相手側のモンスターの画像
 	  l6.setText("<html><span style='font-size:20pt; color:black;'>HP " + this.nowmymedimon.getHp() + "/" + nowmymedimon.getMaxHp() + "</span></html>"); //自分側のモンスターのHP
+    bar1.setMinimum(0); bar1.setMaximum(this.nowmymedimon.getMaxHp());
     bar1.setValue(this.nowmymedimon.getHp());
 	  l7.setText("<html><span style='font-size:20pt; color:black;'>HP " + this.nowyourmedimon.getHp() + "/" + nowyourmedimon.getMaxHp() + "</span></html>"); //相手側のモンスターのHP
+    bar2.setMinimum(0); bar2.setMaximum(this.nowyourmedimon.getMaxHp());
     bar2.setValue(this.nowyourmedimon.getHp());
   }
 }
