@@ -278,9 +278,9 @@ class BattleFrame extends JFrame implements ActionListener{
   l7.setHorizontalAlignment(JLabel.RIGHT);
   l1.setText("<html><img src='file:Background.png' width=100 height=200></html>");
   l2.setText("<html><span style='font-size:20pt; color:black;'>" + this.nowmymedimon.getName() +  "</span></html>"); //自分側のモンスターの名前
-  l3.setText("<html><img src='file:Thogg_b.png' width=500 height=500></html>"); //自分側のモンスターの画像
+  l3.setText("<html><img src='file:" + setMonsterImage('b', this.nowmymedimon.getName()) + "' width=500 height=500></html>"); //自分側のモンスターの画像
 	l4.setText("<html><span style='font-size:20pt; color:black;'>" + this.nowyourmedimon.getName() + "</span></html>"); //相手側のモンスターの名前
-  l5.setText("<html><img src='file:Thogg_f.png' width=500 height=500></html>"); //相手側のモンスターの画像
+  l5.setText("<html><img src='file:" + setMonsterImage('f', this.nowyourmedimon.getName()) + "' width=500 height=500></html>"); //相手側のモンスターの画像
 	l6.setText("<html><span style='font-size:20pt; color:black;'>HP " + this.nowmymedimon.getHp() + "/" + this.nowmymedimon.getMaxHp() + "</span></html>"); //自分側のモンスターのHP
 	l7.setText("<html><span style='font-size:20pt; color:black;'>HP " + this.nowyourmedimon.getHp() + "/" + this.nowyourmedimon.getMaxHp() + "</span></html>"); //相手側のモンスターのHP
   
@@ -334,12 +334,29 @@ class BattleFrame extends JFrame implements ActionListener{
     this.nowyourmedimon = mm.getMedimon(you, mm.getNowmedimon(you));
   }
 
+  public String setMonsterImage(char s, String name){
+    if(s == 'b'){
+      if(name == "トーグ"){return "Thogg_b.png";}
+      if(name == "ウチャ"){return "Ucha_b.png";}
+      if(name == "ミーゴ"){return "Mi-go_b.png";}
+    }else if(s == 'f'){
+      if(name == "トーグ"){return "Thogg_f.png";}
+      if(name == "ウチャ"){return "Ucha_f.png";}
+      if(name == "ミーゴ"){return "Mi-go_f.png";}
+    }else if(s == 'c'){
+      if(name == "トーグ"){return "Thogg_change.png";}
+      if(name == "ウチャ"){return "Ucha_change.png";}
+      if(name == "ミーゴ"){return "Mi-go_change.png";}
+    }
+    return "\0";
+  }
+
   public void actionPerformed(ActionEvent e){
     setNowMedimon(this.mm);
 	  l2.setText("<html><span style='font-size:20pt; color:black;'>" + this.nowmymedimon.getName() +  "</span></html>"); //自分側のモンスターの名前
-    l3.setText("<html><img src='file:Thogg_b.png' width=500 height=500></html>"); //自分側のモンスターの画像
+    l3.setText("<html><img src='file:" + setMonsterImage('b', this.nowmymedimon.getName()) + "' width=500 height=500></html>"); //自分側のモンスターの画像
 	  l4.setText("<html><span style='font-size:20pt; color:black;'>" + this.nowyourmedimon.getName() + "</span></html>"); //相手側のモンスターの名前
-    l5.setText("<html><img src='file:Thogg_f.png' width=500 height=500></html>"); //相手側のモンスターの画像
+    l5.setText("<html><img src='file:" + setMonsterImage('f', this.nowyourmedimon.getName()) + "' width=500 height=500></html>"); //相手側のモンスターの画像
 	  l6.setText("<html><span style='font-size:20pt; color:black;'>HP " + this.nowmymedimon.getHp() + "/" + nowmymedimon.getMaxHp() + "</span></html>"); //自分側のモンスターのHP
     bar1.setMinimum(0); bar1.setMaximum(this.nowmymedimon.getMaxHp());
     bar1.setValue(this.nowmymedimon.getHp());
@@ -421,9 +438,9 @@ class ChangeFrame extends JFrame{
     change3.setActionCommand("2");
 
     l1=new JLabel(); l2=new JLabel(); l3=new JLabel(); l4=new JLabel(); l5=new JLabel(); l6=new JLabel(); l7=new JLabel(); l8=new JLabel(); l9=new JLabel();
-    l1.setText("<html><img src='file:Thogg_change.png' width=200 height=200></html>");
-    l2.setText("<html><img src='file:Thogg_change.png' width=200 height=200></html>");
-    l3.setText("<html><img src='file:Thogg_change.png' width=200 height=200></html>");
+    l1.setText("<html><img src='file:" + setMonsterImage('c', mm.getMedimon(me, 0).getName()) + "' width=200 height=200></html>");
+    l2.setText("<html><img src='file:" + setMonsterImage('c', mm.getMedimon(me, 1).getName()) + "' width=200 height=200></html>");
+    l3.setText("<html><img src='file:" + setMonsterImage('c', mm.getMedimon(me, 2).getName()) + "' width=200 height=200></html>");
     l4.setText("<html><span style='font-size:20pt; color:black;'>" + mm.getMedimon(me, 0).getName() +  "</span></html>");
     l5.setText("<html><span style='font-size:20pt; color:black;'>HP " + mm.getMedimon(me, 0).getHp() + "/" + mm.getMedimon(me, 0).getMaxHp() + "</span></html>");
     l6.setText("<html><span style='font-size:20pt; color:black;'>" + mm.getMedimon(me, 1).getName() +  "</span></html>");
@@ -479,6 +496,23 @@ class ChangeFrame extends JFrame{
     else if(i==1){return change2;}
     else if(i==2){return change3;}
     return null;
+  }
+
+  public String setMonsterImage(char s, String name){
+    if(s == 'b'){
+      if(name == "トーグ"){return "Thogg_b.png";}
+      if(name == "ウチャ"){return "Ucha_b.png";}
+      if(name == "ミーゴ"){return "Mi-go_b.png";}
+    }else if(s == 'f'){
+      if(name == "トーグ"){return "Thogg_f.png";}
+      if(name == "ウチャ"){return "Ucha_f.png";}
+      if(name == "ミーゴ"){return "Mi-go_f.png";}
+    }else if(s == 'c'){
+      if(name == "トーグ"){return "Thogg_change.png";}
+      if(name == "ウチャ"){return "Ucha_change.png";}
+      if(name == "ミーゴ"){return "Mi-go_change.png";}
+    }
+    return "\0";
   }
 }
 
