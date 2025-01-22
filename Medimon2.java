@@ -70,29 +70,26 @@ class MedimonModel {
     private ArrayList<Medimon> all1medimon, all2medimon;       // 1がServer、２がClient
     private int now1medimon = 0, now2medimon = 0;
     private int h, s, b; 
-    private Skill s1, s2, s3, s4;
+    private Skill s1 = new Skill(), s2 = new Skill(), s3 = new Skill(), s4 = new Skill();
     private String n;
     private int serverconducting = 0;          //行動処理中であるか判別する値
     public MedimonModel() {
         this.all1medimon = new ArrayList<Medimon>();
-        h = 150; s = 50; b = 50;  n = "トーグ";
-        s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
+        h = 100; s = 50; b = 50;  n = "Monster1";
         s1.setStatusTarget('h'); s1.setValue(-20); s1.setSkillname("パンチ");
-        s2.setStatusTarget('b'); s2.setValue(120); s2.setSkillname("ぼうぎょ");
+        s2.setStatusTarget('h'); s2.setValue(-40); s2.setSkillname("キック");
         s3.setStatusTarget('h'); s3.setValue(-60); s3.setSkillname("タックル");
-        s4.setStatusTarget('h'); s4.setValue(20); s4.setSkillname("ねむる");
+        s4.setStatusTarget('h'); s4.setValue(40); s4.setSkillname("かいふく");
         Medimon m1 = new Medimon(h, s, b, s1, s2, s3, s4, n);
         all1medimon.add(m1);
-        h = 100; s = 55; b = 50;  n = "ウチャ";
-        s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
-        s1.setStatusTarget('h'); s1.setValue(-40); s1.setSkillname("かえん");
-        s2.setStatusTarget('s'); s2.setValue(120); s2.setSkillname("炎の舞");
+        h = 100; s = 50; b = 50;  n = "Monster2";
+        s1.setStatusTarget('h'); s1.setValue(-20); s1.setSkillname("パンチ");
+        s2.setStatusTarget('h'); s2.setValue(-40); s2.setSkillname("キック");
         s3.setStatusTarget('h'); s3.setValue(-60); s3.setSkillname("タックル");
         s4.setStatusTarget('h'); s4.setValue(40); s4.setSkillname("かいふく");
         m1 = new Medimon(h, s, b, s1, s2, s3, s4, n);
         all1medimon.add(m1);
-        h = 100; s = 50; b = 50;  n = "ミーゴ";
-        s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
+        h = 100; s = 50; b = 50;  n = "Monster3";
         s1.setStatusTarget('h'); s1.setValue(-20); s1.setSkillname("パンチ");
         s2.setStatusTarget('h'); s2.setValue(-40); s2.setSkillname("キック");
         s3.setStatusTarget('h'); s3.setValue(-60); s3.setSkillname("タックル");
@@ -100,24 +97,21 @@ class MedimonModel {
         m1 = new Medimon(h, s, b, s1, s2, s3, s4, n);
         all1medimon.add(m1);
         this.all2medimon = new ArrayList<Medimon>();    
-        h = 150; s = 50; b = 50;  n = "トーグ";
-        s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
+        h = 100; s = 50; b = 50;  n = "Monster1";
         s1.setStatusTarget('h'); s1.setValue(-20); s1.setSkillname("パンチ");
-        s2.setStatusTarget('b'); s2.setValue(110); s2.setSkillname("ぼうぎょ");
+        s2.setStatusTarget('h'); s2.setValue(-40); s2.setSkillname("キック");
         s3.setStatusTarget('h'); s3.setValue(-60); s3.setSkillname("タックル");
-        s4.setStatusTarget('h'); s4.setValue(20); s4.setSkillname("ねむる");
+        s4.setStatusTarget('h'); s4.setValue(40); s4.setSkillname("かいふく");
         Medimon m2 = new Medimon(h, s, b, s1, s2, s3, s4, n);
         all2medimon.add(m2);
-        h = 100; s = 55; b = 50;  n = "ウチャ";
-        s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
-        s1.setStatusTarget('h'); s1.setValue(-40); s1.setSkillname("かえん");
-        s2.setStatusTarget('s'); s2.setValue(120); s2.setSkillname("炎の舞");
+        h = 100; s = 50; b = 50;  n = "Monster2";
+        s1.setStatusTarget('h'); s1.setValue(-20); s1.setSkillname("パンチ");
+        s2.setStatusTarget('h'); s2.setValue(-40); s2.setSkillname("キック");
         s3.setStatusTarget('h'); s3.setValue(-60); s3.setSkillname("タックル");
         s4.setStatusTarget('h'); s4.setValue(40); s4.setSkillname("かいふく");
         m2 = new Medimon(h, s, b, s1, s2, s3, s4, n);
         all2medimon.add(m2);
-        h = 100; s = 50; b = 50;  n = "ミーゴ";
-        s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
+        h = 100; s = 50; b = 50;  n = "Monster3";
         s1.setStatusTarget('h'); s1.setValue(-20); s1.setSkillname("パンチ");
         s2.setStatusTarget('h'); s2.setValue(-40); s2.setSkillname("キック");
         s3.setStatusTarget('h'); s3.setValue(-60); s3.setSkillname("タックル");
@@ -137,63 +131,38 @@ class MedimonModel {
     public void setSkill(int Player1MonsterID, int Player1SkillID, int Player2MonsterID, int Player2SkillID) { //二人の行動を受け取る
         serverconducting = 1;
         if(Player1SkillID < 0) {
-            try {
-                final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-                executorService.schedule(new Runnable() {
-                    @Override
-                    public void run() {
-                        p1Change(Player1MonsterID);                       
-                    }
-                }, 2, TimeUnit.SECONDS);
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-            if(Player2SkillID < 0) {
-                try {
-                    final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-                    executorService.schedule(new Runnable() {
-                        @Override
-                        public void run() {
-                            p2Change(Player2MonsterID);                       
-                        }
-                    }, 4, TimeUnit.SECONDS);
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-            } else {
+            now1medimon = Player1MonsterID;
+            if(Player2SkillID < 0) now2medimon = Player2MonsterID;
+            else {
+                Medimon p1 = all1medimon.get(now1medimon);
+                Medimon p2 = all2medimon.get(now2medimon);
+                Skill sp2 = p2.getSkill(Player2SkillID);
                 try {
                     final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
                     executorService.schedule(new Runnable() {
                         @Override
                         public void run() { 
-                            p2Skill(Player1SkillID, Player2SkillID);
+                            p2Skill(p1, p2, sp2);
                         }
-                    }, 4, TimeUnit.SECONDS);
+                    }, 2, TimeUnit.SECONDS);
                 } catch (Exception e) {
                     System.out.println(e);
                 }
             }
             serverconducting = 0;
         } else if(Player2SkillID < 0) {
+            now2medimon = Player2MonsterID;
+            Medimon p1 = all1medimon.get(now1medimon);
+            Medimon p2 = all2medimon.get(now2medimon);
+            Skill sp1 = p1.getSkill(Player1SkillID);
             try {
                 final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
                 executorService.schedule(new Runnable() {
                     @Override
                     public void run() {
-                        p2Change(Player2MonsterID);                       
+                        p1Skill(p1, p2, sp1);                       
                     }
                 }, 2, TimeUnit.SECONDS);
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-            try {
-                final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-                executorService.schedule(new Runnable() {
-                    @Override
-                    public void run() {
-                        p1Skill(Player1SkillID, Player2SkillID);                       
-                    }
-                }, 4, TimeUnit.SECONDS);
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -201,20 +170,12 @@ class MedimonModel {
         } else {   
             Medimon p1 = all1medimon.get(now1medimon);
             Medimon p2 = all2medimon.get(now2medimon);
-            try {
-                final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-                executorService.schedule(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(p1.getSpeed() >= p2.getSpeed()) {  
-                            p1Skill(Player1SkillID, Player2SkillID);
-                        } else {
-                            p2Skill(Player1SkillID, Player2SkillID);
-                        }
-                    }
-                }, 2, TimeUnit.SECONDS);
-            } catch (Exception e) {
-                System.out.println(e);
+            Skill sp1 = p1.getSkill(Player1SkillID);
+            Skill sp2 = p2.getSkill(Player2SkillID);
+            if(p1.getSpeed() >= p2.getSpeed()) {
+                p1Skill(p1, p2, sp1);
+            } else {
+                p2Skill(p1, p2, sp2);
             }
             if(p1.getHp()!=0 && p2.getHp()!=0) {
                 try {
@@ -223,12 +184,12 @@ class MedimonModel {
                         @Override
                         public void run() {
                             if(p1.getSpeed() >= p2.getSpeed()) {  
-                                p2Skill(Player1SkillID, Player2SkillID);
+                                p2Skill(p1, p2, sp2);
                             }  else {
-                                p1Skill(Player1SkillID, Player2SkillID);
+                                p1Skill(p1, p2, sp1);
                             } 
                         }
-                    }, 4, TimeUnit.SECONDS);
+                    }, 2, TimeUnit.SECONDS);
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -237,48 +198,30 @@ class MedimonModel {
         }
     }
 
-    public void p1Skill (int Player1SkillID, int Player2SkillID) {
-        Medimon p1 = all1medimon.get(now1medimon);
-        Medimon p2 = all2medimon.get(now2medimon);
-        if(p1.getHp()!=0 && p2.getHp()!=0) {
-            Skill sp1 = p1.getSkill(Player1SkillID);
-            if(sp1.getStatusTarget() == 'h') {
-                if(sp1.getValue() < 0) p2.changeHp(sp1.getValue());
-                else p1.changeHp(sp1.getValue());
-            } else if(sp1.getStatusTarget() == 's')  {
-                if(sp1.getValue() < 100) p2.changeSpeed(sp1.getValue());
-                else p1.changeSpeed(sp1.getValue());
-            } else {
-                if(sp1.getValue() < 100) p2.changeBougyo(sp1.getValue());
-                else p1.changeBougyo(sp1.getValue());
-            }
-        } 
+    public void p1Skill (Medimon p1, Medimon p2, Skill sp1) {
+        if(sp1.getStatusTarget() == 'h') {
+            if(sp1.getValue() < 0) p2.changeHp(sp1.getValue());
+            else p1.changeHp(sp1.getValue());
+        } else if(sp1.getStatusTarget() == 's')  {
+            if(sp1.getValue() < 100) p2.changeSpeed(sp1.getValue());
+            else p1.changeSpeed(sp1.getValue());
+        } else {
+            if(sp1.getValue() < 100) p2.changeBougyo(sp1.getValue());
+            else p1.changeBougyo(sp1.getValue());
+        }
     }
 
-    public void p2Skill (int Player1SkillID, int Player2SkillID) {
-        Medimon p1 = all1medimon.get(now1medimon);
-        Medimon p2 = all2medimon.get(now2medimon);
-        if(p1.getHp()!=0 && p2.getHp()!=0) {
-            Skill sp2 = p2.getSkill(Player2SkillID);
-            if(sp2.getStatusTarget() == 'h') {
-                if(sp2.getValue() < 0) p1.changeHp(sp2.getValue());
-                else p2.changeHp(sp2.getValue());
-            } else if(sp2.getStatusTarget() == 's')  {
-                if(sp2.getValue() < 100) p1.changeSpeed(sp2.getValue());
-                else p2.changeSpeed(sp2.getValue());
-            } else {
-                if(sp2.getValue() < 100) p1.changeBougyo(sp2.getValue());
-                else p2.changeBougyo(sp2.getValue());
-            }
-        }        
-    }
-
-    public void p1Change (int Player1MonsterID) {
-        now1medimon = Player1MonsterID;
-    }
-
-    public void p2Change (int Player2MonsterID) {
-        now2medimon = Player2MonsterID;
+    public void p2Skill (Medimon p1, Medimon p2, Skill sp2) {
+        if(sp2.getStatusTarget() == 'h') {
+            if(sp2.getValue() < 0) p1.changeHp(sp2.getValue());
+            else p2.changeHp(sp2.getValue());
+        } else if(sp2.getStatusTarget() == 's')  {
+            if(sp2.getValue() < 100) p1.changeSpeed(sp2.getValue());
+            else p2.changeSpeed(sp2.getValue());
+        } else {
+            if(sp2.getValue() < 100) p1.changeBougyo(sp2.getValue());
+            else p2.changeBougyo(sp2.getValue());
+        }
     }
 
     public void deathChange(int Player, int monsterID) {
