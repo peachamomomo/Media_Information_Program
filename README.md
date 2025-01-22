@@ -1,2 +1,0 @@
-# Media_Information_Program
-メディ情グループ演習
