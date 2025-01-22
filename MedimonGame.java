@@ -4,6 +4,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.swing.*;
+import java.lang.Math;
 //フォント設定用
 import java.io.IOException;
 import java.io.File;
@@ -391,10 +392,10 @@ class CommandFrame extends JFrame{
     int me;
     if(server == true){me = 1;}
     else{me = 2;}
-    b1=new JButton("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,0).getSkillname() + "</span></html>"); 
-    b2=new JButton("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,1).getSkillname() + "</span></html>");
-    b3=new JButton("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,2).getSkillname() + "</span></html>"); 
-    b4=new JButton("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,3).getSkillname() + "</span></html>");
+    b1=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,0).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + Math.abs(mm.getSkill(me, 0).getValue()) + ifHeal(mm.getSkill(me,0).getSkillname()) + "</span></center></html>"); 
+    b2=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,1).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + Math.abs(mm.getSkill(me, 1).getValue()) + ifHeal(mm.getSkill(me,1).getSkillname()) + "</span></center></html>");
+    b3=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,2).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + Math.abs(mm.getSkill(me, 2).getValue()) + ifHeal(mm.getSkill(me,2).getSkillname()) + "</span></center></html>");
+    b4=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,3).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + Math.abs(mm.getSkill(me, 3).getValue()) + ifHeal(mm.getSkill(me,3).getSkillname()) + "</span></center></html>");
     change=new JButton("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>こうたい</span></html>");
     b1.setActionCommand("0");
     b2.setActionCommand("1");
@@ -419,7 +420,7 @@ class CommandFrame extends JFrame{
     p1.add(b1); p1.add(b2); p2.add(b3); p2.add(b4);
    
     this.setSize(1000,300);
-    this.setLocation(360, 740);
+    this.setLocation(460, 740);
 
     
     this.setVisible(true);
@@ -430,6 +431,13 @@ class CommandFrame extends JFrame{
     this.dispose();
   }
 
+  public String ifHeal(String s){
+    if(s=="かいふく"){
+      return "かいふく";
+    }else{
+      return "ダメージ";
+    }
+  }
 
   public JButton getButton(int i){
     if(i==1){return b1;}
