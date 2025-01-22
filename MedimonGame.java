@@ -392,10 +392,10 @@ class CommandFrame extends JFrame{
     int me;
     if(server == true){me = 1;}
     else{me = 2;}
-    b1=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,0).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + Math.abs(mm.getSkill(me, 0).getValue()) + ifHeal(mm.getSkill(me,0).getSkillname()) + "</span></center></html>"); 
-    b2=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,1).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + Math.abs(mm.getSkill(me, 1).getValue()) + ifHeal(mm.getSkill(me,1).getSkillname()) + "</span></center></html>");
-    b3=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,2).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + Math.abs(mm.getSkill(me, 2).getValue()) + ifHeal(mm.getSkill(me,2).getSkillname()) + "</span></center></html>");
-    b4=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,3).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + Math.abs(mm.getSkill(me, 3).getValue()) + ifHeal(mm.getSkill(me,3).getSkillname()) + "</span></center></html>");
+    b1=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,0).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + SkillEffect(me, mm, 0) + "</span></center></html>"); 
+    b2=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,1).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + SkillEffect(me, mm, 1) + "</span></center></html>");
+    b3=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,2).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + SkillEffect(me, mm, 2) + "</span></center></html>");
+    b4=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,3).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + SkillEffect(me, mm, 3) + "</span></center></html>");
     change=new JButton("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>こうたい</span></html>");
     b1.setActionCommand("0");
     b2.setActionCommand("1");
@@ -431,12 +431,19 @@ class CommandFrame extends JFrame{
     this.dispose();
   }
 
-  public String ifHeal(String s){
-    if(s=="かいふく"){
-      return "かいふく";
-    }else{
-      return "ダメージ";
+  public String SkillEffect(int i, MedimonModel mm, int n){
+    if(mm.getSkill(i, n).getStatusTarget() == 'h'){
+      if(mm.getSkill(i, n).getValue() < 0){
+        return Math.abs(mm.getSkill(i, n).getValue()) + "ダメージ";
+      }else{
+        return mm.getSkill(i, n).getValue() + "かいふく";
+      }
+    }else if(mm.getSkill(i, n).getStatusTarget() == 'b'){
+      return "ぼうぎょ" + (mm.getSkill(i, n).getValue() - 100) + "％アップ";
+    }else if(mm.getSkill(i, n).getStatusTarget() == 's'){
+      return "はやさ" + (mm.getSkill(i, n).getValue() - 100) + "％アップ";
     }
+    return "\0";
   }
 
   public JButton getButton(int i){
