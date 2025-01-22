@@ -1,12 +1,10 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.swing.*;
-//フォント設定用
-import java.io.IOException;
-import java.io.File;
 
 class MedimonController implements ActionListener {
   protected CommandFrame view;
@@ -61,8 +59,10 @@ class MedimonController implements ActionListener {
     }
 
     if(e.getSource() == changeButton){
-      view.windowClose();
-      openChangeWindow();
+      //if(model.restMonster() > 1){
+        view.windowClose();
+        openChangeWindow();
+      //}
       return;
     }
 
