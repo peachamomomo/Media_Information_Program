@@ -5,10 +5,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.swing.*;
-import java.lang.Math;
-//フォント設定用
-import java.io.IOException;
-import java.io.File;
 
 class MedimonController implements ActionListener {
   protected CommandFrame view;
@@ -63,10 +59,11 @@ class MedimonController implements ActionListener {
     }
 
     if(e.getSource() == changeButton){
-      //if(model.restMonster() > 1){
+      if((isServer && model.getRemaining(1) > 1) || 
+        (!isServer && model.getRemaining(2) > 1)){
         view.windowClose();
         openChangeWindow();
-      //}
+      }
       return;
     }
 
@@ -186,7 +183,7 @@ class MedimonController implements ActionListener {
                     System.out.println("server: deathChangeWaiting");
                     recvFromServer();
                     model.deathChange(2, opponentMonsterID);
-                }       break;
+                }
         }
     } else {
       System.out.println("clientHP: " + model.getMedimon(2, model.getNowmedimon(2)).getHp() + " serverHP: "
@@ -208,7 +205,7 @@ class MedimonController implements ActionListener {
                     System.out.println("client: deathChangeWaiting");
                     recvFromServer();
                     model.deathChange(1, opponentMonsterID);
-                }       break;
+                }
         }
     }
     openCommandWindow();
