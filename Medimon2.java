@@ -5,7 +5,16 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException; 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 class Skill {
     private Character x;
@@ -73,6 +82,7 @@ class MedimonModel {
     private Skill s1, s2, s3, s4;
     private String n;
     private int serverconducting = 0;          //行動処理中であるか判別する値
+    public Clip clip1, clip2, clip3, clip4, clip5, clip6;
     public MedimonModel() {
         this.all1medimon = new ArrayList<Medimon>();
         h = 150; s = 50; b = 50;  n = "トーグ";
@@ -135,6 +145,12 @@ class MedimonModel {
     }
 
     public void setSkill(int Player1MonsterID, int Player1SkillID, int Player2MonsterID, int Player2SkillID) { //二人の行動を受け取る
+        clip1 = createClip(new File("Attack.wav"));
+        clip2 = createClip(new File("Heal.wav"));
+        clip3 = createClip(new File("Debuf.wav"));
+        clip4 = createClip(new File("Speed.wav"));
+        clip5 = createClip(new File("Bougyo.wav"));
+        clip6 = createClip(new File("Koutai.wav"));
         serverconducting = 1;
         if(Player1SkillID < 0) {
             try {
@@ -233,6 +249,17 @@ class MedimonModel {
                     System.out.println(e);
                 }
             }
+            try {
+                final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+                executorService.schedule(new Runnable() {
+                    @Override
+                    public void run() {
+                        CloseClip();
+                    }
+                }, 6, TimeUnit.SECONDS);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
             serverconducting = 0;
         }
     }
@@ -240,17 +267,39 @@ class MedimonModel {
     public void p1Skill (int Player1SkillID, int Player2SkillID) {
         Medimon p1 = all1medimon.get(now1medimon);
         Medimon p2 = all2medimon.get(now2medimon);
+
         if(p1.getHp()!=0 && p2.getHp()!=0) {
             Skill sp1 = p1.getSkill(Player1SkillID);
             if(sp1.getStatusTarget() == 'h') {
-                if(sp1.getValue() < 0) p2.changeHp(sp1.getValue());
-                else p1.changeHp(sp1.getValue());
+                if(sp1.getValue() < 0) {
+                    p2.changeHp(sp1.getValue());
+		            clip1.start();
+                    clip1.setFramePosition(0);
+                } else {
+                    p1.changeHp(sp1.getValue());
+		            clip2.start();
+                    clip2.setFramePosition(0);
+                }
             } else if(sp1.getStatusTarget() == 's')  {
-                if(sp1.getValue() < 100) p2.changeSpeed(sp1.getValue());
-                else p1.changeSpeed(sp1.getValue());
+                if(sp1.getValue() < 100) {
+                    p2.changeSpeed(sp1.getValue());
+		            clip3.start();
+                    clip3.setFramePosition(0);
+                } else {
+                    p1.changeSpeed(sp1.getValue());
+		            clip4.start();
+                    clip4.setFramePosition(0);
+                }
             } else {
-                if(sp1.getValue() < 100) p2.changeBougyo(sp1.getValue());
-                else p1.changeBougyo(sp1.getValue());
+                if(sp1.getValue() < 100) {
+                    p2.changeBougyo(sp1.getValue());
+		            clip3.start();
+                    clip3.setFramePosition(0);
+                } else {
+                    p1.changeBougyo(sp1.getValue());
+		            clip5.start();
+                    clip5.setFramePosition(0);
+                }
             }
         } 
     }
@@ -261,24 +310,49 @@ class MedimonModel {
         if(p1.getHp()!=0 && p2.getHp()!=0) {
             Skill sp2 = p2.getSkill(Player2SkillID);
             if(sp2.getStatusTarget() == 'h') {
-                if(sp2.getValue() < 0) p1.changeHp(sp2.getValue());
-                else p2.changeHp(sp2.getValue());
+                if(sp2.getValue() < 0) {
+                    p1.changeHp(sp2.getValue());
+		            clip1.start();
+                    clip1.setFramePosition(0);
+                } else {
+                    p2.changeHp(sp2.getValue());
+		            clip2.start();
+                    clip2.setFramePosition(0);
+                }
             } else if(sp2.getStatusTarget() == 's')  {
-                if(sp2.getValue() < 100) p1.changeSpeed(sp2.getValue());
-                else p2.changeSpeed(sp2.getValue());
+                if(sp2.getValue() < 100) {
+                    p1.changeSpeed(sp2.getValue());
+		            clip3.start();
+                    clip3.setFramePosition(0);
+                } else {
+                    p2.changeSpeed(sp2.getValue());
+		            clip4.start();
+                    clip4.setFramePosition(0);
+                }
             } else {
-                if(sp2.getValue() < 100) p1.changeBougyo(sp2.getValue());
-                else p2.changeBougyo(sp2.getValue());
+                if(sp2.getValue() < 100) {
+                    p1.changeBougyo(sp2.getValue());
+		            clip3.start();
+                    clip3.setFramePosition(0);
+                } else {
+                    p2.changeBougyo(sp2.getValue());
+		            clip5.start();
+                    clip5.setFramePosition(0);
+                }
             }
         }        
     }
 
     public void p1Change (int Player1MonsterID) {
         now1medimon = Player1MonsterID;
+		clip6.start();
+        clip6.setFramePosition(0);
     }
 
     public void p2Change (int Player2MonsterID) {
         now2medimon = Player2MonsterID;
+		clip6.start();
+        clip6.setFramePosition(0);
     }
 
     public void deathChange(int Player, int monsterID) {
@@ -319,5 +393,33 @@ class MedimonModel {
         if(p1) return 2;
         else if(p2) return 1;
         else return 0;
+    }
+
+    public static Clip createClip(File path) {
+		//指定されたURLのオーディオ入力ストリームを取得
+		try (AudioInputStream ais = AudioSystem.getAudioInputStream(path)){
+			//ファイルの形式取得
+			AudioFormat af = ais.getFormat();
+			//単一のオーディオ形式を含む指定した情報からデータラインの情報オブジェクトを構築
+			DataLine.Info dataLine = new DataLine.Info(Clip.class,af);
+			//指定された Line.Info オブジェクトの記述に一致するラインを取得
+			Clip c = (Clip)AudioSystem.getLine(dataLine);
+			//再生準備完了
+			c.open(ais);
+			return c;
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (UnsupportedAudioFileException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+    public void CloseClip() {
+        clip1.close(); clip2.close(); clip3.close(); clip4.close(); clip5.close(); clip6.close(); 
     }
 }
