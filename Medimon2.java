@@ -295,8 +295,22 @@ class MedimonModel {
     }
 
     public int getNowmedimon(int Player) { 
-        if(Player ==1) return now1medimon;
+        if(Player == 1) return now1medimon;
         else return now2medimon; 
+    }
+
+    public int getRemaining(int Player) {
+        int n = 0;
+        if(Player == 1) {
+            for(int i=0; i<3; i++) {
+                if(all1medimon.get(i).getHp() == 0) n = n + 1;
+            }
+        } else {
+            for(int i=0; i<3; i++) {
+                if(all2medimon.get(i).getHp() == 0) n = n + 1;
+            }
+        }
+        return n;
     }
 
     public int gameSet() {
