@@ -18,12 +18,14 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 class Skill {
     private Character x;
-    private int n;
+    private int n, type;
     private String name;
     public Character getStatusTarget() { return x; }
     public void setStatusTarget(Character x) { this.x = x; }
     public int getValue() { return n; }
     public void setValue(int n) { this.n = n; }
+    public int getType() { return type; }
+    public void setType(int type) { this.type = type; }
     public String getSkillname() { return name; }
     public void setSkillname(String name) { this.name = name; }
 }
@@ -31,26 +33,31 @@ class Skill {
 class Medimon {
     private int H, h, s, b;  //体力、速さ、防御
     private ArrayList<Skill> a;  //技
-    private int i=0;  //技の数
+    private int type;  //技のタイプ
     private String n;  //名前
 
-    public Medimon(int h, int s, int b, Skill s1, Skill s2, Skill s3, Skill s4, String n){
-        this.H = h; this.h = h; this.s = s; this.b = b; this.n = n;
+    public Medimon(int h, int s, int b, int type, Skill s1, Skill s2, Skill s3, Skill s4, String n){
+        this.H = h; this.h = h; this.s = s; this.b = b; this.type = type; this.n = n;
         this.a = new ArrayList<Skill>();
         a.add(s1);
         a.add(s2);
         a.add(s3);
         a.add(s4);
-        i = 4;
     }
 
     //体力の減少・増加
-    public void changeHp(int n){
+    public void changeHp(int n, int type){
         if(n > 0) {
             h = h + n;
             if(h >= H) h = H;
         } else {
-            h = h + (int)(n*(150-b)/(float)100);
+            if((type+1)%3 == this.type) {
+                h = h + (int)(n*(150-b)*1.2/(float)100);
+            } else if(type == this.type) {
+                h = h + (int)(n*(150-b)/(float)100);
+            } else {
+                h = h + (int)(n*(150-b)*0.8/(float)100);
+            }
             if(h < 0) h = 0;
         } 
     }
@@ -78,61 +85,61 @@ class Medimon {
 class MedimonModel {
     private ArrayList<Medimon> all1medimon, all2medimon;       // 1がServer、２がClient
     private int now1medimon = 0, now2medimon = 0;
-    private int h, s, b; 
+    private int h, s, b, type; 
     private Skill s1, s2, s3, s4;
     private String n;
     private int serverconducting = 0;          //行動処理中であるか判別する値
     public Clip clip1, clip2, clip3, clip4, clip5, clip6;
     public MedimonModel() {
         this.all1medimon = new ArrayList<Medimon>();
-        h = 150; s = 50; b = 50;  n = "トーグ";
+        h = 150; s = 50; b = 50;  type = 0; n = "トーグ";
         s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
-        s1.setStatusTarget('h'); s1.setValue(-20); s1.setSkillname("パンチ");
-        s2.setStatusTarget('b'); s2.setValue(120); s2.setSkillname("ぼうぎょ");
-        s3.setStatusTarget('h'); s3.setValue(-60); s3.setSkillname("タックル");
-        s4.setStatusTarget('h'); s4.setValue(20); s4.setSkillname("ねむる");
-        Medimon m1 = new Medimon(h, s, b, s1, s2, s3, s4, n);
+        s1.setStatusTarget('h'); s1.setValue(-20); s1.setType(0); s1.setSkillname("パンチ");
+        s2.setStatusTarget('b'); s2.setValue(120); s2.setType(0); s2.setSkillname("ぼうぎょ");
+        s3.setStatusTarget('h'); s3.setValue(-60); s3.setType(0); s3.setSkillname("タックル");
+        s4.setStatusTarget('h'); s4.setValue(20); s4.setType(0); s4.setSkillname("ねむる");
+        Medimon m1 = new Medimon(h, s, b, type, s1, s2, s3, s4, n);
         all1medimon.add(m1);
-        h = 100; s = 55; b = 50;  n = "ウチャ";
+        h = 100; s = 55; b = 50;  type = 1;  n = "ウチャ";
         s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
-        s1.setStatusTarget('h'); s1.setValue(-40); s1.setSkillname("かえん");
-        s2.setStatusTarget('s'); s2.setValue(120); s2.setSkillname("炎の舞");
-        s3.setStatusTarget('h'); s3.setValue(-60); s3.setSkillname("タックル");
-        s4.setStatusTarget('h'); s4.setValue(40); s4.setSkillname("かいふく");
-        m1 = new Medimon(h, s, b, s1, s2, s3, s4, n);
+        s1.setStatusTarget('h'); s1.setValue(-40); s1.setType(0); s1.setSkillname("かえん");
+        s2.setStatusTarget('s'); s2.setValue(120); s2.setType(0); s2.setSkillname("炎の舞");
+        s3.setStatusTarget('h'); s3.setValue(-60); s3.setType(0); s3.setSkillname("タックル");
+        s4.setStatusTarget('h'); s4.setValue(40); s4.setType(0); s4.setSkillname("かいふく");
+        m1 = new Medimon(h, s, b, type, s1, s2, s3, s4, n);
         all1medimon.add(m1);
-        h = 100; s = 50; b = 50;  n = "ミーゴ";
+        h = 100; s = 50; b = 50;  type = 0;  n = "ミーゴ";
         s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
-        s1.setStatusTarget('h'); s1.setValue(-20); s1.setSkillname("パンチ");
-        s2.setStatusTarget('h'); s2.setValue(-40); s2.setSkillname("キック");
-        s3.setStatusTarget('h'); s3.setValue(-60); s3.setSkillname("タックル");
-        s4.setStatusTarget('h'); s4.setValue(40); s4.setSkillname("かいふく");
-        m1 = new Medimon(h, s, b, s1, s2, s3, s4, n);
+        s1.setStatusTarget('h'); s1.setValue(-20); s1.setType(0); s1.setSkillname("パンチ");
+        s2.setStatusTarget('h'); s2.setValue(-40); s2.setType(0); s2.setSkillname("キック");
+        s3.setStatusTarget('h'); s3.setValue(-60); s3.setType(0); s3.setSkillname("タックル");
+        s4.setStatusTarget('h'); s4.setValue(40); s4.setType(0); s4.setSkillname("かいふく");
+        m1 = new Medimon(h, s, b, type, s1, s2, s3, s4, n);
         all1medimon.add(m1);
         this.all2medimon = new ArrayList<Medimon>();    
-        h = 150; s = 50; b = 50;  n = "トーグ";
+        h = 150; s = 50; b = 50;  type = 0;  n = "トーグ";
         s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
-        s1.setStatusTarget('h'); s1.setValue(-20); s1.setSkillname("パンチ");
-        s2.setStatusTarget('b'); s2.setValue(110); s2.setSkillname("ぼうぎょ");
-        s3.setStatusTarget('h'); s3.setValue(-60); s3.setSkillname("タックル");
-        s4.setStatusTarget('h'); s4.setValue(20); s4.setSkillname("ねむる");
-        Medimon m2 = new Medimon(h, s, b, s1, s2, s3, s4, n);
+        s1.setStatusTarget('h'); s1.setValue(-20); s1.setType(0); s1.setSkillname("パンチ");
+        s2.setStatusTarget('b'); s2.setValue(120); s2.setType(0); s2.setSkillname("ぼうぎょ");
+        s3.setStatusTarget('h'); s3.setValue(-60); s3.setType(0); s3.setSkillname("タックル");
+        s4.setStatusTarget('h'); s4.setValue(20); s4.setType(0); s4.setSkillname("ねむる");
+        Medimon m2 = new Medimon(h, s, b, type, s1, s2, s3, s4, n);
         all2medimon.add(m2);
-        h = 100; s = 55; b = 50;  n = "ウチャ";
+        h = 100; s = 55; b = 50;  type = 1;  n = "ウチャ";
         s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
-        s1.setStatusTarget('h'); s1.setValue(-40); s1.setSkillname("かえん");
-        s2.setStatusTarget('s'); s2.setValue(120); s2.setSkillname("炎の舞");
-        s3.setStatusTarget('h'); s3.setValue(-60); s3.setSkillname("タックル");
-        s4.setStatusTarget('h'); s4.setValue(40); s4.setSkillname("かいふく");
-        m2 = new Medimon(h, s, b, s1, s2, s3, s4, n);
+        s1.setStatusTarget('h'); s1.setValue(-40); s1.setType(0); s1.setSkillname("かえん");
+        s2.setStatusTarget('s'); s2.setValue(120); s2.setType(0); s2.setSkillname("炎の舞");
+        s3.setStatusTarget('h'); s3.setValue(-60); s3.setType(0); s3.setSkillname("タックル");
+        s4.setStatusTarget('h'); s4.setValue(40); s4.setType(0); s4.setSkillname("かいふく");
+        m2 = new Medimon(h, s, b, type, s1, s2, s3, s4, n);
         all2medimon.add(m2);
-        h = 100; s = 50; b = 50;  n = "ミーゴ";
+        h = 100; s = 50; b = 50;  type = 0;  n = "ミーゴ";
         s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
-        s1.setStatusTarget('h'); s1.setValue(-20); s1.setSkillname("パンチ");
-        s2.setStatusTarget('h'); s2.setValue(-40); s2.setSkillname("キック");
-        s3.setStatusTarget('h'); s3.setValue(-60); s3.setSkillname("タックル");
-        s4.setStatusTarget('h'); s4.setValue(40); s4.setSkillname("かいふく");
-        m2 = new Medimon(h, s, b, s1, s2, s3, s4, n);
+        s1.setStatusTarget('h'); s1.setValue(-20); s1.setType(0); s1.setSkillname("パンチ");
+        s2.setStatusTarget('h'); s2.setValue(-40); s2.setType(0); s2.setSkillname("キック");
+        s3.setStatusTarget('h'); s3.setValue(-60); s3.setType(0); s3.setSkillname("タックル");
+        s4.setStatusTarget('h'); s4.setValue(40); s4.setType(0); s4.setSkillname("かいふく");
+        m2 = new Medimon(h, s, b, type, s1, s2, s3, s4, n);
         all2medimon.add(m2);
     }
 
@@ -272,11 +279,11 @@ class MedimonModel {
             Skill sp1 = p1.getSkill(Player1SkillID);
             if(sp1.getStatusTarget() == 'h') {
                 if(sp1.getValue() < 0) {
-                    p2.changeHp(sp1.getValue());
+                    p2.changeHp(sp1.getValue(), sp1.getType());
 		            clip1.start();
                     clip1.setFramePosition(0);
                 } else {
-                    p1.changeHp(sp1.getValue());
+                    p1.changeHp(sp1.getValue(), sp1.getType());
 		            clip2.start();
                     clip2.setFramePosition(0);
                 }
@@ -311,11 +318,11 @@ class MedimonModel {
             Skill sp2 = p2.getSkill(Player2SkillID);
             if(sp2.getStatusTarget() == 'h') {
                 if(sp2.getValue() < 0) {
-                    p1.changeHp(sp2.getValue());
+                    p1.changeHp(sp2.getValue(), sp2.getType());
 		            clip1.start();
                     clip1.setFramePosition(0);
                 } else {
-                    p2.changeHp(sp2.getValue());
+                    p2.changeHp(sp2.getValue(), sp2.getType());
 		            clip2.start();
                     clip2.setFramePosition(0);
                 }
