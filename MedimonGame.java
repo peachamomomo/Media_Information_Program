@@ -22,6 +22,9 @@ class MedimonController implements ActionListener {
   protected CommServer sv;
   protected CommClient cl;
   protected ChangeFrame changeFrame;
+  private Clip clip1 = model.createClip(new File("startbutton.wav"));
+  private Clip clip2 = model.createClip(new File("button.wav"));
+  private Clip clip3 = model.createClip(new File("error.wav"));
 
   //サーバからのメッセージを記録
   private String serverMsg;
@@ -63,8 +66,8 @@ class MedimonController implements ActionListener {
   public void actionPerformed(ActionEvent e){
 
     if(!battleStart){
-      Clip clip = model.createClip(new File("startbutton.wav"));
-      clip.start();
+      clip1.start();
+      clip1.setFramePosition(0);
       monsterID = Integer.parseInt(e.getActionCommand());
       duelStart();
       return;
@@ -73,27 +76,27 @@ class MedimonController implements ActionListener {
     if(e.getSource() == changeButton){
       if((isServer && model.getRemaining(1) > 1) || 
         (!isServer && model.getRemaining(2) > 1)){
-        Clip clip = model.createClip(new File("button.wav"));
-        clip.start();
+        clip2.start();
+        clip2.setFramePosition(0);
         view.windowClose();
         openChangeWindow();
       } else {
-        Clip clip = model.createClip(new File("error.wav"));
-        clip.start();
+        clip3.start();
+        clip3.setFramePosition(0);
       }
       return;
     }
 
     if(deathChange){
-      Clip clip = model.createClip(new File("button.wav"));
-      clip.start();
+      clip2.start();
+      clip2.setFramePosition(0);
       monsterID = Integer.parseInt(e.getActionCommand());
       deathChange();
       openCommandWindow();
       return;
     } else {
-      Clip clip = model.createClip(new File("button.wav"));
-      clip.start();
+      clip2.start();
+      clip2.setFramePosition(0);
       if(changeMonsterWaiting){
         changeFrame.windowClose();
         monsterID = Integer.parseInt(e.getActionCommand());
@@ -294,6 +297,8 @@ class BattleFrame extends JFrame implements ActionListener{
   JProgressBar bar1, bar2;
   public BattleFrame(boolean server, MedimonModel mm){
   FontLoader.registerFont("misaki_gothic.ttf");
+  Clip clip = mm.createClip(new File("bgm.wav"));
+  clip.loop(Clip.LOOP_CONTINUOUSLY);
   this.server = server;
   if(server == true){
     this.me = 1; this.you = 2;
