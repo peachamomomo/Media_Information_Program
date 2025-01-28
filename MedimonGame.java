@@ -419,6 +419,12 @@ class TitleFrame extends JFrame{
     return "\0";
   }
 
+  public JButton getButton(int i){
+    if     (i==1){return b1;}
+    else if(i==2){return b2;}
+    else         {return b3;}
+  }
+
   public void windowClose(){
     System.out.println("OK");
     this.dispose();
