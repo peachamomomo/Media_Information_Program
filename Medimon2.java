@@ -52,11 +52,11 @@ class Medimon {
             if(h >= H) h = H;
         } else {
             if((type+1)%3 == this.type) {
-                h = h + (int)(n*(150-b)*1.2/(float)100);
+                h = h + (int)(n*(150-b)*2/(float)100);
             } else if(type == this.type) {
                 h = h + (int)(n*(150-b)/(float)100);
             } else {
-                h = h + (int)(n*(150-b)*0.8/(float)100);
+                h = h + (int)(n*(150-b)*0.5/(float)100);
             }
             if(h < 0) h = 0;
         } 

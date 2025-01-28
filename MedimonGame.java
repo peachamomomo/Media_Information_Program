@@ -5,6 +5,16 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException; 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 class MedimonController implements ActionListener {
   protected CommandFrame view;
@@ -53,6 +63,8 @@ class MedimonController implements ActionListener {
   public void actionPerformed(ActionEvent e){
 
     if(!battleStart){
+      Clip clip = model.createClip(new File("startbutton.wav"));
+      clip.start();
       monsterID = Integer.parseInt(e.getActionCommand());
       duelStart();
       return;
@@ -61,18 +73,27 @@ class MedimonController implements ActionListener {
     if(e.getSource() == changeButton){
       if((isServer && model.getRemaining(1) > 1) || 
         (!isServer && model.getRemaining(2) > 1)){
+        Clip clip = model.createClip(new File("button.wav"));
+        clip.start();
         view.windowClose();
         openChangeWindow();
+      } else {
+        Clip clip = model.createClip(new File("error.wav"));
+        clip.start();
       }
       return;
     }
 
     if(deathChange){
+      Clip clip = model.createClip(new File("button.wav"));
+      clip.start();
       monsterID = Integer.parseInt(e.getActionCommand());
       deathChange();
       openCommandWindow();
       return;
     } else {
+      Clip clip = model.createClip(new File("button.wav"));
+      clip.start();
       if(changeMonsterWaiting){
         changeFrame.windowClose();
         monsterID = Integer.parseInt(e.getActionCommand());
