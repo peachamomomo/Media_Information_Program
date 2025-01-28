@@ -854,7 +854,7 @@ public class MedimonGame {
       mv0 = new TitleFrame(server, mm);
       //mv1 = new BattleFrame(server, mm);
       //mv2 = new CommandFrame(server, mm);
-      //mc = new MedimonController(mm, mv1, mv2, server, str, port);
+      mc = new MedimonController(mm, mv1, mv2, server, str, port);
     }else{
       server=false;
       port = Integer.parseInt(args[1]);
@@ -864,7 +864,7 @@ public class MedimonGame {
       mv0 = new TitleFrame(server, mm);
       //mv1 = new BattleFrame(server, mm);
       //mv2 = new CommandFrame(server, mm);
-      //mc = new MedimonController(mm, mv1, mv2, server, str, port);
+      mc = new MedimonController(mm, mv1, mv2, server, str, port);
     }
     
   }
