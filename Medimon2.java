@@ -151,6 +151,12 @@ class MedimonModel {
         }
     }
 
+    public void firstSetSkill(int Player1MonsterID, int Player1SkillID, int Player2MonsterID, int Player2SkillID) {
+        clip6 = createClip(new File("Koutai.wav"));
+        p1Change(Player1MonsterID);
+        p2Change(Player2MonsterID);
+    }
+
     public void setSkill(int Player1MonsterID, int Player1SkillID, int Player2MonsterID, int Player2SkillID) { //二人の行動を受け取る
         clip1 = createClip(new File("Attack.wav"));
         clip2 = createClip(new File("Heal.wav"));
