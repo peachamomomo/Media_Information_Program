@@ -476,8 +476,6 @@ class BattleFrame extends JFrame implements ActionListener{
   }
   this.mm = mm;
 
-  setNowMedimon(this.mm);
-
   p1=new JPanel(); p2=new JPanel(); p6=new JPanel(); p7=new JPanel();
 
 	l1=new JLabel(); l2=new JLabel(); l3=new JLabel(); l4=new JLabel(); l5=new JLabel(); l6=new JLabel(); l7=new JLabel(); 
@@ -489,22 +487,25 @@ class BattleFrame extends JFrame implements ActionListener{
   l6.setHorizontalAlignment(JLabel.LEFT);
   l7.setHorizontalAlignment(JLabel.RIGHT);
   l1.setText("<html><img src='file:Background.png' width=50 height=200></html>");
-  l2.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + this.nowmymedimon.getName() + "</span></html>"); //自分側のモンスターの名前
-  l3.setText("<html><img src='file:" + setMonsterImage('b', this.nowmymedimon.getName()) + "' width=500 height=500></html>"); //自分側のモンスターの画像
+
+  setNowMedimon(this.mm);
+	l2.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + this.nowmymedimon.getName() + "</span></html>"); //自分側のモンスターの名前
+  l3.setText("<html><img src='file:" + setMonsterImage('b', this.nowmymedimon.getName()) + "' width=400 height=400></html>"); //自分側のモンスターの画像
 	l4.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + this.nowyourmedimon.getName() + "</span></html>"); //相手側のモンスターの名前
-  l5.setText("<html><img src='file:" + setMonsterImage('f', this.nowyourmedimon.getName()) + "' width=500 height=500></html>"); //相手側のモンスターの画像
-	l6.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>HP " + this.nowmymedimon.getHp() + "/" + this.nowmymedimon.getMaxHp() + "</span></html>"); //自分側のモンスターのHP
-	l7.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>HP " + this.nowyourmedimon.getHp() + "/" + this.nowyourmedimon.getMaxHp() + "</span></html>"); //相手側のモンスターのHP
-  
+  l5.setText("<html><img src='file:" + setMonsterImage('f', this.nowyourmedimon.getName()) + "' width=400 height=400></html>"); //相手側のモンスターの画像
+	l6.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>HP " + this.nowmymedimon.getHp() + "/" + nowmymedimon.getMaxHp() + "</span></html>"); //自分側のモンスターのHP
+  l7.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>HP " + this.nowyourmedimon.getHp() + "/" + nowyourmedimon.getMaxHp() + "</span></html>"); //相手側のモンスターのHP
+
 	bar1 = new JProgressBar();
+	bar2 = new JProgressBar();
   bar1.setPreferredSize(new Dimension(10, 4));
+  bar1.setForeground(Color.GREEN);
+  bar2.setForeground(Color.GREEN);
+  
   bar1.setMinimum(0); bar1.setMaximum(this.nowmymedimon.getMaxHp());
 	bar1.setValue(this.nowmymedimon.getHp());
-  bar1.setForeground(Color.GREEN);
-	bar2 = new JProgressBar();
   bar2.setMinimum(0); bar2.setMaximum(this.nowyourmedimon.getMaxHp());
 	bar2.setValue(this.nowyourmedimon.getHp());
-  bar2.setForeground(Color.GREEN);
   
   if(me==1){
     this.setTitle("Server Mode");
@@ -842,9 +843,9 @@ public class MedimonGame {
     }
     MedimonModel mm;
     TitleFrame mv0;
-    BattleFrame mv1;
+    //BattleFrame mv1;
     MedimonController mc;
-    CommandFrame mv2;
+    //CommandFrame mv2;
     if (args[0].equals("server")){
       server=true;
       port = Integer.parseInt(args[1]);
