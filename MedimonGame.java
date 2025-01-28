@@ -35,7 +35,7 @@ class MedimonController implements ActionListener {
   private final boolean isServer;
 
   //戦闘が始まったかどうか
-  private boolean battleStart = true;
+  private boolean battleStart = false;
 
   //モンスター交代時の入力待ち
   private boolean changeMonsterWaiting = false;
@@ -56,9 +56,9 @@ class MedimonController implements ActionListener {
     } else {
       cl = new CommClient(str, port);
     }
-    //title.getButton(1).addActionListener(this);
-    //title.getButton(2).addActionListener(this);
-    //title.getButton(3).addActionListener(this);
+    title.getButton(1).addActionListener(this);
+    title.getButton(2).addActionListener(this);
+    title.getButton(3).addActionListener(this);
   }
 
   @Override
