@@ -17,6 +17,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 class MedimonController implements ActionListener {
+  protected TitleFrame title;
   protected BattleFrame battle;
   protected CommandFrame view;
   protected MedimonModel model;
@@ -34,7 +35,7 @@ class MedimonController implements ActionListener {
   private final boolean isServer;
 
   //戦闘が始まったかどうか
-  private boolean battleStart = true;
+  private boolean battleStart = false;
 
   //モンスター交代時の入力待ち
   private boolean changeMonsterWaiting = false;
@@ -46,9 +47,8 @@ class MedimonController implements ActionListener {
   private int monsterID, skillID, opponentMonsterID, opponentSkillID;
 
 //str: serverのIPアドレス
-  public MedimonController(MedimonModel m, BattleFrame b, CommandFrame v, boolean isServer, String str, int port) {
-    battle = b;
-    view = v;
+  public MedimonController(MedimonModel m, TitleFrame t, boolean isServer, String str, int port) {
+    title = t;
     model = m;
     this.isServer = isServer;
     if(isServer){
@@ -56,12 +56,9 @@ class MedimonController implements ActionListener {
     } else {
       cl = new CommClient(str, port);
     }
-    changeButton = view.getButton(-1);
-    view.getButton(1).addActionListener(this);
-    view.getButton(2).addActionListener(this);
-    view.getButton(3).addActionListener(this);
-    view.getButton(4).addActionListener(this);
-    changeButton.addActionListener(this);
+    title.getButton(1).addActionListener(this);
+    title.getButton(2).addActionListener(this);
+    title.getButton(3).addActionListener(this);
   }
 
   @Override
@@ -72,6 +69,7 @@ class MedimonController implements ActionListener {
       clip1.setFramePosition(0);
       monsterID = Integer.parseInt(e.getActionCommand());
       duelStart();
+      openCommandWindow();
       return;
     }
 
@@ -182,9 +180,11 @@ class MedimonController implements ActionListener {
 
   public void duelStart(){
     skillID = -1;
+    title.windowClose();
     sendAction(monsterID, skillID);
     recvFromServer();
     setToModel();
+    battle = new BattleFrame(isServer, model);
     battleStart = true;
   }
 
@@ -854,7 +854,7 @@ public class MedimonGame {
       mv0 = new TitleFrame(server, mm);
       //mv1 = new BattleFrame(server, mm);
       //mv2 = new CommandFrame(server, mm);
-      mc = new MedimonController(mm, mv1, mv2, server, str, port);
+      mc = new MedimonController(mm, mv0, server, str, port);
     }else{
       server=false;
       port = Integer.parseInt(args[1]);
@@ -864,7 +864,7 @@ public class MedimonGame {
       mv0 = new TitleFrame(server, mm);
       //mv1 = new BattleFrame(server, mm);
       //mv2 = new CommandFrame(server, mm);
-      mc = new MedimonController(mm, mv1, mv2, server, str, port);
+      mc = new MedimonController(mm, mv0, server, str, port);
     }
     
   }
