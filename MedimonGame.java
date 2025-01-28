@@ -5,6 +5,16 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException; 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 class MedimonController implements ActionListener {
   protected BattleFrame battle;
@@ -13,6 +23,9 @@ class MedimonController implements ActionListener {
   protected CommServer sv;
   protected CommClient cl;
   protected ChangeFrame changeFrame;
+  private Clip clip1 = model.createClip(new File("startbutton.wav"));
+  private Clip clip2 = model.createClip(new File("button.wav"));
+  private Clip clip3 = model.createClip(new File("error.wav"));
 
   //サーバからのメッセージを記録
   private String serverMsg;
@@ -55,6 +68,8 @@ class MedimonController implements ActionListener {
   public void actionPerformed(ActionEvent e){
 
     if(!battleStart){
+      clip1.start();
+      clip1.setFramePosition(0);
       monsterID = Integer.parseInt(e.getActionCommand());
       duelStart();
       return;
@@ -63,18 +78,27 @@ class MedimonController implements ActionListener {
     if(e.getSource() == changeButton){
       if((isServer && model.getRemaining(1) > 1) || 
         (!isServer && model.getRemaining(2) > 1)){
+        clip2.start();
+        clip2.setFramePosition(0);
         view.windowClose();
         openChangeWindow();
+      } else {
+        clip3.start();
+        clip3.setFramePosition(0);
       }
       return;
     }
 
     if(deathChange){
+      clip2.start();
+      clip2.setFramePosition(0);
       monsterID = Integer.parseInt(e.getActionCommand());
       deathChange();
       openCommandWindow();
       return;
     } else {
+      clip2.start();
+      clip2.setFramePosition(0);
       if(changeMonsterWaiting){
         changeFrame.windowClose();
         monsterID = Integer.parseInt(e.getActionCommand());
@@ -442,6 +466,8 @@ class BattleFrame extends JFrame implements ActionListener{
   JPanel p1, p2, p6, p7;
   public BattleFrame(boolean server, MedimonModel mm){
   FontLoader.registerFont("misaki_gothic.ttf");
+  Clip clip = mm.createClip(new File("bgm.wav"));
+  clip.loop(Clip.LOOP_CONTINUOUSLY);
   this.server = server;
   if(server == true){
     this.me = 1; this.you = 2;
