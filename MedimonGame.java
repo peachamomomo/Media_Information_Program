@@ -196,7 +196,7 @@ class MedimonController implements ActionListener {
     if(isServer){
       System.out.println("setToModel: "+monsterID+" "+skillID+" "+opponentMonsterID+" "+opponentSkillID);
       model.setSkill(monsterID, skillID, opponentMonsterID, opponentSkillID);
-      if(model.getMedimon(1, model.getNowmedimon(1)).getSpeed() > model.getMedimon(2, model.getNowmedimon(2)).getSpeed()){
+      if(model.getMedimon(1, model.getNowmedimon(1)).getSpeed() >= model.getMedimon(2, model.getNowmedimon(2)).getSpeed()){
         //serverのモンスターのスピードが速い場合
         tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), skillID);
         try {
@@ -205,9 +205,9 @@ class MedimonController implements ActionListener {
               @Override
               public void run() {
                   tf.windowClose();
-                  tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), skillID);
+                  tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), opponentSkillID);
               }
-          }, 1, TimeUnit.SECONDS);
+          }, 2, TimeUnit.SECONDS);
         } catch (Exception e) {
           System.out.println(e);
         }
@@ -218,13 +218,13 @@ class MedimonController implements ActionListener {
               public void run() {
                   tf.windowClose();       
               }
-          }, 3, TimeUnit.SECONDS);
+          }, 4, TimeUnit.SECONDS);
         } catch (Exception e) {
           System.out.println(e);
         }
       } else{
         //clientのモンスターのスピードが速い場合
-        tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), skillID);
+        tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), opponentSkillID);
         try {
           final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
           executorService.schedule(new Runnable() {
@@ -233,7 +233,7 @@ class MedimonController implements ActionListener {
                   tf.windowClose();
                   tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), skillID);
               }
-          }, 1, TimeUnit.SECONDS);
+          }, 2, TimeUnit.SECONDS);
         } catch (Exception e) {
           System.out.println(e);
         }
@@ -244,7 +244,7 @@ class MedimonController implements ActionListener {
               public void run() {
                   tf.windowClose();
               }
-          }, 3, TimeUnit.SECONDS);
+          }, 4, TimeUnit.SECONDS);
         } catch (Exception e) {
           System.out.println(e);
         }
@@ -253,7 +253,7 @@ class MedimonController implements ActionListener {
       System.out.println("setToModel: "+opponentMonsterID+" "+opponentSkillID+" "+monsterID+" "+skillID);
       model.setSkill(opponentMonsterID, opponentSkillID, monsterID, skillID);
 
-      if(model.getMedimon(1, model.getNowmedimon(1)).getSpeed() > model.getMedimon(2, model.getNowmedimon(2)).getSpeed()){
+      if(model.getMedimon(1, model.getNowmedimon(1)).getSpeed() >= model.getMedimon(2, model.getNowmedimon(2)).getSpeed()){
         //serverのモンスターのスピードが速い場合
         //tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), skillID);
         try {
@@ -262,9 +262,9 @@ class MedimonController implements ActionListener {
               @Override
               public void run() {
                   //tf.windowClose();
-                  //tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), skillID);
+                  //tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), opponentSkillID);
               }
-          }, 1, TimeUnit.SECONDS);
+          }, 2, TimeUnit.SECONDS);
         } catch (Exception e) {
           System.out.println(e);
         }
@@ -275,13 +275,13 @@ class MedimonController implements ActionListener {
               public void run() {
                   //tf.windowClose();
               }
-          }, 3, TimeUnit.SECONDS);
+          }, 4, TimeUnit.SECONDS);
         } catch (Exception e) {
           System.out.println(e);
         }
       } else{
         //clientのモンスターのスピードが速い場合
-        //tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), skillID);
+        //tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), opponentSkillID);
         try {
           final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
           executorService.schedule(new Runnable() {
@@ -290,7 +290,7 @@ class MedimonController implements ActionListener {
                   //tf.windowClose();
                   //tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), skillID);
               }
-          }, 1, TimeUnit.SECONDS);
+          }, 2, TimeUnit.SECONDS);
         } catch (Exception e) {
           System.out.println(e);
         }
@@ -301,7 +301,7 @@ class MedimonController implements ActionListener {
               public void run() {
                   //tf.windowClose();
               }
-          }, 3, TimeUnit.SECONDS);
+          }, 4, TimeUnit.SECONDS);
         } catch (Exception e) {
           System.out.println(e);
         }
@@ -919,17 +919,18 @@ class TextFrame extends JFrame{
     this.setTitle("Text");
 
     p1=new JPanel();
-    p1.setLayout(new GridLayout(2,1));
+    p1.setLayout(new GridLayout(4,1));
     this.add(p1);
 
     l1=new JLabel(); l2=new JLabel();
     if(skillID != -1){
-      l1.setText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + medimon.getName() + "　の　" + medimon.getSkill(skillID).getSkillname() + "　！</span></html>");
-      l2.setText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + SkillEffect(medimon.getSkill(skillID)) + "　！</span></html>");
+      l1.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + medimon.getName() + "　の　" + medimon.getSkill(skillID).getSkillname() + "　！</span></html>");
+      l2.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + SkillEffect(medimon.getSkill(skillID)) + "　！</span></html>");
     }else{
-      l1.setText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;>" + medimon.getName() + "　もどれ！</span></html>");
+      l1.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;>" + medimon.getName() + "　もどれ！</span></html>");
     }
     p1.add(l1); p1.add(l2);
+    p1.add(new JLabel()); p1.add(new JLabel());
     
     this.setSize(1000,300);
     this.setLocation(360, 740);
