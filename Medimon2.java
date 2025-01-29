@@ -151,6 +151,12 @@ class MedimonModel {
         }
     }
 
+    public void firstSetSkill(int Player1MonsterID, int Player1SkillID, int Player2MonsterID, int Player2SkillID) {
+        clip6 = createClip(new File("Koutai.wav"));
+        p1Change(Player1MonsterID);
+        p2Change(Player2MonsterID);
+    }
+
     public void setSkill(int Player1MonsterID, int Player1SkillID, int Player2MonsterID, int Player2SkillID) { //二人の行動を受け取る
         clip1 = createClip(new File("Attack.wav"));
         clip2 = createClip(new File("Heal.wav"));
@@ -363,8 +369,20 @@ class MedimonModel {
     }
 
     public void deathChange(int Player, int monsterID) {
-        if(Player == 1) now1medimon = monsterID;
-        else now2medimon = monsterID;
+        clip6 = createClip(new File("Koutai.wav"));
+        try {
+            final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+            executorService.schedule(new Runnable() {
+                @Override
+                public void run() {
+                    if(Player == 1) p1Change(monsterID);
+                    else p2Change(monsterID);                       
+                }
+            }, 2, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        
     }
 
     public Skill getSkill(int Player, int Index) {
