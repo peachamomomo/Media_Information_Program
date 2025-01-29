@@ -124,6 +124,7 @@ class MedimonModel {
         s4.setStatusTarget('h'); s4.setValue(40); s4.setType(0); s4.setSkillname("かいふく");
         m1 = new Medimon(h, s, b, type, s1, s2, s3, s4, n);
         allmedimon.add(m1);
+        //Collections.shuffle(allmedimon);
         this.all1medimon = new ArrayList<Medimon>();
         for(int i=0; i<3; i++) {
             h = allmedimon.get(i).getHp(); s = allmedimon.get(i).getSpeed(); b = allmedimon.get(i).getBougyo();  
@@ -133,6 +134,7 @@ class MedimonModel {
             m1 = new Medimon(h, s, b, type, s1, s2, s3, s4, n);
             all1medimon.add(m1);
         }
+        //Collections.shuffle(allmedimon);
         this.all2medimon = new ArrayList<Medimon>();
         for(int i=0; i<3; i++) {
             h = allmedimon.get(i).getHp(); s = allmedimon.get(i).getSpeed(); b = allmedimon.get(i).getBougyo();  
