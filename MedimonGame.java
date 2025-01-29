@@ -15,6 +15,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.imageio.ImageIO;
 
 class MedimonController implements ActionListener {
   protected TitleFrame title;
@@ -604,6 +605,26 @@ class TitleFrame extends JFrame{
   }
 }
 
+class BackgroundPanel extends JPanel {
+  private Image backgroundImage;
+
+  public BackgroundPanel(String filePath) {
+      try {
+          backgroundImage = ImageIO.read(new File(filePath));
+      } catch (IOException e) {
+          e.printStackTrace();
+      }
+  }
+
+  @Override
+  protected void paintComponent(Graphics g) {
+      super.paintComponent(g);
+      if (backgroundImage != null) {
+          g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+      }
+  }
+}
+
 class BattleFrame extends JFrame implements ActionListener{
   private Timer timer;
   boolean server;
@@ -630,6 +651,9 @@ class BattleFrame extends JFrame implements ActionListener{
   }
   this.mm = mm;
 
+  BackgroundPanel backgroundPanel = new BackgroundPanel("Background.png");
+  backgroundPanel.setLayout(new BorderLayout());
+
   p1=new JPanel(); p2=new JPanel(); p6=new JPanel(); p7=new JPanel();
 
 	l1=new JLabel(); l2=new JLabel(); l3=new JLabel(); l4=new JLabel(); l5=new JLabel(); l6=new JLabel(); l7=new JLabel(); 
@@ -640,7 +664,7 @@ class BattleFrame extends JFrame implements ActionListener{
   l5.setHorizontalAlignment(JLabel.CENTER);
   l6.setHorizontalAlignment(JLabel.LEFT);
   l7.setHorizontalAlignment(JLabel.RIGHT);
-  l1.setText("<html><img src='file:Background.png' width=50 height=200></html>");
+  l1.setText("<html><img src='file:Center.png' width=50 height=200></html>");
 
   setNowMedimon(this.mm);
 	l2.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + this.nowmymedimon.getName() + "</span></html>"); //自分側のモンスターの名前
@@ -671,13 +695,17 @@ class BattleFrame extends JFrame implements ActionListener{
   p2.setLayout(new BorderLayout());
 	p6.setLayout(new GridLayout(4,1));
 	p7.setLayout(new GridLayout(4,1));
+  p1.setOpaque(false); p2.setOpaque(false); p6.setOpaque(false); p7.setOpaque(false);
 
 	p1.add(p6, BorderLayout.NORTH);
 	p2.add(p7, BorderLayout.NORTH);
 
-  this.add(p1,BorderLayout.WEST);
-  this.add(p2,BorderLayout.EAST);
-  this.add(l1,BorderLayout.CENTER);
+  this.add(backgroundPanel);
+
+  backgroundPanel.add(p1, BorderLayout.WEST);
+  backgroundPanel.add(p2, BorderLayout.EAST);
+  backgroundPanel.add(l1, BorderLayout.CENTER);
+
 	p1.add(l3,BorderLayout.CENTER);
 	p2.add(l5,BorderLayout.CENTER);
   p6.add(new JLabel());
@@ -691,7 +719,7 @@ class BattleFrame extends JFrame implements ActionListener{
   
   this.setSize(1000, 600); 
   this.setLocation(460, 140);
-  this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+  this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
   this.setVisible(true);
 
   timer = new Timer(1, this); // 1ミリ秒毎にactionPerformedを呼び出し
@@ -781,8 +809,7 @@ class CommandFrame extends JFrame{
    
     this.setSize(1000,300);
     this.setLocation(460, 740);
-
-    
+    this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     this.setVisible(true);
   }
 
@@ -877,7 +904,7 @@ class ChangeFrame extends JFrame{
 
     this.setSize(1000, 600); 
     this.setLocation(460, 140);
-
+    this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     this.setVisible(true);
   }
 
@@ -934,7 +961,7 @@ class TextFrame extends JFrame{
     
     this.setSize(1000,300);
     this.setLocation(360, 740);
-
+    this.setUndecorated(true);
     this.setVisible(true);
   }
 
@@ -997,7 +1024,7 @@ class ResultFrame extends JFrame{
 
     this.setSize(1000, 900); 
     this.setLocation(460, 140);
-
+    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setVisible(true);
   }
 
