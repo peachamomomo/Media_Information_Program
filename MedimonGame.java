@@ -216,62 +216,86 @@ class MedimonController implements ActionListener {
     if(isServer){
       System.out.println("clientHP: " + model.getMedimon(1, model.getNowmedimon(1)).getHp() + " serverHP: "
                           + model.getMedimon(2, model.getNowmedimon(2)).getHp());
-        switch (model.gameSet()) {
-            case 1:
-                battle.stopClip();
-                battle.windowClose();
-                result = new ResultFrame(1);
-                return;
-            case 2:
-                battle.stopClip();
-                battle.windowClose();
-                result = new ResultFrame(2);
-                return;
-            default:
-                if(model.getMedimon(1, model.getNowmedimon(1)).getHp() == 0){
-                    clip4.start();
-                    clip4.setFramePosition(0);
-                    deathChange = true;
-                    openChangeWindow();
-                    return;
-                } else if(model.getMedimon(2, model.getNowmedimon(2)).getHp() == 0){
-                    clip4.start();
-                    clip4.setFramePosition(0);
-                    System.out.println("server: deathChangeWaiting");
-                    recvFromServer();
-                    model.deathChange(2, opponentMonsterID);
+      switch (model.gameSet()) {
+        case 1:
+          battle.stopClip();
+          battle.windowClose();
+          result = new ResultFrame(1);
+          return;
+        case 2:
+          battle.stopClip();
+          battle.windowClose();
+          result = new ResultFrame(2);
+          return;
+        default:
+          if(model.getMedimon(1, model.getNowmedimon(1)).getHp() == 0){
+            clip4.start();
+            clip4.setFramePosition(0);
+            deathChange = true;
+            openChangeWindow();
+            return;
+          } else if(model.getMedimon(2, model.getNowmedimon(2)).getHp() == 0){
+            clip4.start();
+            clip4.setFramePosition(0);
+            System.out.println("server: deathChangeWaiting");
+            recvFromServer();
+            model.deathChange(2, opponentMonsterID);
+            try {
+              final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+              executorService.schedule(new Runnable() {
+                @Override
+                public void run() { 
+                  openCommandWindow();
                 }
-        }
+              }, 2, TimeUnit.SECONDS);
+            } catch (Exception en) {
+              System.out.println(en);
+            }
+            return;
+          }
+      }
     } else {
       System.out.println("clientHP: " + model.getMedimon(2, model.getNowmedimon(2)).getHp() + " serverHP: "
                           + model.getMedimon(1, model.getNowmedimon(1)).getHp());
-        switch (model.gameSet()) {
-            case 2:
-                battle.stopClip();
-                battle.windowClose();
-                result = new ResultFrame(1);
-                return;
-            case 1:
-                battle.stopClip();
-                battle.windowClose();
-                result = new ResultFrame(2);
-                return;
-            default:
-                //自身のモンスターのHPが0ならデスチェンジ、相手のモンスターのHPが0なら交代先が入力されるまで待機
-                if(model.getMedimon(2, model.getNowmedimon(2)).getHp() == 0){
-                    clip4.start();
-                    clip4.setFramePosition(0);
-                    deathChange = true;
-                    openChangeWindow();
-                    return;
-                } else if(model.getMedimon(1, model.getNowmedimon(1)).getHp() == 0){
-                    clip4.start();
-                    clip4.setFramePosition(0);
-                    System.out.println("client: deathChangeWaiting");
-                    recvFromServer();
-                    model.deathChange(1, opponentMonsterID);
+      switch (model.gameSet()) {
+        case 2:
+          battle.stopClip();
+          battle.windowClose();
+          result = new ResultFrame(1);
+          return;
+        case 1:
+          battle.stopClip();
+          battle.windowClose();
+          result = new ResultFrame(2);
+          return;
+        default:
+          //自身のモンスターのHPが0ならデスチェンジ、相手のモンスターのHPが0なら交代先が入力されるまで待機
+          if(model.getMedimon(2, model.getNowmedimon(2)).getHp() == 0){
+            clip4.start();
+            clip4.setFramePosition(0);
+            deathChange = true;
+            openChangeWindow();
+            return;
+          } else if(model.getMedimon(1, model.getNowmedimon(1)).getHp() == 0){
+            clip4.start();
+            clip4.setFramePosition(0);
+            System.out.println("client: deathChangeWaiting");
+            recvFromServer();
+            model.deathChange(1, opponentMonsterID);
+            try {
+              final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+              executorService.schedule(new Runnable() {
+                @Override
+                public void run() { 
+                  openCommandWindow();
                 }
-        }
+              }, 2, TimeUnit.SECONDS);
+            } catch (Exception en) {
+              System.out.println(en);
+            }
+            return;
+          }
+      }
     }
     openCommandWindow();
   }
