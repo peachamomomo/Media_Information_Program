@@ -200,16 +200,27 @@ class MedimonController implements ActionListener {
       model.setSkill(monsterID, skillID, opponentMonsterID, opponentSkillID);
       if(model.getMedimon(1, model.getNowmedimon(1)).getSpeed() >= model.getMedimon(2, model.getNowmedimon(2)).getSpeed()){
         //serverのモンスターのスピードが速い場合
-        tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), skillID);
+        try {
+          final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+          executorService.schedule(new Runnable() {
+              @Override
+              public void run() {
+                  tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), skillID);
+              }
+          }, 1, TimeUnit.SECONDS);
+        } catch (Exception e) {
+          System.out.println(e);
+        }
         try {
           final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
           executorService.schedule(new Runnable() {
               @Override
               public void run() {
                   tf.windowClose();
-                  tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), opponentSkillID);
+                  if(model.getMedimon(2, model.getNowmedimon(2)).getHp() != 0)
+                      tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), opponentSkillID);
               }
-          }, 2, TimeUnit.SECONDS);
+          }, 3, TimeUnit.SECONDS);
         } catch (Exception e) {
           System.out.println(e);
         }
@@ -220,22 +231,33 @@ class MedimonController implements ActionListener {
               public void run() {
                   tf.windowClose();       
               }
-          }, 4, TimeUnit.SECONDS);
+          }, 5, TimeUnit.SECONDS);
         } catch (Exception e) {
           System.out.println(e);
         }
       } else{
         //clientのモンスターのスピードが速い場合
-        tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), opponentSkillID);
+        try {
+          final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+          executorService.schedule(new Runnable() {
+              @Override
+              public void run() {
+                  tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), opponentSkillID);
+              }
+          }, 1, TimeUnit.SECONDS);
+        } catch (Exception e) {
+          System.out.println(e);
+        }
         try {
           final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
           executorService.schedule(new Runnable() {
               @Override
               public void run() {
                   tf.windowClose();
-                  tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), skillID);
+                  if(model.getMedimon(1, model.getNowmedimon(1)).getHp() != 0)
+                    tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), skillID);
               }
-          }, 2, TimeUnit.SECONDS);
+          }, 3, TimeUnit.SECONDS);
         } catch (Exception e) {
           System.out.println(e);
         }
@@ -246,7 +268,7 @@ class MedimonController implements ActionListener {
               public void run() {
                   tf.windowClose();
               }
-          }, 4, TimeUnit.SECONDS);
+          }, 5, TimeUnit.SECONDS);
         } catch (Exception e) {
           System.out.println(e);
         }
@@ -516,7 +538,7 @@ class TitleFrame extends JFrame{
     p2.add(l2, BorderLayout.NORTH);
     l2.setHorizontalAlignment(JLabel.CENTER);
     l2.setVerticalAlignment(JLabel.CENTER);
-    l2.setText("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>さいしょにたたかわせるモンスターをえらんでください<br></span><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>（モンスターにカーソルをあわせると、つかえるわざがみれます）<br><br></span></center></html>"); //自分側のモンスターの名前
+    l2.setText("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>さいしょにたたかわせるモンスターをえらんでください<br></span><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>（ゲームちゅう、モンスターにカーソルをあわせると、つかえるわざやステータスがみれます）<br><br></span></center></html>"); //自分側のモンスターの名前
     
     l3=new JLabel(); l4=new JLabel(); l5=new JLabel();
     p7.add(l3); p8.add(l4); p9.add(l5);
@@ -692,12 +714,16 @@ class BattleFrame extends JFrame implements ActionListener{
   l1.setText("<html><img src='file:Center.png' width=50 height=200></html>");
 
   setNowMedimon(this.mm);
-	l2.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + this.nowmymedimon.getName() + "</span></html>"); //自分側のモンスターの名前
+	l2.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>&nbsp;" + this.nowmymedimon.getName() + "</span></html>"); //自分側のモンスターの名前
   l3.setText("<html><img src='file:" + setMonsterImage('b', this.nowmymedimon.getName()) + "' width=400 height=400></html>"); //自分側のモンスターの画像
-	l4.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + this.nowyourmedimon.getName() + "</span></html>"); //相手側のモンスターの名前
+  l3.setToolTipText("<html><span style='font-family:MisakiGothic; font-size:25pt; color:black;'>"
+    + "はやさ: " + this.nowmymedimon.getSpeed() 
+    + "<br>ぼうぎょ: " + this.nowmymedimon.getBougyo() + "</span></html>");
+  
+	l4.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + this.nowyourmedimon.getName() + " </span></html>"); //相手側のモンスターの名前
   l5.setText("<html><img src='file:" + setMonsterImage('f', this.nowyourmedimon.getName()) + "' width=400 height=400></html>"); //相手側のモンスターの画像
-	l6.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>HP " + this.nowmymedimon.getHp() + "/" + nowmymedimon.getMaxHp() + "</span></html>"); //自分側のモンスターのHP
-  l7.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>HP " + this.nowyourmedimon.getHp() + "/" + nowyourmedimon.getMaxHp() + "</span></html>"); //相手側のモンスターのHP
+	l6.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>&nbsp;HP " + this.nowmymedimon.getHp() + "/" + nowmymedimon.getMaxHp() + "</span></html>"); //自分側のモンスターのHP
+  l7.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>HP " + this.nowyourmedimon.getHp() + "/" + nowyourmedimon.getMaxHp() + " </span></html>"); //相手側のモンスターのHP
 
 	bar1 = new JProgressBar();
 	bar2 = new JProgressBar();
@@ -775,16 +801,35 @@ class BattleFrame extends JFrame implements ActionListener{
 
   public void actionPerformed(ActionEvent e){
     setNowMedimon(this.mm);
-	  l2.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + this.nowmymedimon.getName() + "</span></html>"); //自分側のモンスターの名前
+	  l2.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>&nbsp;" + this.nowmymedimon.getName() + "</span></html>"); //自分側のモンスターの名前
     l3.setText("<html><img src='file:" + setMonsterImage('b', this.nowmymedimon.getName()) + "' width=400 height=400></html>"); //自分側のモンスターの画像
-	  l4.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + this.nowyourmedimon.getName() + "</span></html>"); //相手側のモンスターの名前
+	  l3.setToolTipText("<html><span style='font-family:MisakiGothic; font-size:25pt; color:black;'>"
+    + "はやさ: " + this.nowmymedimon.getSpeed() 
+    + "<br>ぼうぎょ: " + this.nowmymedimon.getBougyo() + "</span></html>");
+    l4.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + this.nowyourmedimon.getName() + " </span></html>"); //相手側のモンスターの名前
     l5.setText("<html><img src='file:" + setMonsterImage('f', this.nowyourmedimon.getName()) + "' width=400 height=400></html>"); //相手側のモンスターの画像
-	  l6.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>HP " + this.nowmymedimon.getHp() + "/" + nowmymedimon.getMaxHp() + "</span></html>"); //自分側のモンスターのHP
+	  l6.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>&nbsp;HP " + this.nowmymedimon.getHp() + "/" + nowmymedimon.getMaxHp() + "</span></html>"); //自分側のモンスターのHP
     bar1.setMinimum(0); bar1.setMaximum(this.nowmymedimon.getMaxHp());
     bar1.setValue(this.nowmymedimon.getHp());
-	  l7.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>HP " + this.nowyourmedimon.getHp() + "/" + nowyourmedimon.getMaxHp() + "</span></html>"); //相手側のモンスターのHP
+    int mHPper = this.nowmymedimon.getHp() * 100 / this.nowmymedimon.getMaxHp();
+    if(mHPper > 50){
+      bar1.setForeground(Color.GREEN);
+    }else if(mHPper <= 50 && mHPper > 10){
+      bar1.setForeground(Color.ORANGE);
+    }else{
+      bar1.setForeground(Color.RED);
+    }
+	  l7.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>HP " + this.nowyourmedimon.getHp() + "/" + nowyourmedimon.getMaxHp() + " </span></html>"); //相手側のモンスターのHP
     bar2.setMinimum(0); bar2.setMaximum(this.nowyourmedimon.getMaxHp());
     bar2.setValue(this.nowyourmedimon.getHp());
+    int yHPper = this.nowyourmedimon.getHp() * 100 / this.nowyourmedimon.getMaxHp();
+    if(yHPper > 50){
+      bar2.setForeground(Color.GREEN);
+    }else if(yHPper <= 50 && yHPper > 10){
+      bar2.setForeground(Color.ORANGE);
+    }else{
+      bar2.setForeground(Color.RED);
+    }
   }
 
   public void stopClip(){
@@ -809,7 +854,7 @@ class CommandFrame extends JFrame{
     b2=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,1).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + SkillEffect(me, mm, 1) + "</span></center></html>");
     b3=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,2).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + SkillEffect(me, mm, 2) + "</span></center></html>");
     b4=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,3).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + SkillEffect(me, mm, 3) + "</span></center></html>");
-    change=new JButton("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>こうたい</span></html>");
+    change=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>こうたい</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>ひかえのモンスター<br>" + (mm.getRemaining(me)-1) + "たい</span></center></html>");
     b1.setActionCommand("0");
     b2.setActionCommand("1");
     b3.setActionCommand("2");
@@ -888,13 +933,44 @@ class ChangeFrame extends JFrame{
     l1.setText("<html><img src='file:" + setMonsterImage('c', mm.getMedimon(me, 0).getName()) + "' width=150 height=150></html>");
     l2.setText("<html><img src='file:" + setMonsterImage('c', mm.getMedimon(me, 1).getName()) + "' width=150 height=150></html>");
     l3.setText("<html><img src='file:" + setMonsterImage('c', mm.getMedimon(me, 2).getName()) + "' width=150 height=150></html>");
-    l4.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getMedimon(me, 0).getName() +  "</span></html>");
-    l5.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>HP " + mm.getMedimon(me, 0).getHp() + "/" + mm.getMedimon(me, 0).getMaxHp() + "</span></html>");
-    l6.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getMedimon(me, 1).getName() +  "</span></html>");
-    l7.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>HP " + mm.getMedimon(me, 1).getHp() + "/" + mm.getMedimon(me, 1).getMaxHp() + "</span></html>");
-    l8.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getMedimon(me, 2).getName() +  "</span></html>");
-    l9.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>HP " + mm.getMedimon(me, 2).getHp() + "/" + mm.getMedimon(me, 2).getMaxHp() + "</span></html>");
+    l1.setToolTipText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" 
+    + mm.getMedimon(me, 0).getSkill(0).getSkillname() + ": " + SkillEffect(me, mm, 0, 0) + "<br>"
+    + mm.getMedimon(me, 0).getSkill(1).getSkillname() + ": " + SkillEffect(me, mm, 0, 1) + "<br>"
+    + mm.getMedimon(me, 0).getSkill(2).getSkillname() + ": " + SkillEffect(me, mm, 0, 2) + "<br>"
+    + mm.getMedimon(me, 0).getSkill(3).getSkillname() + ": " + SkillEffect(me, mm, 0, 3)
+    + "</span></html>");
+    l2.setToolTipText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" 
+    + mm.getMedimon(me, 1).getSkill(0).getSkillname() + ": " + SkillEffect(me, mm, 1, 0) + "<br>"
+    + mm.getMedimon(me, 1).getSkill(1).getSkillname() + ": " + SkillEffect(me, mm, 1, 1) + "<br>"
+    + mm.getMedimon(me, 1).getSkill(2).getSkillname() + ": " + SkillEffect(me, mm, 1, 2) + "<br>"
+    + mm.getMedimon(me, 1).getSkill(3).getSkillname() + ": " + SkillEffect(me, mm, 1, 3)
+    + "</span></html>");
+    l3.setToolTipText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" 
+    + mm.getMedimon(me, 2).getSkill(0).getSkillname() + ": " + SkillEffect(me, mm, 2, 0) + "<br>"
+    + mm.getMedimon(me, 2).getSkill(1).getSkillname() + ": " + SkillEffect(me, mm, 2, 1) + "<br>"
+    + mm.getMedimon(me, 2).getSkill(2).getSkillname() + ": " + SkillEffect(me, mm, 2, 2) + "<br>"
+    + mm.getMedimon(me, 2).getSkill(3).getSkillname() + ": " + SkillEffect(me, mm, 2, 3)
+    + "</span></html>");
     
+    l4.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getMedimon(me, 0).getName() +  "</span></html>");
+    l5.setText("<html><span style='font-family:MisakiGothic; font-size:25pt; color:black;'>"
+    + "HP: " + mm.getMedimon(me, 0).getMaxHp() 
+    + "<br>はやさ: " + mm.getMedimon(me, 0).getSpeed() 
+    + "<br>ぼうぎょ: " + mm.getMedimon(me, 0).getBougyo() + "</span></html>");
+    l6.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getMedimon(me, 1).getName() +  "</span></html>");
+    l7.setText("<html><span style='font-family:MisakiGothic; font-size:25pt; color:black;'>"
+    + "HP: " + mm.getMedimon(me, 0).getMaxHp() 
+    + "<br>はやさ: " + mm.getMedimon(me, 0).getSpeed() 
+    + "<br>ぼうぎょ: " + mm.getMedimon(me, 0).getBougyo() + "</span></html>");
+    l8.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getMedimon(me, 2).getName() +  "</span></html>");
+    l9.setText("<html><span style='font-family:MisakiGothic; font-size:25pt; color:black;'>"
+    + "HP: " + mm.getMedimon(me, 0).getMaxHp() 
+    + "<br>はやさ: " + mm.getMedimon(me, 0).getSpeed() 
+    + "<br>ぼうぎょ: " + mm.getMedimon(me, 0).getBougyo() + "</span></html>");
+
+    l1.setHorizontalAlignment(JLabel.CENTER);
+    l2.setHorizontalAlignment(JLabel.CENTER);
+    l3.setHorizontalAlignment(JLabel.CENTER);
     l4.setHorizontalAlignment(JLabel.LEFT);
     l5.setHorizontalAlignment(JLabel.LEFT);
     l6.setHorizontalAlignment(JLabel.LEFT);
@@ -961,6 +1037,21 @@ class ChangeFrame extends JFrame{
     }
     return "\0";
   }
+
+  public String SkillEffect(int i, MedimonModel mm, int index, int n){
+    if(mm.getMedimon(i, index).getSkill(n).getStatusTarget() == 'h'){
+      if(mm.getMedimon(i, index).getSkill(n).getValue() < 0){
+        return Math.abs(mm.getMedimon(i, index).getSkill(n).getValue()) + "ダメージ";
+      }else{
+        return mm.getMedimon(i, index).getSkill(n).getValue() + "かいふく";
+      }
+    }else if(mm.getMedimon(i, index).getSkill(n).getStatusTarget() == 'b'){
+      return "ぼうぎょ" + (mm.getMedimon(i, index).getSkill(n).getValue() - 100) + "％アップ";
+    }else if(mm.getMedimon(i, index).getSkill(n).getStatusTarget() == 's'){
+      return "はやさ" + (mm.getMedimon(i, index).getSkill(n).getValue() - 100) + "％アップ";
+    }
+    return "\0";
+  }
 }
 
 class TextFrame extends JFrame{
@@ -986,7 +1077,7 @@ class TextFrame extends JFrame{
     
     this.setSize(1000,300);
     this.setLocation(360, 740);
-    this.setUndecorated(true);
+    this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     this.setVisible(true);
   }
 
