@@ -78,20 +78,20 @@ class Medimon {
     public int getHp() { return h; }
     public int getSpeed() { return s; }
     public int getBougyo() { return b; }
+    public int getType() { return type; }
     public Skill getSkill(int index) { return a.get(index); }
     public String getName() { return n; }
 }
 
 class MedimonModel {
-    private ArrayList<Medimon> all1medimon, all2medimon;       // 1がServer、２がClient
+    private ArrayList<Medimon> allmedimon, all1medimon, all2medimon;       // 1がServer、２がClient
     private int now1medimon = 0, now2medimon = 0;
     private int h, s, b, type; 
     private Skill s1, s2, s3, s4;
     private String n;
-    private int serverconducting = 0;          //行動処理中であるか判別する値
     public Clip clip1, clip2, clip3, clip4, clip5, clip6;
     public MedimonModel() {
-        this.all1medimon = new ArrayList<Medimon>();
+        this.allmedimon = new ArrayList<Medimon>();
         h = 100; s = 50; b = 50;  type = 0; n = "トーグ";
         s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
         s1.setStatusTarget('h'); s1.setValue(-20); s1.setType(0); s1.setSkillname("パンチ");
@@ -99,7 +99,7 @@ class MedimonModel {
         s3.setStatusTarget('h'); s3.setValue(-60); s3.setType(0); s3.setSkillname("タックル");
         s4.setStatusTarget('h'); s4.setValue(20); s4.setType(0); s4.setSkillname("ねむる");
         Medimon m1 = new Medimon(h, s, b, type, s1, s2, s3, s4, n);
-        all1medimon.add(m1);
+        allmedimon.add(m1);
         h = 10; s = 55; b = 50;  type = 1;  n = "ウチャ";
         s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
         s1.setStatusTarget('h'); s1.setValue(-40); s1.setType(0); s1.setSkillname("かえん");
@@ -107,7 +107,7 @@ class MedimonModel {
         s3.setStatusTarget('h'); s3.setValue(-60); s3.setType(0); s3.setSkillname("タックル");
         s4.setStatusTarget('h'); s4.setValue(40); s4.setType(0); s4.setSkillname("かいふく");
         m1 = new Medimon(h, s, b, type, s1, s2, s3, s4, n);
-        all1medimon.add(m1);
+        allmedimon.add(m1);
         h = 10; s = 50; b = 50;  type = 0;  n = "ミーゴ";
         s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
         s1.setStatusTarget('h'); s1.setValue(-20); s1.setType(0); s1.setSkillname("パンチ");
@@ -115,32 +115,33 @@ class MedimonModel {
         s3.setStatusTarget('h'); s3.setValue(-60); s3.setType(0); s3.setSkillname("タックル");
         s4.setStatusTarget('h'); s4.setValue(40); s4.setType(0); s4.setSkillname("かいふく");
         m1 = new Medimon(h, s, b, type, s1, s2, s3, s4, n);
-        all1medimon.add(m1);
-        this.all2medimon = new ArrayList<Medimon>();    
-        h = 10; s = 50; b = 50;  type = 0;  n = "トーグ";
-        s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
-        s1.setStatusTarget('h'); s1.setValue(-20); s1.setType(0); s1.setSkillname("パンチ");
-        s2.setStatusTarget('b'); s2.setValue(120); s2.setType(0); s2.setSkillname("ぼうぎょ");
-        s3.setStatusTarget('h'); s3.setValue(-60); s3.setType(0); s3.setSkillname("タックル");
-        s4.setStatusTarget('h'); s4.setValue(20); s4.setType(0); s4.setSkillname("ねむる");
-        Medimon m2 = new Medimon(h, s, b, type, s1, s2, s3, s4, n);
-        all2medimon.add(m2);
-        h = 10; s = 55; b = 50;  type = 1;  n = "ウチャ";
-        s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
-        s1.setStatusTarget('h'); s1.setValue(-40); s1.setType(0); s1.setSkillname("かえん");
-        s2.setStatusTarget('s'); s2.setValue(120); s2.setType(0); s2.setSkillname("炎の舞");
-        s3.setStatusTarget('h'); s3.setValue(-60); s3.setType(0); s3.setSkillname("タックル");
-        s4.setStatusTarget('h'); s4.setValue(40); s4.setType(0); s4.setSkillname("かいふく");
-        m2 = new Medimon(h, s, b, type, s1, s2, s3, s4, n);
-        all2medimon.add(m2);
-        h = 10; s = 50; b = 50;  type = 0;  n = "ミーゴ";
+        allmedimon.add(m1);
+        h = 10; s = 50; b = 50;  type = 0;  n = "ヨギー";
         s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
         s1.setStatusTarget('h'); s1.setValue(-20); s1.setType(0); s1.setSkillname("パンチ");
         s2.setStatusTarget('h'); s2.setValue(-40); s2.setType(0); s2.setSkillname("キック");
         s3.setStatusTarget('h'); s3.setValue(-60); s3.setType(0); s3.setSkillname("タックル");
         s4.setStatusTarget('h'); s4.setValue(40); s4.setType(0); s4.setSkillname("かいふく");
-        m2 = new Medimon(h, s, b, type, s1, s2, s3, s4, n);
-        all2medimon.add(m2);
+        m1 = new Medimon(h, s, b, type, s1, s2, s3, s4, n);
+        allmedimon.add(m1);
+        this.all1medimon = new ArrayList<Medimon>();
+        for(int i=0; i<3; i++) {
+            h = allmedimon.get(i).getHp(); s = allmedimon.get(i).getSpeed(); b = allmedimon.get(i).getBougyo();  
+            type = allmedimon.get(i).getType(); n = allmedimon.get(i).getName();
+            s1 = allmedimon.get(i).getSkill(0); s2 = allmedimon.get(i).getSkill(1);
+            s3 = allmedimon.get(i).getSkill(2); s4 = allmedimon.get(i).getSkill(3);
+            m1 = new Medimon(h, s, b, type, s1, s2, s3, s4, n);
+            all1medimon.add(m1);
+        }
+        this.all2medimon = new ArrayList<Medimon>();
+        for(int i=0; i<3; i++) {
+            h = allmedimon.get(i).getHp(); s = allmedimon.get(i).getSpeed(); b = allmedimon.get(i).getBougyo();  
+            type = allmedimon.get(i).getType(); n = allmedimon.get(i).getName();
+            s1 = allmedimon.get(i).getSkill(0); s2 = allmedimon.get(i).getSkill(1);
+            s3 = allmedimon.get(i).getSkill(2); s4 = allmedimon.get(i).getSkill(3);
+            m1 = new Medimon(h, s, b, type, s1, s2, s3, s4, n);
+            all2medimon.add(m1);
+        }
     }
 
     public Medimon getMedimon(int Player, int Index) {
@@ -164,7 +165,6 @@ class MedimonModel {
         clip4 = createClip(new File("Speed.wav"));
         clip5 = createClip(new File("Bougyo.wav"));
         clip6 = createClip(new File("Koutai.wav"));
-        serverconducting = 1;
         if(Player1SkillID < 0) {
             try {
                 final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
@@ -202,7 +202,6 @@ class MedimonModel {
                     System.out.println(e);
                 }
             }
-            serverconducting = 0;
         } else if(Player2SkillID < 0) {
             try {
                 final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
@@ -226,7 +225,6 @@ class MedimonModel {
             } catch (Exception e) {
                 System.out.println(e);
             }
-            serverconducting = 0;
         } else {   
             Medimon p1 = all1medimon.get(now1medimon);
             Medimon p2 = all2medimon.get(now2medimon);
@@ -273,7 +271,6 @@ class MedimonModel {
             } catch (Exception e) {
                 System.out.println(e);
             }
-            serverconducting = 0;
         }
     }
 

@@ -959,14 +959,14 @@ class ChangeFrame extends JFrame{
     + "<br>ぼうぎょ: " + mm.getMedimon(me, 0).getBougyo() + "</span></html>");
     l6.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getMedimon(me, 1).getName() +  "</span></html>");
     l7.setText("<html><span style='font-family:MisakiGothic; font-size:25pt; color:black;'>"
-    + "HP: " + mm.getMedimon(me, 0).getMaxHp() 
-    + "<br>はやさ: " + mm.getMedimon(me, 0).getSpeed() 
-    + "<br>ぼうぎょ: " + mm.getMedimon(me, 0).getBougyo() + "</span></html>");
+    + "HP: " + mm.getMedimon(me, 1).getMaxHp() 
+    + "<br>はやさ: " + mm.getMedimon(me, 1).getSpeed() 
+    + "<br>ぼうぎょ: " + mm.getMedimon(me, 1).getBougyo() + "</span></html>");
     l8.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getMedimon(me, 2).getName() +  "</span></html>");
     l9.setText("<html><span style='font-family:MisakiGothic; font-size:25pt; color:black;'>"
-    + "HP: " + mm.getMedimon(me, 0).getMaxHp() 
-    + "<br>はやさ: " + mm.getMedimon(me, 0).getSpeed() 
-    + "<br>ぼうぎょ: " + mm.getMedimon(me, 0).getBougyo() + "</span></html>");
+    + "HP: " + mm.getMedimon(me, 2).getMaxHp() 
+    + "<br>はやさ: " + mm.getMedimon(me, 2).getSpeed() 
+    + "<br>ぼうぎょ: " + mm.getMedimon(me, 2).getBougyo() + "</span></html>");
 
     l1.setHorizontalAlignment(JLabel.CENTER);
     l2.setHorizontalAlignment(JLabel.CENTER);
