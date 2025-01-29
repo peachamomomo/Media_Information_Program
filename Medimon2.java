@@ -92,7 +92,7 @@ class MedimonModel {
     public Clip clip1, clip2, clip3, clip4, clip5, clip6;
     public MedimonModel() {
         this.all1medimon = new ArrayList<Medimon>();
-        h = 10; s = 50; b = 50;  type = 0; n = "トーグ";
+        h = 100; s = 50; b = 50;  type = 0; n = "トーグ";
         s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
         s1.setStatusTarget('h'); s1.setValue(-20); s1.setType(0); s1.setSkillname("パンチ");
         s2.setStatusTarget('b'); s2.setValue(120); s2.setType(0); s2.setSkillname("ぼうぎょ");
