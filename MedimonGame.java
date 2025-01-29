@@ -434,8 +434,13 @@ class TitleFrame extends JFrame{
   JLabel l1, l2, l3, l4, l5, l6, l7, l8;
   JButton b1, b2, b3;
   JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9;
+  Clip clip;
   public TitleFrame(boolean server, MedimonModel mm){
     FontLoader.registerFont("misaki_gothic.ttf");
+
+    clip = mm.createClip(new File("start_bgm.wav"));
+    clip.loop(Clip.LOOP_CONTINUOUSLY);
+
     this.server = server;
     if(server == true){
       this.me = 1; this.you = 2;
@@ -583,6 +588,7 @@ class TitleFrame extends JFrame{
   }
 
   public void windowClose(){
+    clip.close();
     System.out.println("OK");
     this.dispose();
   }
