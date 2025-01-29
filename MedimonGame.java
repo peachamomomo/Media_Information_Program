@@ -71,17 +71,7 @@ class MedimonController implements ActionListener {
       clip1.setFramePosition(0);
       monsterID = Integer.parseInt(e.getActionCommand());
       duelStart();
-      try {
-        final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-        executorService.schedule(new Runnable() {
-          @Override
-          public void run() { 
-            openCommandWindow();
-          }
-        }, 5, TimeUnit.SECONDS);
-      } catch (Exception en) {
-        System.out.println(en);
-      }
+      openCommandWindow();
       return;
     }
 
@@ -104,7 +94,17 @@ class MedimonController implements ActionListener {
       clip2.setFramePosition(0);
       monsterID = Integer.parseInt(e.getActionCommand());
       deathChange();
-      openCommandWindow();
+      try {
+        final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.schedule(new Runnable() {
+          @Override
+          public void run() { 
+            openCommandWindow();
+          }
+        }, 2, TimeUnit.SECONDS);
+      } catch (Exception en) {
+        System.out.println(en);
+      }
       return;
     } else {
       clip2.start();
