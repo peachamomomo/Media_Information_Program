@@ -24,6 +24,7 @@ class MedimonController implements ActionListener {
   protected CommServer sv;
   protected CommClient cl;
   protected ChangeFrame changeFrame;
+  protected ResultFrame result;
   private Clip clip1 = model.createClip(new File("startbutton.wav"));
   private Clip clip2 = model.createClip(new File("button.wav"));
   private Clip clip3 = model.createClip(new File("error.wav"));
@@ -206,12 +207,14 @@ class MedimonController implements ActionListener {
                           + model.getMedimon(2, model.getNowmedimon(2)).getHp());
         switch (model.gameSet()) {
             case 1:
-                battle.ResultFrame(battle, 1);
-                System.out.println("YOU WIN!");
+                battle.stopClip();
+                battle.windowClose();
+                result = new ResultFrame(1);
                 return;
             case 2:
-                battle.ResultFrame(battle, 2);
-                System.out.println("YOU LOSE...");
+                battle.stopClip();
+                battle.windowClose();
+                result = new ResultFrame(2);
                 return;
             default:
                 if(model.getMedimon(1, model.getNowmedimon(1)).getHp() == 0){
@@ -229,12 +232,14 @@ class MedimonController implements ActionListener {
                           + model.getMedimon(1, model.getNowmedimon(1)).getHp());
         switch (model.gameSet()) {
             case 2:
-                battle.ResultFrame(battle, 1);
-                System.out.println("YOU WIN!");
+                battle.stopClip();
+                battle.windowClose();
+                result = new ResultFrame(1);
                 return;
             case 1:
-                battle.ResultFrame(battle, 2);
-                System.out.println("YOU LOSE...");
+                battle.stopClip();
+                battle.windowClose();
+                result = new ResultFrame(2);
                 return;
             default:
                 //自身のモンスターのHPが0ならデスチェンジ、相手のモンスターのHPが0なら交代先が入力されるまで待機
@@ -469,16 +474,21 @@ class TitleFrame extends JFrame{
 class BattleFrame extends JFrame implements ActionListener{
   private Timer timer;
   boolean server;
+  int judge;
   MedimonModel mm;
   int me, you;
   Medimon nowmymedimon, nowyourmedimon;
   JLabel l1, l2, l3, l4, l5, l6, l7;
   JProgressBar bar1, bar2;
   JPanel p1, p2, p6, p7;
+  Clip clip;
   public BattleFrame(boolean server, MedimonModel mm){
   FontLoader.registerFont("misaki_gothic.ttf");
-  Clip clip = mm.createClip(new File("bgm.wav"));
+  judge = 0;
+
+  clip = mm.createClip(new File("bgm.wav"));
   clip.loop(Clip.LOOP_CONTINUOUSLY);
+
   this.server = server;
   if(server == true){
     this.me = 1; this.you = 2;
@@ -555,23 +565,6 @@ class BattleFrame extends JFrame implements ActionListener{
   timer.start(); // stopメソッドを呼ぶまでactionPerformedが呼ばれ続ける
   }
 
-  public void ResultFrame(BattleFrame b, int i){
-    FontLoader.registerFont("misaki_gothic.ttf");
-    timer.stop();
-    p1 = new JPanel();
-    l1 = new JLabel();
-    if(i == 1){
-      l1.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>YOU WIN!</span></html>");
-    } else {
-      l1.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>YOU LOSE...</span></html>");
-    }
-    p1.add(l1);
-    b.add(p1);
-    this.setSize(1000, 600);
-    this.setLocation(460, 140);
-    this.setVisible(true);
-  }
-
   public void setNowMedimon(MedimonModel mm){
     this.nowmymedimon = mm.getMedimon(me, mm.getNowmedimon(me));
     this.nowyourmedimon = mm.getMedimon(you, mm.getNowmedimon(you));
@@ -606,6 +599,10 @@ class BattleFrame extends JFrame implements ActionListener{
 	  l7.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>HP " + this.nowyourmedimon.getHp() + "/" + nowyourmedimon.getMaxHp() + "</span></html>"); //相手側のモンスターのHP
     bar2.setMinimum(0); bar2.setMaximum(this.nowyourmedimon.getMaxHp());
     bar2.setValue(this.nowyourmedimon.getHp());
+  }
+
+  public void stopClip(){
+    clip.stop();
   }
 
   public void windowClose(){
@@ -811,26 +808,43 @@ class TextFrame extends JFrame{
 }
 
 class ResultFrame extends JFrame{
-  JLabel l1, l2;
+  JPanel p1, p2, p3;
+  JLabel l1, l2, l3;
   public ResultFrame(int i){
-    JPanel p1=new JPanel();
-    l1=new JLabel(); l2=new JLabel();
-    
+    FontLoader.registerFont("misaki_gothic.ttf");
     this.setTitle("Result");
 
+    p1=new JPanel();
+    p1.setLayout(new BorderLayout());
     this.add(p1);
+    p2=new JPanel(); 
+    p2.setLayout(new GridLayout(2, 1));
+    p3=new JPanel(); 
+    p3.setLayout(new GridLayout(2, 1));
+    p1.add(p2, BorderLayout.NORTH); p1.add(p3, BorderLayout.SOUTH);
 
+    l1=new JLabel(); 
+    l1.setHorizontalAlignment(JLabel.CENTER); l1.setVerticalAlignment(JLabel.CENTER);
     if(i == 1){
-      l1.setText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>YOU WIN!</span></html>");
+      l1.setText("<html><span style='font-family:MisakiGothic; font-size:100pt; color:black;'>YOU WIN!</span></html>");
+      System.out.println("YOU WIN!");
     } else {
-      l1.setText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>YOU LOSE...</span></html>");
+      l1.setText("<html><span style='font-family:MisakiGothic; font-size:100pt; color:black;'>YOU LOSE...</span></html>");
+      System.out.println("YOU LOSE...");
     }
+    p2.add(new JLabel()); p2.add(l1);
 
-    //p1.setLayout(new GridLayout(2,1));
+    l2=new JLabel();
+    l2.setText("<html><img src='file:TitleLogo.png' width=600 height=400></html>");
+    l2.setHorizontalAlignment(JLabel.CENTER); l2.setVerticalAlignment(JLabel.NORTH);
+    p1.add(l2, BorderLayout.CENTER);
 
-    p1.add(l1); //p1.add(l2);
-   
-    this.setSize(1000, 600); 
+    l3=new JLabel();
+    l3.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>Ⅹに ＃メディモン でポストしてね</span></html>");
+    l3.setHorizontalAlignment(JLabel.CENTER); l3.setVerticalAlignment(JLabel.NORTH);
+    p3.add(l3); p3.add(new JLabel());
+
+    this.setSize(1000, 900); 
     this.setLocation(460, 140);
 
     this.setVisible(true);
