@@ -167,6 +167,17 @@ class MedimonController implements ActionListener {
     }
   }
 
+  public void firstSetToModel(){
+    //setSkillのPlayer1にはserverの情報を、Player2にはclientの情報を入力するように実装しました
+    if(isServer){
+      System.out.println("setToModel: "+monsterID+" "+skillID+" "+opponentMonsterID+" "+opponentSkillID);
+      model.firstSetSkill(monsterID, skillID, opponentMonsterID, opponentSkillID);
+    } else {
+      System.out.println("setToModel: "+opponentMonsterID+" "+opponentSkillID+" "+monsterID+" "+skillID);
+      model.firstSetSkill(opponentMonsterID, opponentSkillID, monsterID, skillID);
+    }
+  }
+
     //ボタン入力から受け取った自分のmonster/skillIDと、メッセージから受け取った相手のmonster/skillIDをmodelにsetするメソッド
   public void setToModel(){
     //setSkillのPlayer1にはserverの情報を、Player2にはclientの情報を入力するように実装しました
@@ -184,7 +195,7 @@ class MedimonController implements ActionListener {
     title.windowClose();
     sendAction(monsterID, skillID);
     recvFromServer();
-    setToModel();
+    firstSetToModel();
     battle = new BattleFrame(isServer, model);
     battleStart = true;
   }
