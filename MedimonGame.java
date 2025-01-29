@@ -915,7 +915,7 @@ class TextFrame extends JFrame{
     l1=new JLabel(); l2=new JLabel();
     if(skillID != -1){
       l1.setText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + medimon.getName() + "　の　" + medimon.getSkill(skillID).getSkillname() + "　！</span></html>");
-      l2.setText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;>" + SkillEffect(0, medimon.getSkill(skillID), 0) + "</span></html>");
+      l2.setText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + SkillEffect(medimon.getSkill(skillID)) + "　！</span></html>");
     }else{
       l1.setText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;>" + medimon.getName() + "　もどれ！</span></html>");
     }
@@ -927,7 +927,7 @@ class TextFrame extends JFrame{
     this.setVisible(true);
   }
 
-  public String SkillEffect(int i, Skill skill, int n){
+  public String SkillEffect(Skill skill){
     if(skill.getStatusTarget() == 'h'){
       if(skill.getValue() < 0){
         return Math.abs(skill.getValue()) + "ダメージ";
@@ -936,10 +936,9 @@ class TextFrame extends JFrame{
       }
     }else if(skill.getStatusTarget() == 'b'){
       return "ぼうぎょ" + (skill.getValue() - 100) + "％アップ";
-    }else if(skill.getStatusTarget() == 's'){
+    }else{
       return "はやさ" + (skill.getValue() - 100) + "％アップ";
     }
-    return "\0";
   }
 
   public void windowClose(){
