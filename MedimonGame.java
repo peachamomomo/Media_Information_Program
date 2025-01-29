@@ -200,16 +200,27 @@ class MedimonController implements ActionListener {
       model.setSkill(monsterID, skillID, opponentMonsterID, opponentSkillID);
       if(model.getMedimon(1, model.getNowmedimon(1)).getSpeed() >= model.getMedimon(2, model.getNowmedimon(2)).getSpeed()){
         //serverのモンスターのスピードが速い場合
-        tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), skillID);
+        try {
+          final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+          executorService.schedule(new Runnable() {
+              @Override
+              public void run() {
+                  tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), skillID);
+              }
+          }, 1, TimeUnit.SECONDS);
+        } catch (Exception e) {
+          System.out.println(e);
+        }
         try {
           final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
           executorService.schedule(new Runnable() {
               @Override
               public void run() {
                   tf.windowClose();
-                  tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), opponentSkillID);
+                  if(model.getMedimon(2, model.getNowmedimon(2)).getHp() != 0)
+                      tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), opponentSkillID);
               }
-          }, 2, TimeUnit.SECONDS);
+          }, 3, TimeUnit.SECONDS);
         } catch (Exception e) {
           System.out.println(e);
         }
@@ -220,22 +231,33 @@ class MedimonController implements ActionListener {
               public void run() {
                   tf.windowClose();       
               }
-          }, 4, TimeUnit.SECONDS);
+          }, 5, TimeUnit.SECONDS);
         } catch (Exception e) {
           System.out.println(e);
         }
       } else{
         //clientのモンスターのスピードが速い場合
-        tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), opponentSkillID);
+        try {
+          final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+          executorService.schedule(new Runnable() {
+              @Override
+              public void run() {
+                  tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), opponentSkillID);
+              }
+          }, 1, TimeUnit.SECONDS);
+        } catch (Exception e) {
+          System.out.println(e);
+        }
         try {
           final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
           executorService.schedule(new Runnable() {
               @Override
               public void run() {
                   tf.windowClose();
-                  tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), skillID);
+                  if(model.getMedimon(1, model.getNowmedimon(1)).getHp() != 0)
+                    tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), skillID);
               }
-          }, 2, TimeUnit.SECONDS);
+          }, 3, TimeUnit.SECONDS);
         } catch (Exception e) {
           System.out.println(e);
         }
@@ -246,7 +268,7 @@ class MedimonController implements ActionListener {
               public void run() {
                   tf.windowClose();
               }
-          }, 4, TimeUnit.SECONDS);
+          }, 5, TimeUnit.SECONDS);
         } catch (Exception e) {
           System.out.println(e);
         }
