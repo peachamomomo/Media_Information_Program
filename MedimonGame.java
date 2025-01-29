@@ -109,8 +109,9 @@ class MedimonController implements ActionListener {
     } else {
       clip2.start();
       clip2.setFramePosition(0);
-      if(changeMonsterWaiting){
+      if(changeMonsterWaiting){ //openChangeWindow();実行でtrueになる
         changeFrame.windowClose();
+        System.out.println("ChangeWindow :close");
         monsterID = Integer.parseInt(e.getActionCommand());
         skillID = -1;
       } else {
@@ -214,7 +215,7 @@ class MedimonController implements ActionListener {
   //試合状況を監視する(勝敗or継続中)
   public void duelJudge(){
     if(isServer){
-      System.out.println("clientHP: " + model.getMedimon(1, model.getNowmedimon(1)).getHp() + " serverHP: "
+      System.out.println("serverHP: " + model.getMedimon(1, model.getNowmedimon(1)).getHp() + " clientHP: "
                           + model.getMedimon(2, model.getNowmedimon(2)).getHp());
       switch (model.gameSet()) {
         case 1:
@@ -314,15 +315,15 @@ class MedimonController implements ActionListener {
   }
 
   public void openChangeWindow(){
-    if(changeMonsterWaiting) return;
-      view.windowClose();
-      System.out.println("commandWindow :close");
-      changeFrame = new ChangeFrame(isServer, model);
-      changeFrame.getButton(0).addActionListener(this);
-      changeFrame.getButton(1).addActionListener(this);
-      changeFrame.getButton(2).addActionListener(this);
-      
-      changeMonsterWaiting = true;
+    view.windowClose();
+    System.out.println("commandWindow :close");
+    changeFrame = new ChangeFrame(isServer, model);
+    changeFrame.getButton(0).addActionListener(this);
+    changeFrame.getButton(1).addActionListener(this);
+    changeFrame.getButton(2).addActionListener(this);
+  
+    changeMonsterWaiting = true;
+    System.out.println("ChangeWindow :open");
   }
 
   public void deathChange(){
