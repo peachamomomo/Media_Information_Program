@@ -28,6 +28,7 @@ class MedimonController implements ActionListener {
   private Clip clip1 = model.createClip(new File("startbutton.wav"));
   private Clip clip2 = model.createClip(new File("button.wav"));
   private Clip clip3 = model.createClip(new File("error.wav"));
+  private Clip clip4 = model.createClip(new File("Death.wav"));
 
   //サーバからのメッセージを記録
   private String serverMsg;
@@ -218,10 +219,14 @@ class MedimonController implements ActionListener {
                 return;
             default:
                 if(model.getMedimon(1, model.getNowmedimon(1)).getHp() == 0){
+                    clip4.start();
+                    clip4.setFramePosition(0);
                     deathChange = true;
                     openChangeWindow();
                     return;
                 } else if(model.getMedimon(2, model.getNowmedimon(2)).getHp() == 0){
+                    clip4.start();
+                    clip4.setFramePosition(0);
                     System.out.println("server: deathChangeWaiting");
                     recvFromServer();
                     model.deathChange(2, opponentMonsterID);
@@ -244,10 +249,14 @@ class MedimonController implements ActionListener {
             default:
                 //自身のモンスターのHPが0ならデスチェンジ、相手のモンスターのHPが0なら交代先が入力されるまで待機
                 if(model.getMedimon(2, model.getNowmedimon(2)).getHp() == 0){
+                    clip4.start();
+                    clip4.setFramePosition(0);
                     deathChange = true;
                     openChangeWindow();
                     return;
                 } else if(model.getMedimon(1, model.getNowmedimon(1)).getHp() == 0){
+                    clip4.start();
+                    clip4.setFramePosition(0);
                     System.out.println("client: deathChangeWaiting");
                     recvFromServer();
                     model.deathChange(1, opponentMonsterID);

@@ -378,7 +378,7 @@ class MedimonModel {
                     if(Player == 1) p1Change(monsterID);
                     else p2Change(monsterID);                       
                 }
-            }, 2, TimeUnit.SECONDS);
+            }, 1, TimeUnit.SECONDS);
         } catch (Exception e) {
             System.out.println(e);
         }
