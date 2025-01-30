@@ -1254,7 +1254,6 @@ class TextFrame extends JFrame{
       l2.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + SkillEffect(medimon.getSkill(skillID)) + "　！</span></html>");
     }else{
       l1.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + medimon.getName() + "　もどれ！</span></html>");
-      System.out.println("return");
     }
     p1.add(l1); p1.add(l2);
     p1.add(new JLabel()); p1.add(new JLabel());
