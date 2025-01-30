@@ -1259,7 +1259,7 @@ class TextFrame extends JFrame{
     p1.add(new JLabel()); p1.add(new JLabel());
     
     this.setSize(1000,300);
-    this.setLocation(360, 740);
+    this.setLocation(460, 740);
     this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     this.setVisible(true);
   }
