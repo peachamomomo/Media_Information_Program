@@ -50,6 +50,9 @@ class MedimonController implements ActionListener {
     
   private int monsterID, skillID, opponentMonsterID, opponentSkillID;
 
+  private String monster1Name, monster2Name, monster3Name;
+  private String opponentMonster1Name, opponentMonster2Name, opponentMonster3Name;    
+
 //str: serverのIPアドレス
   public MedimonController(MedimonModel m, TitleFrame t, boolean isServer, String str, int port) {
     title = t;
@@ -124,7 +127,7 @@ class MedimonController implements ActionListener {
       }
     
       //サーバに送る
-      sendAction(monsterID, skillID);
+      sendAction();
       System.out.println("sendAction: finish");
             
       //modelにデータ送信
@@ -150,13 +153,13 @@ class MedimonController implements ActionListener {
   }
 
     //サーバにデータを送るメソッド
-  public void sendAction(int monsterIndex, int skillIndex){
+  public void sendAction(){
     if(isServer){
-      serverMsg = String.format("%d %d %d", monsterIndex, skillIndex, 1); //1 -> server
+      serverMsg = String.format("%d %d %d", monsterID, skillID, 1); //1 -> server
       System.out.println("send: " + serverMsg);
       sv.send(serverMsg);
     } else {
-      serverMsg = String.format("%d %d %d", monsterIndex, skillIndex, 2); //2 ->client
+      serverMsg = String.format("%d %d %d", monsterID, skillID, 2); //2 ->client
       System.out.println("send: " + serverMsg);
       cl.send(serverMsg);
     }
@@ -169,26 +172,61 @@ class MedimonController implements ActionListener {
       opponentMonsterID = Integer.parseInt(msgArray[0]);
       opponentSkillID = Integer.parseInt(msgArray[1]);
       //clientInput = Integer.parseInt(msgArray[4]);
-      System.out.println("recv: "+opponentMonsterID+" "+opponentSkillID
-                          +" "+msgArray[2]);
+      System.out.println("recv: "+opponentMonsterID+" "+
+                          opponentSkillID+" "+msgArray[2]);
     } else {
       String[] msgArray = (cl.recv()).split(" ");
       opponentMonsterID = Integer.parseInt(msgArray[0]);
       opponentSkillID = Integer.parseInt(msgArray[1]);
       //serverInput = Integer.parseInt(msgArray[4]);
-      System.out.println("recv: "+opponentMonsterID+" "+opponentSkillID
-                          +" "+msgArray[2]);
+      System.out.println("recv: "+opponentMonsterID+" "+
+                          opponentSkillID+" "+msgArray[2]);
+    }
+  }
+
+  public void sendActionStart(){
+    if(isServer){
+      //
+      serverMsg = String.format("%s %s %s %d %d", monster1Name, monster2Name, 
+                                monster3Name, monsterID, 1); //1 -> server
+      System.out.println("send: " + serverMsg);
+      sv.send(serverMsg);
+    } else {
+      serverMsg = String.format("%s %s %s %d %d", monster1Name, monster2Name, 
+                                monster3Name, monsterID, 2); //2 ->client
+      System.out.println("send: " + serverMsg);
+      cl.send(serverMsg);
+    }
+  }
+
+  public void recvFromServerStart(){
+    if(isServer){
+      String[] msgArray = (sv.recv()).split(" ");
+      opponentMonster1Name = msgArray[0];
+      opponentMonster2Name = msgArray[1];
+      opponentMonster3Name = msgArray[2];
+      opponentMonsterID = Integer.parseInt(msgArray[3]);
+      System.out.println("recv: "+opponentMonster1Name+" "+opponentMonster2Name+" "+
+                          opponentMonster3Name+" "+opponentMonsterID+" "+msgArray[4]);
+    } else {
+      String[] msgArray = (cl.recv()).split(" ");
+      opponentMonster1Name = msgArray[0];
+      opponentMonster2Name = msgArray[1];
+      opponentMonster3Name = msgArray[2];
+      opponentMonsterID = Integer.parseInt(msgArray[3]);
+      System.out.println("recv: "+opponentMonster1Name+" "+opponentMonster2Name+" "+
+                          opponentMonster3Name+" "+opponentMonsterID+" "+msgArray[4]);
     }
   }
 
   public void firstSetToModel(){
     //setSkillのPlayer1にはserverの情報を、Player2にはclientの情報を入力するように実装しました
     if(isServer){
-      System.out.println("setToModel: "+monsterID+" "+skillID+" "+opponentMonsterID+" "+opponentSkillID);
-      model.firstSetSkill(monsterID, skillID, opponentMonsterID, opponentSkillID);
+      System.out.println("setToModel: "+monsterID+" "+opponentMonsterID);
+      model.firstSetSkill(monsterID, opponentMonsterID);
     } else {
-      System.out.println("setToModel: "+opponentMonsterID+" "+opponentSkillID+" "+monsterID+" "+skillID);
-      model.firstSetSkill(opponentMonsterID, opponentSkillID, monsterID, skillID);
+      System.out.println("setToModel: "+opponentMonsterID+" "+monsterID);
+      model.firstSetSkill(opponentMonsterID, monsterID);
     }
   }
 
@@ -336,8 +374,8 @@ class MedimonController implements ActionListener {
   public void duelStart(){
     skillID = -1;
     title.windowClose();
-    sendAction(monsterID, skillID);
-    recvFromServer();
+    sendActionStart();
+    recvFromServerStart();
     firstSetToModel();
     battle = new BattleFrame(isServer, model);
     battleStart = true;
@@ -461,11 +499,11 @@ class MedimonController implements ActionListener {
     changeFrame.windowClose();
     if(isServer){
       model.deathChange(1, monsterID);
-      sendAction(monsterID, skillID);
+      sendAction();
       System.out.println("server: deathChange");
     } else {
       model.deathChange(2, monsterID);
-      sendAction(monsterID, skillID);
+      sendAction();
       System.out.println("client: deathChange");
     }
     deathChange = false;

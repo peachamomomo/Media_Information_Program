@@ -154,7 +154,7 @@ class MedimonModel {
         }
     }
 
-    public void firstSetSkill(int Player1MonsterID, int Player1SkillID, int Player2MonsterID, int Player2SkillID) {
+    public void firstSetSkill(int Player1MonsterID, int Player2MonsterID) {
         clip6 = createClip(new File("Koutai.wav"));
         p1Change(Player1MonsterID);
         p2Change(Player2MonsterID);
