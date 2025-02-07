@@ -220,7 +220,7 @@ class MedimonController implements ActionListener {
   }
 
   public void firstSetToModel(){
-    //setSkillのPlayer1にはserverの情報を、Player2にはclientの情報を入力するように実装しました
+    //相手のデッキに登録されたモンスター名3体+選択されたモンスターのIDをmodelに送信
     if(isServer){
       System.out.println("setToModel: "+monsterID+" "+opponentMonsterID);
       model.firstSetSkill(monsterID, opponentMonsterID);
