@@ -16,7 +16,8 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-class Skill {
+//技の種類ｘ、タイプtype、ダメージｎ、名前nameを保存するクラス
+class Skill {                      
     private Character x;
     private int n, type;
     private String name;
@@ -30,9 +31,10 @@ class Skill {
     public void setSkillname(String name) { this.name = name; }
 }
 
-class Medimon {
+//モンスターの個々のステータスを保存するクラス
+class Medimon {                     
     private int H, h, s, b;  //体力、速さ、防御
-    private ArrayList<Skill> a;  //技
+    private ArrayList<Skill> a;  //技(4つ)
     private int type;  //技のタイプ
     private String n;  //名前
 
@@ -85,12 +87,13 @@ class Medimon {
 
 class MedimonModel {
     private ArrayList<Medimon> allmedimon, all1medimon, all2medimon;       // 1がServer、２がClient
-    private int now1medimon = 0, now2medimon = 0;
+    private int now1medimon = 0, now2medimon = 0;       //場に出てるモンスターのindex
     private int h, s, b, type; 
     private Skill s1, s2, s3, s4;
     private String n;
-    public Clip clip1, clip2, clip3, clip4, clip5, clip6;
+    public Clip clip1, clip2, clip3, clip4, clip5, clip6;       //効果音
     public MedimonModel() {
+        //allmediimonにすべての種類のモンスターを格納
         this.allmedimon = new ArrayList<Medimon>();
         h = 150; s = 45; b = 70;  type = 0; n = "トーグ";
         s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
@@ -124,7 +127,7 @@ class MedimonModel {
         s4.setStatusTarget('h'); s4.setValue(40); s4.setType(0); s4.setSkillname("かいふく");
         m1 = new Medimon(h, s, b, type, s1, s2, s3, s4, n);
         allmedimon.add(m1);
-        //Collections.shuffle(allmedimon);
+        Collections.shuffle(allmedimon);        //allmedimonをシャッフルし始めの3体をall1medimon,all2medimonのどちらにも格納
         this.all1medimon = new ArrayList<Medimon>();
         for(int i=0; i<3; i++) {
             h = allmedimon.get(i).getHp(); s = allmedimon.get(i).getSpeed(); b = allmedimon.get(i).getBougyo();  
@@ -134,7 +137,6 @@ class MedimonModel {
             m1 = new Medimon(h, s, b, type, s1, s2, s3, s4, n);
             all1medimon.add(m1);
         }
-        //Collections.shuffle(allmedimon);
         this.all2medimon = new ArrayList<Medimon>();
         for(int i=0; i<3; i++) {
             h = allmedimon.get(i).getHp(); s = allmedimon.get(i).getSpeed(); b = allmedimon.get(i).getBougyo();  
@@ -146,28 +148,22 @@ class MedimonModel {
         }
     }
 
-    public Medimon getMedimon(int Player, int Index) {
-        if(Player == 1) {                            // Server
-            return all1medimon.get(Index);
-        } else {                            // Client
-            return all2medimon.get(Index);
-        }
-    }
-
+    //始めに場に出すモンスターの設定
     public void firstSetSkill(int Player1MonsterID, int Player2MonsterID) {
         clip6 = createClip(new File("Koutai.wav"));
         p1Change(Player1MonsterID);
         p2Change(Player2MonsterID);
     }
 
-    public void setSkill(int Player1MonsterID, int Player1SkillID, int Player2MonsterID, int Player2SkillID) { //二人の行動を受け取る
+    //二人の行動の反映で、1人目の行動が2秒後に2人目の行動が4秒後になるように遅延をいれる
+    public void setSkill(int Player1MonsterID, int Player1SkillID, int Player2MonsterID, int Player2SkillID) { 
         clip1 = createClip(new File("Attack.wav"));
         clip2 = createClip(new File("Heal.wav"));
         clip3 = createClip(new File("Debuf.wav"));
         clip4 = createClip(new File("Speed.wav"));
         clip5 = createClip(new File("Bougyo.wav"));
         clip6 = createClip(new File("Koutai.wav"));
-        if(Player1SkillID < 0) {
+        if(Player1SkillID < 0) {        //Player1がこうたいのとき
             try {
                 final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
                 executorService.schedule(new Runnable() {
@@ -179,7 +175,7 @@ class MedimonModel {
             } catch (Exception e) {
                 System.out.println(e);
             }
-            if(Player2SkillID < 0) {
+            if(Player2SkillID < 0) {        //Player2もこうたいのとき
                 try {
                     final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
                     executorService.schedule(new Runnable() {
@@ -191,7 +187,7 @@ class MedimonModel {
                 } catch (Exception e) {
                     System.out.println(e);
                 }
-            } else {
+            } else {        //Player2がこうたいでないとき
                 try {
                     final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
                     executorService.schedule(new Runnable() {
@@ -204,7 +200,7 @@ class MedimonModel {
                     System.out.println(e);
                 }
             }
-        } else if(Player2SkillID < 0) {
+        } else if(Player2SkillID < 0) {     //Player1がこうたいでなく、Player2がこうたいのとき
             try {
                 final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
                 executorService.schedule(new Runnable() {
@@ -227,7 +223,7 @@ class MedimonModel {
             } catch (Exception e) {
                 System.out.println(e);
             }
-        } else {   
+        } else {    //Player1もPlayer2もこうたいでないとき
             Medimon p1 = all1medimon.get(now1medimon);
             Medimon p2 = all2medimon.get(now2medimon);
             try {
@@ -262,6 +258,7 @@ class MedimonModel {
                     System.out.println(e);
                 }
             }
+            //効果音のメモリを破棄
             try {
                 final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
                 executorService.schedule(new Runnable() {
@@ -276,6 +273,7 @@ class MedimonModel {
         }
     }
 
+    //Player1のこうたい以外の行動の実行
     public void p1Skill (int Player1SkillID, int Player2SkillID) {
         Medimon p1 = all1medimon.get(now1medimon);
         Medimon p2 = all2medimon.get(now2medimon);
@@ -316,6 +314,7 @@ class MedimonModel {
         } 
     }
 
+    //Player2のこうたい以外の行動の実行
     public void p2Skill (int Player1SkillID, int Player2SkillID) {
         Medimon p1 = all1medimon.get(now1medimon);
         Medimon p2 = all2medimon.get(now2medimon);
@@ -355,18 +354,21 @@ class MedimonModel {
         }        
     }
 
+    //Player1のこうたいの実行
     public void p1Change (int Player1MonsterID) {
         now1medimon = Player1MonsterID;
 		clip6.start();
         clip6.setFramePosition(0);
     }
 
+    //Player2のこうたいの実行
     public void p2Change (int Player2MonsterID) {
         now2medimon = Player2MonsterID;
 		clip6.start();
         clip6.setFramePosition(0);
     }
 
+    //場のモンスターが死んだときに控えからモンスターをだす
     public void deathChange(int Player, int monsterID) {
         clip6 = createClip(new File("Koutai.wav"));
         try {
@@ -374,14 +376,22 @@ class MedimonModel {
             executorService.schedule(new Runnable() {
                 @Override
                 public void run() {
-                    if(Player == 1) p1Change(monsterID);
-                    else p2Change(monsterID);                       
+                    if(Player == 1) p1Change(monsterID);                            // Server
+                    else p2Change(monsterID);                               // Client                    
                 }
             }, 1, TimeUnit.SECONDS);
         } catch (Exception e) {
             System.out.println(e);
         }
         
+    }
+
+    public Medimon getMedimon(int Player, int Index) {
+        if(Player == 1) {                            // Server
+            return all1medimon.get(Index);
+        } else {                            // Client
+            return all2medimon.get(Index);
+        }
     }
 
     public Skill getSkill(int Player, int Index) {
@@ -397,13 +407,14 @@ class MedimonModel {
         else return now2medimon; 
     }
 
+    //控えのモンスターの数を返す
     public int getRemaining(int Player) {
         int n = 0;
-        if(Player == 1) {
+        if(Player == 1) {                            // Server
             for(int i=0; i<3; i++) {
                 if(all1medimon.get(i).getHp() != 0) n = n + 1;
             }
-        } else {
+        } else {                            // Client
             for(int i=0; i<3; i++) {
                 if(all2medimon.get(i).getHp() != 0) n = n + 1;
             }
@@ -411,12 +422,35 @@ class MedimonModel {
         return n;
     }
 
+    public ArrayList<Medimon> getMedimons(int Player) {
+        if(Player == 1) return all1medimon;                            // Server
+        else return all2medimon;
+    }
+
+    //始めに相手のモンスターを3体格納
+    public void setMedimons(int Player, String m1name, String m2name, String m3name) {
+        ArrayList<Medimon> medimons = new ArrayList<Medimon>();
+        for(Medimon monster:allmedimon) {
+            if(monster.getName().equals(m1name)) medimons.add(monster);
+        }
+        for(Medimon monster:allmedimon) {
+            if(monster.getName().equals(m2name)) medimons.add(monster);
+        }
+        for(Medimon monster:allmedimon) {
+            if(monster.getName().equals(m3name)) medimons.add(monster);
+        }
+        if(Player == 1) all1medimon = medimons;                            // Server
+        else all2medimon = medimons;                            // Client
+        
+    }
+
+    //GameSetかの判定をし、もしGameSetなら勝ったほうを返す
     public int gameSet() {
         boolean p1 = all1medimon.get(0).getHp() == 0 && all1medimon.get(1).getHp() == 0 && all1medimon.get(2).getHp() == 0;
         boolean p2 = all2medimon.get(0).getHp() == 0 && all2medimon.get(1).getHp() == 0 && all2medimon.get(2).getHp() == 0;
-        if(p1) return 2;
-        else if(p2) return 1;
-        else return 0;
+        if(p1) return 2;        //clientの勝利
+        else if(p2) return 1;       //serverの勝利
+        else return 0;      //Gameの続行
     }
 
     public static Clip createClip(File path) {
