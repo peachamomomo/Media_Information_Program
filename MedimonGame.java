@@ -826,14 +826,17 @@ class TitleFrame extends JFrame{
       if(name == "トーグ"){return "Thogg_b.png";}
       if(name == "ウチャ"){return "Ucha_b.png";}
       if(name == "ミーゴ"){return "Mi-go_b.png";}
+      if(name == "ヨギー"){return "Yogii_b.png";}
     }else if(s == 'f'){
       if(name == "トーグ"){return "Thogg_f.png";}
       if(name == "ウチャ"){return "Ucha_f.png";}
       if(name == "ミーゴ"){return "Mi-go_f.png";}
+      if(name == "ヨギー"){return "Yogii_f.png";}
     }else if(s == 'c'){
       if(name == "トーグ"){return "Thogg_change.png";}
       if(name == "ウチャ"){return "Ucha_change.png";}
       if(name == "ミーゴ"){return "Mi-go_change.png";}
+      if(name == "ヨギー"){return "Yogii_change.png";}
     }
     return "\0";
   }
@@ -1007,14 +1010,17 @@ class BattleFrame extends JFrame implements ActionListener{
       if(name == "トーグ"){return "Thogg_b.png";}
       if(name == "ウチャ"){return "Ucha_b.png";}
       if(name == "ミーゴ"){return "Mi-go_b.png";}
+      if(name == "ヨギー"){return "Yogii_b.png";}
     }else if(s == 'f'){
       if(name == "トーグ"){return "Thogg_f.png";}
       if(name == "ウチャ"){return "Ucha_f.png";}
       if(name == "ミーゴ"){return "Mi-go_f.png";}
+      if(name == "ヨギー"){return "Yogii_f.png";}
     }else if(s == 'c'){
       if(name == "トーグ"){return "Thogg_change.png";}
       if(name == "ウチャ"){return "Ucha_change.png";}
       if(name == "ミーゴ"){return "Mi-go_change.png";}
+      if(name == "ヨギー"){return "Yogii_change.png";}
     }
     return "\0";
   }
@@ -1252,14 +1258,17 @@ class ChangeFrame extends JFrame{
       if(name == "トーグ"){return "Thogg_b.png";}
       if(name == "ウチャ"){return "Ucha_b.png";}
       if(name == "ミーゴ"){return "Mi-go_b.png";}
+      if(name == "ヨギー"){return "Yogii_b.png";}
     }else if(s == 'f'){
       if(name == "トーグ"){return "Thogg_f.png";}
       if(name == "ウチャ"){return "Ucha_f.png";}
       if(name == "ミーゴ"){return "Mi-go_f.png";}
+      if(name == "ヨギー"){return "Yogii_f.png";}
     }else if(s == 'c'){
       if(name == "トーグ"){return "Thogg_change.png";}
       if(name == "ウチャ"){return "Ucha_change.png";}
       if(name == "ミーゴ"){return "Mi-go_change.png";}
+      if(name == "ヨギー"){return "Yogii_change.png";}
     }
     return "\0";
   }
