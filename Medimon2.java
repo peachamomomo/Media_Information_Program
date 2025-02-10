@@ -74,6 +74,7 @@ class Medimon {
     public void changeBougyo(int n){
         Float x = n / (float)100;
         b = (int)(b * x);
+        if(b>150) b = 150;
     } 
 
     public int getMaxHp() { return H; }
