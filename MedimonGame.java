@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException; 
+import java.util.ArrayList;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -185,13 +186,21 @@ class MedimonController implements ActionListener {
   }
 
   public void sendActionStart(){
+    ArrayList<Medimon> medimons;
     if(isServer){
-      //
+      medimons = model.getMedimons(1);
+      monster1Name = medimons.get(0).getName();
+      monster2Name = medimons.get(1).getName();
+      monster3Name = medimons.get(2).getName();
       serverMsg = String.format("%s %s %s %d %d", monster1Name, monster2Name, 
                                 monster3Name, monsterID, 1); //1 -> server
       System.out.println("send: " + serverMsg);
       sv.send(serverMsg);
     } else {
+      medimons = model.getMedimons(2);
+      monster1Name = medimons.get(0).getName();
+      monster2Name = medimons.get(1).getName();
+      monster3Name = medimons.get(2).getName();
       serverMsg = String.format("%s %s %s %d %d", monster1Name, monster2Name, 
                                 monster3Name, monsterID, 2); //2 ->client
       System.out.println("send: " + serverMsg);
@@ -219,13 +228,15 @@ class MedimonController implements ActionListener {
     }
   }
 
-  public void firstSetToModel(){
+  public void setToModelStart(){
     //相手のデッキに登録されたモンスター名3体+選択されたモンスターのIDをmodelに送信
     if(isServer){
       System.out.println("setToModel: "+monsterID+" "+opponentMonsterID);
+      model.setMedimons(2, opponentMonster1Name, opponentMonster2Name, opponentMonster3Name);
       model.firstSetSkill(monsterID, opponentMonsterID);
     } else {
       System.out.println("setToModel: "+opponentMonsterID+" "+monsterID);
+      model.setMedimons(1, opponentMonster1Name, opponentMonster2Name, opponentMonster3Name);
       model.firstSetSkill(opponentMonsterID, monsterID);
     }
   }
@@ -541,7 +552,7 @@ class MedimonController implements ActionListener {
     title.windowClose();
     sendActionStart();
     recvFromServerStart();
-    firstSetToModel();
+    setToModelStart();
     battle = new BattleFrame(isServer, model);
     battleStart = true;
   }
