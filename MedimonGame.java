@@ -194,7 +194,7 @@ class MedimonController implements ActionListener {
       monster3Name = medimons.get(2).getName();
       serverMsg = String.format("%s %s %s %d %d", monster1Name, monster2Name, 
                                 monster3Name, monsterID, 1); //1 -> server
-      System.out.println("send: " + serverMsg);
+      //System.out.println("send: " + serverMsg);
       sv.send(serverMsg);
     } else {
       medimons = model.getMedimons(2);
@@ -203,7 +203,7 @@ class MedimonController implements ActionListener {
       monster3Name = medimons.get(2).getName();
       serverMsg = String.format("%s %s %s %d %d", monster1Name, monster2Name, 
                                 monster3Name, monsterID, 2); //2 ->client
-      System.out.println("send: " + serverMsg);
+      //System.out.println("send: " + serverMsg);
       cl.send(serverMsg);
     }
   }
@@ -215,16 +215,16 @@ class MedimonController implements ActionListener {
       opponentMonster2Name = msgArray[1];
       opponentMonster3Name = msgArray[2];
       opponentMonsterID = Integer.parseInt(msgArray[3]);
-      System.out.println("recv: "+opponentMonster1Name+" "+opponentMonster2Name+" "+
-                          opponentMonster3Name+" "+opponentMonsterID+" "+msgArray[4]);
+      /*System.out.println("recv: "+opponentMonster1Name+" "+opponentMonster2Name+" "+
+                          opponentMonster3Name+" "+opponentMonsterID+" "+msgArray[4]);*/
     } else {
       String[] msgArray = (cl.recv()).split(" ");
       opponentMonster1Name = msgArray[0];
       opponentMonster2Name = msgArray[1];
       opponentMonster3Name = msgArray[2];
       opponentMonsterID = Integer.parseInt(msgArray[3]);
-      System.out.println("recv: "+opponentMonster1Name+" "+opponentMonster2Name+" "+
-                          opponentMonster3Name+" "+opponentMonsterID+" "+msgArray[4]);
+      /*System.out.println("recv: "+opponentMonster1Name+" "+opponentMonster2Name+" "+
+                          opponentMonster3Name+" "+opponentMonsterID+" "+msgArray[4]);*/
     }
   }
 
