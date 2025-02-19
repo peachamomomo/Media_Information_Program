@@ -5,17 +5,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.swing.*;
-import java.io.File;
+import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.net.MalformedURLException; 
+import java.io.InputStream;
 import java.util.ArrayList;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
 import javax.imageio.ImageIO;
 
 class MedimonController implements ActionListener {
@@ -28,10 +22,10 @@ class MedimonController implements ActionListener {
   protected TextFrame tf;
   protected ChangeFrame changeFrame;
   protected ResultFrame result;
-  private Clip clip1 = model.createClip(new File("startbutton.wav"));
-  private Clip clip2 = model.createClip(new File("button.wav"));
-  private Clip clip3 = model.createClip(new File("error.wav"));
-  private Clip clip4 = model.createClip(new File("Death.wav"));
+  private Clip clip1 = model.createClip(getClass().getResourceAsStream("startbutton.wav"));
+  private Clip clip2 = model.createClip(getClass().getResourceAsStream("button.wav"));
+  private Clip clip3 = model.createClip(getClass().getResourceAsStream("error.wav"));
+  private Clip clip4 = model.createClip(getClass().getResourceAsStream("Death.wav"));
 
   //サーバからのメッセージを記録
   private String serverMsg;
@@ -688,11 +682,14 @@ class MedimonController implements ActionListener {
 
 class FontLoader {
   public static void registerFont(String fontPath) {
-      try {
-          Font font = Font.createFont(Font.TRUETYPE_FONT, new File(fontPath));
+      try (InputStream is = FontLoader.class.getResourceAsStream(fontPath)){
+          if (is == null) {
+              throw new IOException("Font resource not found: " + fontPath);
+          }
+          Font font = Font.createFont(Font.TRUETYPE_FONT, is);
           GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
           ge.registerFont(font);
-      } catch (Exception e) {
+      } catch (FontFormatException | IOException e) {
           e.printStackTrace();
       }
   }
@@ -710,7 +707,7 @@ class TitleFrame extends JFrame{
   public TitleFrame(boolean server, MedimonModel mm){
     FontLoader.registerFont("misaki_gothic.ttf");
 
-    clip = mm.createClip(new File("start_bgm.wav"));
+    clip = mm.createClip(getClass().getResourceAsStream("start_bgm.wav"));
     clip.loop(Clip.LOOP_CONTINUOUSLY);
 
     this.server = server;
@@ -910,7 +907,7 @@ class BattleFrame extends JFrame implements ActionListener{
   FontLoader.registerFont("misaki_gothic.ttf");
   judge = 0;
 
-  clip = mm.createClip(new File("bgm.wav"));
+  clip = mm.createClip(getClass().getResourceAsStream("bgm.wav"));
   clip.loop(Clip.LOOP_CONTINUOUSLY);
 
   this.server = server;
@@ -1355,7 +1352,7 @@ class ResultFrame extends JFrame{
   public ResultFrame(int i){
     FontLoader.registerFont("misaki_gothic.ttf");
 
-    clip = createClip(new File("result_bgm.wav"));
+    clip = createClip(getClass().getResourceAsStream("result_bgm.wav"));
     clip.loop(Clip.LOOP_CONTINUOUSLY);
 
     this.setTitle("Result");
@@ -1396,9 +1393,10 @@ class ResultFrame extends JFrame{
     this.setVisible(true);
   }
 
-  public static Clip createClip(File path) {
+  public static Clip createClip(InputStream path) {
 		//指定されたURLのオーディオ入力ストリームを取得
-		try (AudioInputStream ais = AudioSystem.getAudioInputStream(path)){
+		try (InputStream bufferedIn = new BufferedInputStream(path)){
+            AudioInputStream ais = AudioSystem.getAudioInputStream(bufferedIn);
 			//ファイルの形式取得
 			AudioFormat af = ais.getFormat();
 			//単一のオーディオ形式を含む指定した情報からデータラインの情報オブジェクトを構築
@@ -1408,15 +1406,9 @@ class ResultFrame extends JFrame{
 			//再生準備完了
 			c.open(ais);
 			return c;
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (UnsupportedAudioFileException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (LineUnavailableException e) {
-			e.printStackTrace();
-		}
+		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
 		return null;
 	}
 

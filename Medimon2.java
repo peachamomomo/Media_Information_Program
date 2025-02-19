@@ -1,20 +1,11 @@
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.io.File;
+import javax.sound.sampled.*;
+import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.net.MalformedURLException; 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.InputStream;
 
 //技の種類ｘ、タイプtype、ダメージｎ、名前nameを保存するクラス
 class Skill {                      
@@ -151,19 +142,19 @@ class MedimonModel {
 
     //始めに場に出すモンスターの設定
     public void firstSetSkill(int Player1MonsterID, int Player2MonsterID) {
-        clip6 = createClip(new File("Koutai.wav"));
+        clip6 = createClip(getClass().getResourceAsStream("Koutai.wav"));
         p1Change(Player1MonsterID);
         p2Change(Player2MonsterID);
     }
 
     //二人の行動の反映で、1人目の行動が2秒後に2人目の行動が4秒後になるように遅延をいれる
     public void setSkill(int Player1MonsterID, int Player1SkillID, int Player2MonsterID, int Player2SkillID) { 
-        clip1 = createClip(new File("Attack.wav"));
-        clip2 = createClip(new File("Heal.wav"));
-        clip3 = createClip(new File("Debuf.wav"));
-        clip4 = createClip(new File("Speed.wav"));
-        clip5 = createClip(new File("Bougyo.wav"));
-        clip6 = createClip(new File("Koutai.wav"));
+        clip1 = createClip(getClass().getResourceAsStream("Attack.wav"));
+        clip2 = createClip(getClass().getResourceAsStream("Heal.wav"));
+        clip3 = createClip(getClass().getResourceAsStream("Debuf.wav"));
+        clip4 = createClip(getClass().getResourceAsStream("Speed.wav"));
+        clip5 = createClip(getClass().getResourceAsStream("Bougyo.wav"));
+        clip6 = createClip(getClass().getResourceAsStream("Koutai.wav"));
         if(Player1SkillID < 0) {        //Player1がこうたいのとき
             try {
                 final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
@@ -371,7 +362,7 @@ class MedimonModel {
 
     //場のモンスターが死んだときに控えからモンスターをだす
     public void deathChange(int Player, int monsterID) {
-        clip6 = createClip(new File("Koutai.wav"));
+        clip6 = createClip(getClass().getResourceAsStream("Koutai.wav"));
         try {
             final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
             executorService.schedule(new Runnable() {
@@ -454,9 +445,10 @@ class MedimonModel {
         else return 0;      //Gameの続行
     }
 
-    public static Clip createClip(File path) {
+    public static Clip createClip(InputStream path) {
 		//指定されたURLのオーディオ入力ストリームを取得
-		try (AudioInputStream ais = AudioSystem.getAudioInputStream(path)){
+		try (InputStream bufferedIn = new BufferedInputStream(path)){
+            AudioInputStream ais = AudioSystem.getAudioInputStream(bufferedIn);
 			//ファイルの形式取得
 			AudioFormat af = ais.getFormat();
 			//単一のオーディオ形式を含む指定した情報からデータラインの情報オブジェクトを構築
@@ -466,15 +458,9 @@ class MedimonModel {
 			//再生準備完了
 			c.open(ais);
 			return c;
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (UnsupportedAudioFileException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (LineUnavailableException e) {
-			e.printStackTrace();
-		}
+		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
 		return null;
 	}
 
