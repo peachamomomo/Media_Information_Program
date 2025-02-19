@@ -1464,7 +1464,7 @@ public class MedimonGame {
     boolean server=false;
     int port;
     if (args.length<2){
-      System.out.println("Usage : java MedimonGame {server/{IP adress}/{localhost}} {port no.} \n");     
+      System.out.println("Usage : java -jar MedimonGame.jar {server/{IP adress}/{localhost}} {port no.} \n");     
       System.exit(1);
     }
     MedimonModel mm;
