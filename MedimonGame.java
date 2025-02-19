@@ -253,7 +253,7 @@ class MedimonController implements ActionListener {
           executorService.schedule(new Runnable() {
               @Override
               public void run() {
-                  tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), skillID);
+                  tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), model.getMedimon(2, model.getNowmedimon(2)), skillID);
               }
           }, 1, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -266,7 +266,7 @@ class MedimonController implements ActionListener {
               public void run() {
                   tf.windowClose();
                   if(model.getMedimon(2, model.getNowmedimon(2)).getHp() != 0)
-                      tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), opponentSkillID);
+                      tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), model.getMedimon(1, model.getNowmedimon(1)), opponentSkillID);
               }
           }, 3, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -289,7 +289,7 @@ class MedimonController implements ActionListener {
           executorService.schedule(new Runnable() {
               @Override
               public void run() {
-                  tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), opponentSkillID);
+                  tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), model.getMedimon(1, model.getNowmedimon(1)), opponentSkillID);
               }
           }, 1, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -302,7 +302,7 @@ class MedimonController implements ActionListener {
               public void run() {
                   tf.windowClose();
                   if(model.getMedimon(1, model.getNowmedimon(1)).getHp() != 0)
-                    tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), skillID);
+                    tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), model.getMedimon(2, model.getNowmedimon(2)), skillID);
               }
           }, 3, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -326,7 +326,7 @@ class MedimonController implements ActionListener {
           executorService.schedule(new Runnable() {
               @Override
               public void run() {
-                  tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), skillID);
+                  tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), model.getMedimon(2, model.getNowmedimon(2)), skillID);
               }
           }, 1, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -339,7 +339,7 @@ class MedimonController implements ActionListener {
               public void run() {
                   tf.windowClose();
                   if(model.getMedimon(2, model.getNowmedimon(2)).getHp() != 0)
-                      tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), opponentSkillID);
+                      tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), model.getMedimon(1, model.getNowmedimon(1)), opponentSkillID);
               }
           }, 3, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -363,7 +363,7 @@ class MedimonController implements ActionListener {
           executorService.schedule(new Runnable() {
               @Override
               public void run() {
-                  tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), opponentSkillID);
+                  tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), model.getMedimon(1, model.getNowmedimon(1)), opponentSkillID);
               }
           }, 1, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -376,7 +376,7 @@ class MedimonController implements ActionListener {
               public void run() {
                   tf.windowClose();
                   if(model.getMedimon(1, model.getNowmedimon(1)).getHp() != 0)
-                    tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), skillID);
+                    tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), model.getMedimon(2, model.getNowmedimon(2)), skillID);
               }
           }, 3, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -403,7 +403,7 @@ class MedimonController implements ActionListener {
           executorService.schedule(new Runnable() {
               @Override
               public void run() {
-                  tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), opponentSkillID);
+                  tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), model.getMedimon(2, model.getNowmedimon(2)), opponentSkillID);
               }
           }, 1, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -416,7 +416,7 @@ class MedimonController implements ActionListener {
               public void run() {
                   tf.windowClose();
                   if(model.getMedimon(2, model.getNowmedimon(2)).getHp() != 0)
-                      tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), skillID);
+                      tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), model.getMedimon(1, model.getNowmedimon(1)), skillID);
               }
           }, 3, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -439,7 +439,7 @@ class MedimonController implements ActionListener {
           executorService.schedule(new Runnable() {
               @Override
               public void run() {
-                  tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), skillID);
+                  tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), model.getMedimon(1, model.getNowmedimon(1)), skillID);
               }
           }, 1, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -452,7 +452,7 @@ class MedimonController implements ActionListener {
               public void run() {
                   tf.windowClose();
                   if(model.getMedimon(1, model.getNowmedimon(1)).getHp() != 0)
-                    tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), opponentSkillID);
+                    tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), model.getMedimon(2, model.getNowmedimon(2)), opponentSkillID);
               }
           }, 3, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -476,7 +476,7 @@ class MedimonController implements ActionListener {
           executorService.schedule(new Runnable() {
               @Override
               public void run() {
-                  tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), opponentSkillID);
+                  tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), model.getMedimon(2, model.getNowmedimon(2)), opponentSkillID);
               }
           }, 1, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -489,7 +489,7 @@ class MedimonController implements ActionListener {
               public void run() {
                   tf.windowClose();
                   if(model.getMedimon(2, model.getNowmedimon(2)).getHp() != 0)
-                      tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), skillID);
+                      tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), model.getMedimon(1, model.getNowmedimon(1)), skillID);
               }
           }, 3, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -513,7 +513,7 @@ class MedimonController implements ActionListener {
           executorService.schedule(new Runnable() {
               @Override
               public void run() {
-                  tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), skillID);
+                  tf = new TextFrame(model.getMedimon(2, model.getNowmedimon(2)), model.getMedimon(1, model.getNowmedimon(1)), skillID);
               }
           }, 1, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -526,7 +526,7 @@ class MedimonController implements ActionListener {
               public void run() {
                   tf.windowClose();
                   if(model.getMedimon(1, model.getNowmedimon(1)).getHp() != 0)
-                    tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), opponentSkillID);
+                    tf = new TextFrame(model.getMedimon(1, model.getNowmedimon(1)), model.getMedimon(2, model.getNowmedimon(2)), opponentSkillID);
               }
           }, 3, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -784,16 +784,19 @@ class TitleFrame extends JFrame{
     l6=new JLabel(); l7=new JLabel(); l8=new JLabel();
     l6.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" 
     + mm.getMedimon(me, 0).getName() + "</span><span style='font-family:MisakiGothic; font-size:25pt; color:black;'>"
+    + "<br>タイプ: " + setTypeText(mm.getMedimon(me, 0).getType())
     + "<br>HP: " + mm.getMedimon(me, 0).getMaxHp() 
     + "<br>はやさ: " + mm.getMedimon(me, 0).getSpeed() 
     + "<br>ぼうぎょ: " + mm.getMedimon(me, 0).getBougyo() + "</span></html>");
     l7.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" 
     + mm.getMedimon(me, 1).getName() + "</span><span style='font-family:MisakiGothic; font-size:25pt; color:black;'>" 
+    + "<br>タイプ: " + setTypeText(mm.getMedimon(me, 1).getType())
     + "<br>HP: " + mm.getMedimon(me, 1).getMaxHp() 
     + "<br>はやさ: " + mm.getMedimon(me, 1).getSpeed() 
     + "<br>ぼうぎょ: " + mm.getMedimon(me, 1).getBougyo() + "</span></html>");
     l8.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" 
     + mm.getMedimon(me, 2).getName() + "</span><span style='font-family:MisakiGothic; font-size:25pt; color:black;'>"
+    + "<br>タイプ: " + setTypeText(mm.getMedimon(me, 2).getType())
     + "<br>HP: " + mm.getMedimon(me, 2).getMaxHp() 
     + "<br>はやさ: " + mm.getMedimon(me, 2).getSpeed() 
     + "<br>ぼうぎょ: " + mm.getMedimon(me, 2).getBougyo() + "</span></html>");
@@ -819,6 +822,12 @@ class TitleFrame extends JFrame{
   public void setNowMedimon(MedimonModel mm){
     this.nowmymedimon = mm.getMedimon(me, mm.getNowmedimon(me));
     this.nowyourmedimon = mm.getMedimon(you, mm.getNowmedimon(you));
+  }
+
+  public String setTypeText(int type){
+    if(type == 0){return "グー";}
+    else if(type == 1){return "チョキ";}
+    else{return "パー";}
   }
 
   public String setMonsterImage(char s, String name){
@@ -940,7 +949,8 @@ class BattleFrame extends JFrame implements ActionListener{
 	l2.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>&nbsp;" + this.nowmymedimon.getName() + "</span></html>"); //自分側のモンスターの名前
   l3.setText("<html><img src='file:" + setMonsterImage('b', this.nowmymedimon.getName()) + "' width=400 height=400></html>"); //自分側のモンスターの画像
   l3.setToolTipText("<html><span style='font-family:MisakiGothic; font-size:25pt; color:black;'>"
-    + "はやさ: " + this.nowmymedimon.getSpeed() 
+    + "タイプ: " + setTypeText(this.nowmymedimon.getType())
+    + "<br>はやさ: " + this.nowmymedimon.getSpeed() 
     + "<br>ぼうぎょ: " + this.nowmymedimon.getBougyo() + "</span></html>");
   
 	l4.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + this.nowyourmedimon.getName() + " </span></html>"); //相手側のモンスターの名前
@@ -1005,6 +1015,12 @@ class BattleFrame extends JFrame implements ActionListener{
     this.nowyourmedimon = mm.getMedimon(you, mm.getNowmedimon(you));
   }
 
+  public String setTypeText(int type){
+    if(type == 0){return "グー";}
+    else if(type == 1){return "チョキ";}
+    else{return "パー";}
+  }
+
   public String setMonsterImage(char s, String name){
     if(s == 'b'){
       if(name == "トーグ"){return "Thogg_b.png";}
@@ -1030,7 +1046,8 @@ class BattleFrame extends JFrame implements ActionListener{
 	  l2.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>&nbsp;" + this.nowmymedimon.getName() + "</span></html>"); //自分側のモンスターの名前
     l3.setText("<html><img src='file:" + setMonsterImage('b', this.nowmymedimon.getName()) + "' width=400 height=400></html>"); //自分側のモンスターの画像
 	  l3.setToolTipText("<html><span style='font-family:MisakiGothic; font-size:25pt; color:black;'>"
-    + "はやさ: " + this.nowmymedimon.getSpeed() 
+    + "タイプ: " + setTypeText(this.nowmymedimon.getType())
+    + "<br>はやさ: " + this.nowmymedimon.getSpeed() 
     + "<br>ぼうぎょ: " + this.nowmymedimon.getBougyo() + "</span></html>");
     l4.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + this.nowyourmedimon.getName() + " </span></html>"); //相手側のモンスターの名前
     l5.setText("<html><img src='file:" + setMonsterImage('f', this.nowyourmedimon.getName()) + "' width=400 height=400></html>"); //相手側のモンスターの画像
@@ -1185,18 +1202,21 @@ class ChangeFrame extends JFrame{
     + "</span></html>");
     
     l4.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getMedimon(me, 0).getName() +  "</span></html>");
-    l5.setText("<html><span style='font-family:MisakiGothic; font-size:25pt; color:black;'>"
-    + "HP: " + mm.getMedimon(me, 0).getMaxHp() 
+    l5.setText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>"
+    + "タイプ: " + setTypeText(mm.getMedimon(me, 0).getType())
+    + "<br>HP: " + mm.getMedimon(me, 0).getMaxHp() 
     + "<br>はやさ: " + mm.getMedimon(me, 0).getSpeed() 
     + "<br>ぼうぎょ: " + mm.getMedimon(me, 0).getBougyo() + "</span></html>");
     l6.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getMedimon(me, 1).getName() +  "</span></html>");
-    l7.setText("<html><span style='font-family:MisakiGothic; font-size:25pt; color:black;'>"
-    + "HP: " + mm.getMedimon(me, 1).getMaxHp() 
+    l7.setText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>"
+    + "タイプ: " + setTypeText(mm.getMedimon(me, 1).getType())
+    + "<br>HP: " + mm.getMedimon(me, 1).getMaxHp() 
     + "<br>はやさ: " + mm.getMedimon(me, 1).getSpeed() 
     + "<br>ぼうぎょ: " + mm.getMedimon(me, 1).getBougyo() + "</span></html>");
     l8.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getMedimon(me, 2).getName() +  "</span></html>");
-    l9.setText("<html><span style='font-family:MisakiGothic; font-size:25pt; color:black;'>"
-    + "HP: " + mm.getMedimon(me, 2).getMaxHp() 
+    l9.setText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>"
+    + "タイプ: " + setTypeText(mm.getMedimon(me, 2).getType())
+    + "<br>HP: " + mm.getMedimon(me, 2).getMaxHp() 
     + "<br>はやさ: " + mm.getMedimon(me, 2).getSpeed() 
     + "<br>ぼうぎょ: " + mm.getMedimon(me, 2).getBougyo() + "</span></html>");
 
@@ -1253,6 +1273,12 @@ class ChangeFrame extends JFrame{
     return null;
   }
 
+  public String setTypeText(int type){
+    if(type == 0){return "グー";}
+    else if(type == 1){return "チョキ";}
+    else{return "パー";}
+  }
+
   public String setMonsterImage(char s, String name){
     if(s == 'b'){
       if(name == "トーグ"){return "Thogg_b.png";}
@@ -1298,7 +1324,7 @@ class ChangeFrame extends JFrame{
 class TextFrame extends JFrame{
   JPanel p1;
   JLabel l1, l2;
-  public TextFrame(Medimon medimon, int skillID){
+  public TextFrame(Medimon mymedimon, Medimon yourmedimon, int skillID){
     FontLoader.registerFont("misaki_gothic.ttf");
     this.setTitle("Text");
 
@@ -1308,10 +1334,10 @@ class TextFrame extends JFrame{
 
     l1=new JLabel(); l2=new JLabel();
     if(skillID != -1){
-      l1.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + medimon.getName() + "　の　" + medimon.getSkill(skillID).getSkillname() + "　！</span></html>");
-      l2.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + SkillEffect(medimon.getSkill(skillID)) + "　！</span></html>");
+      l1.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mymedimon.getName() + "　の　" + mymedimon.getSkill(skillID).getSkillname() + "　！</span></html>");
+      l2.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + SkillEffect(mymedimon.getSkill(skillID), mymedimon.getType(), yourmedimon.getType()) + "</span></html>");
     }else{
-      l1.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + medimon.getName() + "　もどれ！</span></html>");
+      l1.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mymedimon.getName() + "　もどれ！</span></html>");
     }
     p1.add(l1); p1.add(l2);
     p1.add(new JLabel()); p1.add(new JLabel());
@@ -1322,10 +1348,16 @@ class TextFrame extends JFrame{
     this.setVisible(true);
   }
 
-  public String SkillEffect(Skill skill){
+  public String SkillEffect(Skill skill, int mytype, int yourtype){
     if(skill.getStatusTarget() == 'h'){
       if(skill.getValue() < 0){
-        return Math.abs(skill.getValue()) + "ダメージ";
+        if((mytype+1)%3 == yourtype){
+          return "こうかはばつぐん！";
+        }else if(mytype == yourtype){
+          return "";
+        }else{
+          return "こうかはいまひとつ...";
+        }
       }else{
         return skill.getValue() + "かいふく";
       }
