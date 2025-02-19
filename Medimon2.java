@@ -7,7 +7,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-//技の種類ｘ、タイプtype、ダメージｎ、名前nameを保存するクラス
+//技の種類x、タイプtype、ダメージn、名前nameを保存するクラス
 class Skill {                      
     private Character x;
     private int n, type;
