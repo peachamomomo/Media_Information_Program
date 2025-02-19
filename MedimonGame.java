@@ -695,7 +695,7 @@ class FontLoader { //フォントファイルを読み込む
   }
 }
 
-class TitleFrame extends JFrame{　//タイトル画面
+class TitleFrame extends JFrame{        //タイトル画面
   boolean server;
   MedimonModel mm;
   int me, you;
