@@ -686,7 +686,7 @@ class MedimonController implements ActionListener {
   }
 }
 
-class FontLoader {
+class FontLoader { //フォントファイルを読み込む
   public static void registerFont(String fontPath) {
       try {
           Font font = Font.createFont(Font.TRUETYPE_FONT, new File(fontPath));
@@ -698,7 +698,7 @@ class FontLoader {
   }
 }
 
-class TitleFrame extends JFrame{
+class TitleFrame extends JFrame{　//タイトル画面
   boolean server;
   MedimonModel mm;
   int me, you;
@@ -824,13 +824,13 @@ class TitleFrame extends JFrame{
     this.nowyourmedimon = mm.getMedimon(you, mm.getNowmedimon(you));
   }
 
-  public String setTypeText(int type){
+  public String setTypeText(int type){ 
     if(type == 0){return "グー";}
     else if(type == 1){return "チョキ";}
     else{return "パー";}
   }
 
-  public String setMonsterImage(char s, String name){
+  public String setMonsterImage(char s, String name){ //モンスターの名前から画像をセットする
     if(s == 'b'){
       if(name == "トーグ"){return "Thogg_b.png";}
       if(name == "ウチャ"){return "Ucha_b.png";}
@@ -850,7 +850,7 @@ class TitleFrame extends JFrame{
     return "\0";
   }
 
-  public String SkillEffect(int i, MedimonModel mm, int index, int n){
+  public String SkillEffect(int i, MedimonModel mm, int index, int n){ //スキルの効果にあわせて表示するテキストをセットする
     if(mm.getMedimon(i, index).getSkill(n).getStatusTarget() == 'h'){
       if(mm.getMedimon(i, index).getSkill(n).getValue() < 0){
         return Math.abs(mm.getMedimon(i, index).getSkill(n).getValue()) + "ダメージ";
@@ -884,7 +884,7 @@ class TitleFrame extends JFrame{
   }
 }
 
-class BackgroundPanel extends JPanel {
+class BackgroundPanel extends JPanel { //背景画像をセットする
   private Image backgroundImage;
 
   public BackgroundPanel(String filePath) {
@@ -904,7 +904,7 @@ class BackgroundPanel extends JPanel {
   }
 }
 
-class BattleFrame extends JFrame implements ActionListener{
+class BattleFrame extends JFrame implements ActionListener{ //バトル画面
   private Timer timer;
   boolean server;
   int judge;
@@ -1041,7 +1041,7 @@ class BattleFrame extends JFrame implements ActionListener{
     return "\0";
   }
 
-  public void actionPerformed(ActionEvent e){
+  public void actionPerformed(ActionEvent e){ //1フレーム毎にバトル画面を更新する
     setNowMedimon(this.mm);
 	  l2.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>&nbsp;" + this.nowmymedimon.getName() + "</span></html>"); //自分側のモンスターの名前
     l3.setText("<html><img src='file:" + setMonsterImage('b', this.nowmymedimon.getName()) + "' width=400 height=400></html>"); //自分側のモンスターの画像
@@ -1085,7 +1085,7 @@ class BattleFrame extends JFrame implements ActionListener{
   }
 }
 
-class CommandFrame extends JFrame{
+class CommandFrame extends JFrame{ //コマンド選択画面
   JButton b1, b2, b3, b4, change;
   public CommandFrame(boolean server, MedimonModel mm){
     FontLoader.registerFont("misaki_gothic.ttf");
@@ -1167,7 +1167,7 @@ class CommandFrame extends JFrame{
   }
 }
 
-class ChangeFrame extends JFrame{
+class ChangeFrame extends JFrame{ //交代画面
   JButton change1, change2, change3;
   JLabel l1, l2, l3, l4, l5, l6, l7, l8, l9;
   public ChangeFrame(boolean server, MedimonModel mm){
@@ -1176,7 +1176,6 @@ class ChangeFrame extends JFrame{
     int me;
     if(server == true){me = 1;}
     else{me = 2;}
-    // JPanelに貼り付けるためのJButtonを5つ生成
     change1=new JButton("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>こうたい</span></html>"); 
     change2=new JButton("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>こうたい</span></html>"); 
     change3=new JButton("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>こうたい</span></html>");
@@ -1327,7 +1326,7 @@ class ChangeFrame extends JFrame{
   }
 }
 
-class TextFrame extends JFrame{
+class TextFrame extends JFrame{ //テキスト表示画面
   JPanel p1;
   JLabel l1, l2;
   public TextFrame(Medimon mymedimon, Medimon yourmedimon, int skillID){
