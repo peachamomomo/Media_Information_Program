@@ -759,26 +759,26 @@ class TitleFrame extends JFrame{
     l3.setText("<html><img src='file:" + setMonsterImage('c', mm.getMedimon(me, 0).getName()) + "' width=150 height=150></html>");
     l3.setHorizontalAlignment(JLabel.CENTER);
     l3.setToolTipText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" 
-    + mm.getMedimon(me, 0).getSkill(0).getSkillname() + ": " + SkillEffect(me, mm, 0, 0) + "<br>"
-    + mm.getMedimon(me, 0).getSkill(1).getSkillname() + ": " + SkillEffect(me, mm, 0, 1) + "<br>"
-    + mm.getMedimon(me, 0).getSkill(2).getSkillname() + ": " + SkillEffect(me, mm, 0, 2) + "<br>"
-    + mm.getMedimon(me, 0).getSkill(3).getSkillname() + ": " + SkillEffect(me, mm, 0, 3)
+    + "[" + setTypeText(mm.getMedimon(me, 0).getSkill(0).getType()) + "]" + mm.getMedimon(me, 0).getSkill(0).getSkillname() + ": " + SkillEffect(me, mm, 0, 0) + "<br>"
+    + "[" + setTypeText(mm.getMedimon(me, 0).getSkill(1).getType()) + "]" + mm.getMedimon(me, 0).getSkill(1).getSkillname() + ": " + SkillEffect(me, mm, 0, 1) + "<br>"
+    + "[" + setTypeText(mm.getMedimon(me, 0).getSkill(2).getType()) + "]" + mm.getMedimon(me, 0).getSkill(2).getSkillname() + ": " + SkillEffect(me, mm, 0, 2) + "<br>"
+    + "[" + setTypeText(mm.getMedimon(me, 0).getSkill(3).getType()) + "]" + mm.getMedimon(me, 0).getSkill(3).getSkillname() + ": " + SkillEffect(me, mm, 0, 3)
     + "</span></html>");
     l4.setText("<html><img src='file:" + setMonsterImage('c', mm.getMedimon(me, 1).getName()) + "' width=150 height=150></html>");
     l4.setHorizontalAlignment(JLabel.CENTER);
     l4.setToolTipText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" 
-    + mm.getMedimon(me, 1).getSkill(0).getSkillname() + ": " + SkillEffect(me, mm, 1, 0) + "<br>"
-    + mm.getMedimon(me, 1).getSkill(1).getSkillname() + ": " + SkillEffect(me, mm, 1, 1) + "<br>"
-    + mm.getMedimon(me, 1).getSkill(2).getSkillname() + ": " + SkillEffect(me, mm, 1, 2) + "<br>"
-    + mm.getMedimon(me, 1).getSkill(3).getSkillname() + ": " + SkillEffect(me, mm, 1, 3)
+    + "[" + setTypeText(mm.getMedimon(me, 1).getSkill(0).getType()) + "]" + mm.getMedimon(me, 1).getSkill(0).getSkillname() + ": " + SkillEffect(me, mm, 1, 0) + "<br>"
+    + "[" + setTypeText(mm.getMedimon(me, 1).getSkill(1).getType()) + "]" + mm.getMedimon(me, 1).getSkill(1).getSkillname() + ": " + SkillEffect(me, mm, 1, 1) + "<br>"
+    + "[" + setTypeText(mm.getMedimon(me, 1).getSkill(2).getType()) + "]" + mm.getMedimon(me, 1).getSkill(2).getSkillname() + ": " + SkillEffect(me, mm, 1, 2) + "<br>"
+    + "[" + setTypeText(mm.getMedimon(me, 1).getSkill(3).getType()) + "]" + mm.getMedimon(me, 1).getSkill(3).getSkillname() + ": " + SkillEffect(me, mm, 1, 3)
     + "</span></html>");
     l5.setText("<html><img src='file:" + setMonsterImage('c', mm.getMedimon(me, 2).getName()) + "' width=150 height=150></html>");
     l5.setHorizontalAlignment(JLabel.CENTER);
     l5.setToolTipText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" 
-    + mm.getMedimon(me, 2).getSkill(0).getSkillname() + ": " + SkillEffect(me, mm, 2, 0) + "<br>"
-    + mm.getMedimon(me, 2).getSkill(1).getSkillname() + ": " + SkillEffect(me, mm, 2, 1) + "<br>"
-    + mm.getMedimon(me, 2).getSkill(2).getSkillname() + ": " + SkillEffect(me, mm, 2, 2) + "<br>"
-    + mm.getMedimon(me, 2).getSkill(3).getSkillname() + ": " + SkillEffect(me, mm, 2, 3)
+    + "[" + setTypeText(mm.getMedimon(me, 2).getSkill(0).getType()) + "]" + mm.getMedimon(me, 2).getSkill(0).getSkillname() + ": " + SkillEffect(me, mm, 2, 0) + "<br>"
+    + "[" + setTypeText(mm.getMedimon(me, 2).getSkill(1).getType()) + "]" + mm.getMedimon(me, 2).getSkill(1).getSkillname() + ": " + SkillEffect(me, mm, 2, 1) + "<br>"
+    + "[" + setTypeText(mm.getMedimon(me, 2).getSkill(2).getType()) + "]" + mm.getMedimon(me, 2).getSkill(2).getSkillname() + ": " + SkillEffect(me, mm, 2, 2) + "<br>"
+    + "[" + setTypeText(mm.getMedimon(me, 2).getSkill(3).getType()) + "]" + mm.getMedimon(me, 2).getSkill(3).getSkillname() + ": " + SkillEffect(me, mm, 2, 3)
     + "</span></html>");
 
     l6=new JLabel(); l7=new JLabel(); l8=new JLabel();
@@ -1093,10 +1093,10 @@ class CommandFrame extends JFrame{
     int me;
     if(server == true){me = 1;}
     else{me = 2;}
-    b1=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,0).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + SkillEffect(me, mm, 0) + "</span></center></html>"); 
-    b2=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,1).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + SkillEffect(me, mm, 1) + "</span></center></html>");
-    b3=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,2).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + SkillEffect(me, mm, 2) + "</span></center></html>");
-    b4=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,3).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" + SkillEffect(me, mm, 3) + "</span></center></html>");
+    b1=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,0).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>タイプ: " + setTypeText(mm.getSkill(me,0).getType()) + "<br>" + SkillEffect(me, mm, 0) + "</span></center></html>"); 
+    b2=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,1).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>タイプ: " + setTypeText(mm.getSkill(me,1).getType()) + "<br>" + SkillEffect(me, mm, 1) + "</span></center></html>");
+    b3=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,2).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>タイプ: " + setTypeText(mm.getSkill(me,2).getType()) + "<br>" + SkillEffect(me, mm, 2) + "</span></center></html>");
+    b4=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getSkill(me,3).getSkillname() + "</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>タイプ: " + setTypeText(mm.getSkill(me,3).getType()) + "<br>" + SkillEffect(me, mm, 3) + "</span></center></html>");
     change=new JButton("<html><center><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>こうたい</span><br><br><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>ひかえのモンスター<br>" + (mm.getRemaining(me)-1) + "たい</span></center></html>");
     b1.setActionCommand("0");
     b2.setActionCommand("1");
@@ -1159,6 +1159,12 @@ class CommandFrame extends JFrame{
     else if(i==4){return b4;}
     else{return change;}
   }
+
+  public String setTypeText(int type){
+    if(type == 0){return "グー";}
+    else if(type == 1){return "チョキ";}
+    else{return "パー";}
+  }
 }
 
 class ChangeFrame extends JFrame{
@@ -1183,22 +1189,22 @@ class ChangeFrame extends JFrame{
     l2.setText("<html><img src='file:" + setMonsterImage('c', mm.getMedimon(me, 1).getName()) + "' width=150 height=150></html>");
     l3.setText("<html><img src='file:" + setMonsterImage('c', mm.getMedimon(me, 2).getName()) + "' width=150 height=150></html>");
     l1.setToolTipText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" 
-    + mm.getMedimon(me, 0).getSkill(0).getSkillname() + ": " + SkillEffect(me, mm, 0, 0) + "<br>"
-    + mm.getMedimon(me, 0).getSkill(1).getSkillname() + ": " + SkillEffect(me, mm, 0, 1) + "<br>"
-    + mm.getMedimon(me, 0).getSkill(2).getSkillname() + ": " + SkillEffect(me, mm, 0, 2) + "<br>"
-    + mm.getMedimon(me, 0).getSkill(3).getSkillname() + ": " + SkillEffect(me, mm, 0, 3)
+    + "[" + setTypeText(mm.getMedimon(me, 0).getSkill(0).getType()) + "]" + mm.getMedimon(me, 0).getSkill(0).getSkillname() + ": " + SkillEffect(me, mm, 0, 0) + "<br>"
+    + "[" + setTypeText(mm.getMedimon(me, 0).getSkill(1).getType()) + "]" + mm.getMedimon(me, 0).getSkill(1).getSkillname() + ": " + SkillEffect(me, mm, 0, 1) + "<br>"
+    + "[" + setTypeText(mm.getMedimon(me, 0).getSkill(2).getType()) + "]" + mm.getMedimon(me, 0).getSkill(2).getSkillname() + ": " + SkillEffect(me, mm, 0, 2) + "<br>"
+    + "[" + setTypeText(mm.getMedimon(me, 0).getSkill(3).getType()) + "]" + mm.getMedimon(me, 0).getSkill(3).getSkillname() + ": " + SkillEffect(me, mm, 0, 3)
     + "</span></html>");
     l2.setToolTipText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" 
-    + mm.getMedimon(me, 1).getSkill(0).getSkillname() + ": " + SkillEffect(me, mm, 1, 0) + "<br>"
-    + mm.getMedimon(me, 1).getSkill(1).getSkillname() + ": " + SkillEffect(me, mm, 1, 1) + "<br>"
-    + mm.getMedimon(me, 1).getSkill(2).getSkillname() + ": " + SkillEffect(me, mm, 1, 2) + "<br>"
-    + mm.getMedimon(me, 1).getSkill(3).getSkillname() + ": " + SkillEffect(me, mm, 1, 3)
+    + "[" + setTypeText(mm.getMedimon(me, 1).getSkill(0).getType()) + "]" + mm.getMedimon(me, 1).getSkill(0).getSkillname() + ": " + SkillEffect(me, mm, 1, 0) + "<br>"
+    + "[" + setTypeText(mm.getMedimon(me, 1).getSkill(1).getType()) + "]" + mm.getMedimon(me, 1).getSkill(1).getSkillname() + ": " + SkillEffect(me, mm, 1, 1) + "<br>"
+    + "[" + setTypeText(mm.getMedimon(me, 1).getSkill(2).getType()) + "]" + mm.getMedimon(me, 1).getSkill(2).getSkillname() + ": " + SkillEffect(me, mm, 1, 2) + "<br>"
+    + "[" + setTypeText(mm.getMedimon(me, 1).getSkill(3).getType()) + "]" + mm.getMedimon(me, 1).getSkill(3).getSkillname() + ": " + SkillEffect(me, mm, 1, 3)
     + "</span></html>");
     l3.setToolTipText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" 
-    + mm.getMedimon(me, 2).getSkill(0).getSkillname() + ": " + SkillEffect(me, mm, 2, 0) + "<br>"
-    + mm.getMedimon(me, 2).getSkill(1).getSkillname() + ": " + SkillEffect(me, mm, 2, 1) + "<br>"
-    + mm.getMedimon(me, 2).getSkill(2).getSkillname() + ": " + SkillEffect(me, mm, 2, 2) + "<br>"
-    + mm.getMedimon(me, 2).getSkill(3).getSkillname() + ": " + SkillEffect(me, mm, 2, 3)
+    + "[" + setTypeText(mm.getMedimon(me, 2).getSkill(0).getType()) + "]" + mm.getMedimon(me, 2).getSkill(0).getSkillname() + ": " + SkillEffect(me, mm, 2, 0) + "<br>"
+    + "[" + setTypeText(mm.getMedimon(me, 2).getSkill(1).getType()) + "]" + mm.getMedimon(me, 2).getSkill(1).getSkillname() + ": " + SkillEffect(me, mm, 2, 1) + "<br>"
+    + "[" + setTypeText(mm.getMedimon(me, 2).getSkill(2).getType()) + "]" + mm.getMedimon(me, 2).getSkill(2).getSkillname() + ": " + SkillEffect(me, mm, 2, 2) + "<br>"
+    + "[" + setTypeText(mm.getMedimon(me, 2).getSkill(3).getType()) + "]" + mm.getMedimon(me, 2).getSkill(3).getSkillname() + ": " + SkillEffect(me, mm, 2, 3)
     + "</span></html>");
     
     l4.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mm.getMedimon(me, 0).getName() +  "</span></html>");
@@ -1335,7 +1341,7 @@ class TextFrame extends JFrame{
     l1=new JLabel(); l2=new JLabel();
     if(skillID != -1){
       l1.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mymedimon.getName() + "　の　" + mymedimon.getSkill(skillID).getSkillname() + "　！</span></html>");
-      l2.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + SkillEffect(mymedimon.getSkill(skillID), mymedimon.getType(), yourmedimon.getType()) + "</span></html>");
+      l2.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + SkillEffect(mymedimon.getSkill(skillID), yourmedimon.getType()) + "</span></html>");
     }else{
       l1.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + mymedimon.getName() + "　もどれ！</span></html>");
     }
@@ -1348,12 +1354,13 @@ class TextFrame extends JFrame{
     this.setVisible(true);
   }
 
-  public String SkillEffect(Skill skill, int mytype, int yourtype){
+  public String SkillEffect(Skill skill, int yourtype){
+    int skilltype = skill.getType();
     if(skill.getStatusTarget() == 'h'){
       if(skill.getValue() < 0){
-        if((mytype+1)%3 == yourtype){
+        if((skilltype+1)%3 == yourtype){
           return "こうかはばつぐん！";
-        }else if(mytype == yourtype){
+        }else if(skilltype == yourtype){
           return "";
         }else{
           return "こうかはいまひとつ...";
