@@ -742,7 +742,7 @@ class TitleFrame extends JFrame{
 
     l1=new JLabel();
     p1.add(l1);
-    l1.setText("<html><img src='file:TitleLogo.png' width=600 height=400></html>");
+    l1.setText("<html><img src=" + getClass().getResource("TitleLogo.png") + " width=600 height=400></html>");
     l1.setHorizontalAlignment(JLabel.CENTER);
     l1.setVerticalAlignment(JLabel.CENTER);
     l2=new JLabel();
@@ -753,7 +753,7 @@ class TitleFrame extends JFrame{
     
     l3=new JLabel(); l4=new JLabel(); l5=new JLabel();
     p7.add(l3); p8.add(l4); p9.add(l5);
-    l3.setText("<html><img src='file:" + setMonsterImage('c', mm.getMedimon(me, 0).getName()) + "' width=150 height=150></html>");
+    l3.setText("<html><img src=" + getClass().getResource(setMonsterImage('c', mm.getMedimon(me, 0).getName())) + " width=150 height=150></html>");
     l3.setHorizontalAlignment(JLabel.CENTER);
     l3.setToolTipText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" 
     + mm.getMedimon(me, 0).getSkill(0).getSkillname() + ": " + SkillEffect(me, mm, 0, 0) + "<br>"
@@ -761,7 +761,7 @@ class TitleFrame extends JFrame{
     + mm.getMedimon(me, 0).getSkill(2).getSkillname() + ": " + SkillEffect(me, mm, 0, 2) + "<br>"
     + mm.getMedimon(me, 0).getSkill(3).getSkillname() + ": " + SkillEffect(me, mm, 0, 3)
     + "</span></html>");
-    l4.setText("<html><img src='file:" + setMonsterImage('c', mm.getMedimon(me, 1).getName()) + "' width=150 height=150></html>");
+    l4.setText("<html><img src=" + getClass().getResource(setMonsterImage('c', mm.getMedimon(me, 1).getName())) + " width=150 height=150></html>");
     l4.setHorizontalAlignment(JLabel.CENTER);
     l4.setToolTipText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" 
     + mm.getMedimon(me, 1).getSkill(0).getSkillname() + ": " + SkillEffect(me, mm, 1, 0) + "<br>"
@@ -769,7 +769,7 @@ class TitleFrame extends JFrame{
     + mm.getMedimon(me, 1).getSkill(2).getSkillname() + ": " + SkillEffect(me, mm, 1, 2) + "<br>"
     + mm.getMedimon(me, 1).getSkill(3).getSkillname() + ": " + SkillEffect(me, mm, 1, 3)
     + "</span></html>");
-    l5.setText("<html><img src='file:" + setMonsterImage('c', mm.getMedimon(me, 2).getName()) + "' width=150 height=150></html>");
+    l5.setText("<html><img src=" + getClass().getResource(setMonsterImage('c', mm.getMedimon(me, 2).getName())) + " width=150 height=150></html>");
     l5.setHorizontalAlignment(JLabel.CENTER);
     l5.setToolTipText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" 
     + mm.getMedimon(me, 2).getSkill(0).getSkillname() + ": " + SkillEffect(me, mm, 2, 0) + "<br>"
@@ -940,18 +940,18 @@ class BattleFrame extends JFrame implements ActionListener{
   l5.setHorizontalAlignment(JLabel.CENTER);
   l6.setHorizontalAlignment(JLabel.LEFT);
   l7.setHorizontalAlignment(JLabel.RIGHT);
-  l1.setText("<html><img src='file:Center.png' width=50 height=200></html>");
+  l1.setText("<html><img src=" + getClass().getResource("Center.png") + " width=50 height=200></html>");
 
   setNowMedimon(this.mm);
 	l2.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>&nbsp;" + this.nowmymedimon.getName() + "</span></html>"); //自分側のモンスターの名前
-  l3.setText("<html><img src='file:" + setMonsterImage('b', this.nowmymedimon.getName()) + "' width=400 height=400></html>"); //自分側のモンスターの画像
+  l3.setText("<html><img src=" + getClass().getResource(setMonsterImage('b', this.nowmymedimon.getName())) + " width=400 height=400></html>"); //自分側のモンスターの画像
   l3.setToolTipText("<html><span style='font-family:MisakiGothic; font-size:25pt; color:black;'>"
     + "タイプ: " + setTypeText(this.nowmymedimon.getType())
     + "<br>はやさ: " + this.nowmymedimon.getSpeed() 
     + "<br>ぼうぎょ: " + this.nowmymedimon.getBougyo() + "</span></html>");
   
 	l4.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + this.nowyourmedimon.getName() + " </span></html>"); //相手側のモンスターの名前
-  l5.setText("<html><img src='file:" + setMonsterImage('f', this.nowyourmedimon.getName()) + "' width=400 height=400></html>"); //相手側のモンスターの画像
+  l5.setText("<html><img src=" + getClass().getResource(setMonsterImage('f', this.nowyourmedimon.getName())) + " width=400 height=400></html>"); //相手側のモンスターの画像
 	l6.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>&nbsp;HP " + this.nowmymedimon.getHp() + "/" + nowmymedimon.getMaxHp() + "</span></html>"); //自分側のモンスターのHP
   l7.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>HP " + this.nowyourmedimon.getHp() + "/" + nowyourmedimon.getMaxHp() + " </span></html>"); //相手側のモンスターのHP
 
@@ -1041,13 +1041,13 @@ class BattleFrame extends JFrame implements ActionListener{
   public void actionPerformed(ActionEvent e){
     setNowMedimon(this.mm);
 	  l2.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>&nbsp;" + this.nowmymedimon.getName() + "</span></html>"); //自分側のモンスターの名前
-    l3.setText("<html><img src='file:" + setMonsterImage('b', this.nowmymedimon.getName()) + "' width=400 height=400></html>"); //自分側のモンスターの画像
+    l3.setText("<html><img src=" + getClass().getResource(setMonsterImage('b', this.nowmymedimon.getName())) + " width=400 height=400></html>"); //自分側のモンスターの画像
 	  l3.setToolTipText("<html><span style='font-family:MisakiGothic; font-size:25pt; color:black;'>"
     + "タイプ: " + setTypeText(this.nowmymedimon.getType())
     + "<br>はやさ: " + this.nowmymedimon.getSpeed() 
     + "<br>ぼうぎょ: " + this.nowmymedimon.getBougyo() + "</span></html>");
     l4.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>" + this.nowyourmedimon.getName() + " </span></html>"); //相手側のモンスターの名前
-    l5.setText("<html><img src='file:" + setMonsterImage('f', this.nowyourmedimon.getName()) + "' width=400 height=400></html>"); //相手側のモンスターの画像
+    l5.setText("<html><img src=" + getClass().getResource(setMonsterImage('f', this.nowyourmedimon.getName())) + " width=400 height=400></html>"); //相手側のモンスターの画像
 	  l6.setText("<html><span style='font-family:MisakiGothic; font-size:30pt; color:black;'>&nbsp;HP " + this.nowmymedimon.getHp() + "/" + nowmymedimon.getMaxHp() + "</span></html>"); //自分側のモンスターのHP
     bar1.setMinimum(0); bar1.setMaximum(this.nowmymedimon.getMaxHp());
     bar1.setValue(this.nowmymedimon.getHp());
@@ -1176,9 +1176,9 @@ class ChangeFrame extends JFrame{
     change3.setActionCommand("2");
 
     l1=new JLabel(); l2=new JLabel(); l3=new JLabel(); l4=new JLabel(); l5=new JLabel(); l6=new JLabel(); l7=new JLabel(); l8=new JLabel(); l9=new JLabel();
-    l1.setText("<html><img src='file:" + setMonsterImage('c', mm.getMedimon(me, 0).getName()) + "' width=150 height=150></html>");
-    l2.setText("<html><img src='file:" + setMonsterImage('c', mm.getMedimon(me, 1).getName()) + "' width=150 height=150></html>");
-    l3.setText("<html><img src='file:" + setMonsterImage('c', mm.getMedimon(me, 2).getName()) + "' width=150 height=150></html>");
+    l1.setText("<html><img src=" + getClass().getResource(setMonsterImage('c', mm.getMedimon(me, 0).getName())) + " width=150 height=150></html>");
+    l2.setText("<html><img src=" + getClass().getResource(setMonsterImage('c', mm.getMedimon(me, 1).getName())) + " width=150 height=150></html>");
+    l3.setText("<html><img src=" + getClass().getResource(setMonsterImage('c', mm.getMedimon(me, 2).getName())) + " width=150 height=150></html>");
     l1.setToolTipText("<html><span style='font-family:MisakiGothic; font-size:20pt; color:black;'>" 
     + mm.getMedimon(me, 0).getSkill(0).getSkillname() + ": " + SkillEffect(me, mm, 0, 0) + "<br>"
     + mm.getMedimon(me, 0).getSkill(1).getSkillname() + ": " + SkillEffect(me, mm, 0, 1) + "<br>"
@@ -1410,7 +1410,7 @@ class ResultFrame extends JFrame{
     p2.add(new JLabel()); p2.add(l1);
 
     l2=new JLabel();
-    l2.setText("<html><img src='file:TitleLogo.png' width=600 height=400></html>");
+    l2.setText("<html><img src=" + getClass().getResource("TitleLogo.png") + " width=600 height=400></html>");
     l2.setHorizontalAlignment(JLabel.CENTER); l2.setVerticalAlignment(JLabel.NORTH);
     p1.add(l2, BorderLayout.CENTER);
 
