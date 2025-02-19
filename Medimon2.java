@@ -120,12 +120,12 @@ class MedimonModel {
         s4.setStatusTarget('h'); s4.setValue(60); s4.setType(2); s4.setSkillname("みつをすう");
         m1 = new Medimon(h, s, b, type, s1, s2, s3, s4, n);
         allmedimon.add(m1);
-        h = 10; s = 50; b = 50;  type = 0;  n = "ヨギー";
+        h = 120; s = 50; b = 50;  type = 0;  n = "ヨギー";
         s1 = new Skill(); s2 = new Skill(); s3 = new Skill(); s4 = new Skill();
-        s1.setStatusTarget('h'); s1.setValue(-20); s1.setType(0); s1.setSkillname("パンチ");
-        s2.setStatusTarget('h'); s2.setValue(-40); s2.setType(0); s2.setSkillname("キック");
-        s3.setStatusTarget('h'); s3.setValue(-60); s3.setType(0); s3.setSkillname("タックル");
-        s4.setStatusTarget('h'); s4.setValue(40); s4.setType(0); s4.setSkillname("かいふく");
+        s1.setStatusTarget('h'); s1.setValue(-70); s1.setType(0); s1.setSkillname("のびーるキック");
+        s2.setStatusTarget('h'); s2.setValue(-40); s2.setType(2); s2.setSkillname("もちふぶき");
+        s3.setStatusTarget('b'); s4.setValue(120); s4.setType(0); s4.setSkillname("れいとう");
+        s4.setStatusTarget('s'); s3.setValue(50); s3.setType(0); s3.setSkillname("ねんちゃくだん");
         m1 = new Medimon(h, s, b, type, s1, s2, s3, s4, n);
         allmedimon.add(m1);
         Collections.shuffle(allmedimon);        //allmedimonをシャッフルし始めの3体をall1medimon,all2medimonのどちらにも格納
